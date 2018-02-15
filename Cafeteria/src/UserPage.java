@@ -264,6 +264,8 @@ public class UserPage {
 		JLabel lblDate = new JLabel("Date:");
 		
 		JLabel label_1 = new JLabel("1/1/2000");
+		
+		JButton btnLogOut = new JButton("Log Out");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -280,8 +282,11 @@ public class UserPage {
 								.addComponent(label_1)
 								.addComponent(lblAccountname)
 								.addComponent(label)))
-						.addComponent(btnCheckHistory))
-					.addContainerGap(122, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(btnCheckHistory)
+							.addGap(18)
+							.addComponent(btnLogOut)))
+					.addContainerGap(33, Short.MAX_VALUE))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -299,7 +304,9 @@ public class UserPage {
 						.addComponent(lblDate)
 						.addComponent(label_1))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnCheckHistory)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnCheckHistory)
+						.addComponent(btnLogOut))
 					.addContainerGap(8, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
