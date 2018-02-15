@@ -166,7 +166,7 @@ public class UserPage {
 		
 		JLabel lblMenu_1 = new JLabel("Menu 2:");
 		
-		JLabel lblNewLabel_2 = new JLabel("Permanent items:");
+		JLabel lblNewLabel_2 = new JLabel("Permanent item:");
 		
 		JLabel lblMenuItems = new JLabel("Menu 1 items");
 		
