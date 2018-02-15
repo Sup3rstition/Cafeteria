@@ -128,15 +128,15 @@ public class UserPage {
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
+						.addComponent(panel_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
+							.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(lblProblemsContactUs)
-							.addPreferredGap(ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
-							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 258, GroupLayout.PREFERRED_SIZE)))
+							.addGap(133)
+							.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		gl_panel_2.setVerticalGroup(
@@ -144,7 +144,7 @@ public class UserPage {
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+						.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -154,7 +154,7 @@ public class UserPage {
 							.addComponent(lblProblemsContactUs))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 99, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		
