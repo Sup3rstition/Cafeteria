@@ -16,12 +16,14 @@ import javax.swing.JComboBox;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.SystemColor;
+import javax.swing.JTable;
 
 public class UserPage {
 
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -51,6 +53,8 @@ public class UserPage {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setEnabled(false);
+		frame.setResizable(false);
 		frame.setBounds(100, 100, 740, 487);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -122,6 +126,10 @@ public class UserPage {
 		panel_4.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		
 		JLabel lblProblemsContactUs = new JLabel("Problems? Contact us at ____________@________.com");
+		
+		JLabel lblOrderDate = new JLabel("Order Date:");
+		
+		JComboBox comboBox = new JComboBox();
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -130,7 +138,12 @@ public class UserPage {
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addComponent(panel_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addComponent(lblOrderDate)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE))
 						.addGroup(gl_panel_2.createSequentialGroup()
@@ -147,15 +160,19 @@ public class UserPage {
 						.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
-							.addGap(31)))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblOrderDate)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(3)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 99, Short.MAX_VALUE)
 							.addContainerGap())
-						.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(lblProblemsContactUs)
 							.addGap(30))))
 		);
@@ -220,34 +237,15 @@ public class UserPage {
 		);
 		panel_4.setLayout(gl_panel_4);
 		
-		JLabel lblOrderDate = new JLabel("Order Date:");
-		
-		JComboBox comboBox = new JComboBox();
-		
-		JPanel panel_5 = new JPanel();
+		table = new JTable();
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_3.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_5, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
-						.addGroup(gl_panel_3.createSequentialGroup()
-							.addComponent(lblOrderDate)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
+				.addComponent(table, GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_3.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblOrderDate)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-					.addContainerGap())
+				.addComponent(table, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
 		);
 		panel_3.setLayout(gl_panel_3);
 		
