@@ -32,6 +32,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import javax.swing.JSplitPane;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import java.awt.FlowLayout;
 
 public class LunchHour {
 	private JFrame frame1;
@@ -56,6 +61,8 @@ public class LunchHour {
 	private JPanel CheckHistoryPanel;
 	private JTextField ChkHistorytextField;
 	private JTextField ChkHistorytextField_1;
+	private JTextField txtUsernmewebsitecom;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -85,8 +92,9 @@ public class LunchHour {
 	 */
 	private void initialize() {
 		frame1 = new JFrame();
-		frame1.setBounds(100, 100, 477,310);
-		//frame1.setSize(665, 616);
+		frame1.setTitle("Login \n");
+		frame1.setResizable(false);
+		frame1.setBounds(100, 100, 628,505);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -98,21 +106,88 @@ public class LunchHour {
 		LoginPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel LoginPanel_1 = new JPanel();
+		LoginPanel_1.setBackground(new Color(102, 102, 102));
 		LoginPanel.add(LoginPanel_1, BorderLayout.CENTER);
-				GroupLayout gl_LoginPanel_1 = new GroupLayout(LoginPanel_1);
-				gl_LoginPanel_1.setHorizontalGroup(
-					gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-						.addGap(0, 477, Short.MAX_VALUE)
-				);
-				gl_LoginPanel_1.setVerticalGroup(
-					gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-						.addGap(0, 288, Short.MAX_VALUE)
-				);
-				LoginPanel_1.setLayout(gl_LoginPanel_1);
 		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 204, 0));
+		
+		JLabel lblUsernameemail = new JLabel("Username/Email:");
+		
+		txtUsernmewebsitecom = new JTextField();
+		txtUsernmewebsitecom.setText("Username@website.com");
+		txtUsernmewebsitecom.setBackground(new Color(128, 128, 128));
+		txtUsernmewebsitecom.setColumns(10);
+		
+		JLabel lblPassowrd = new JLabel("Password:");
+		
+		passwordField = new JPasswordField();
+		
+		JCheckBox chckbxRememberMe = new JCheckBox("Remember Me");
+		
+		JButton btnLogin = new JButton("Login");
+		
+		JLabel lblForogtPassord = new JLabel("Forgot Password?");
+		GroupLayout gl_LoginPanel_1 = new GroupLayout(LoginPanel_1);
+		gl_LoginPanel_1.setHorizontalGroup(
+			gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_LoginPanel_1.createSequentialGroup()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, gl_LoginPanel_1.createSequentialGroup()
+							.addComponent(chckbxRememberMe)
+							.addGap(18)
+							.addComponent(lblForogtPassord, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, gl_LoginPanel_1.createSequentialGroup()
+							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblPassowrd)
+								.addComponent(lblUsernameemail))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtUsernmewebsitecom, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+								.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)))
+						.addComponent(btnLogin))
+					.addContainerGap())
+		);
+		gl_LoginPanel_1.setVerticalGroup(
+			gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_LoginPanel_1.createSequentialGroup()
+					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 496, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_LoginPanel_1.createSequentialGroup()
+							.addGap(191)
+							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblUsernameemail)
+								.addComponent(txtUsernmewebsitecom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblPassowrd)
+								.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(chckbxRememberMe)
+								.addComponent(lblForogtPassord))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnLogin)))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		SpringLayout sl_panel = new SpringLayout();
+		panel.setLayout(sl_panel);
+		
+		JLabel lblSchoolLogo = new JLabel("School Logo");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblSchoolLogo, 231, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, lblSchoolLogo, 106, SpringLayout.WEST, panel);
+		panel.add(lblSchoolLogo);
+		LoginPanel_1.setLayout(gl_LoginPanel_1);
+		
+				/*Login Panel Ends
+				 * 
+				 * 
+				 * OrderPanel Begins
+				 */
 		JPanel OrderPanel = new JPanel();
 		frame1.getContentPane().add(OrderPanel, "name_272189214436444");
-		
 		
 		JPanel ParentAccountPanel = new JPanel();
 		ParentAccountPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -132,18 +207,7 @@ public class LunchHour {
 		JButton CheckHistoryBtn = new JButton("Check History");
 		
 		JButton OrderLogoutBtn = new JButton("Log Out");
-		OrderLogoutBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(477, 310);
-				LoginPanel.setVisible(true);	
-			}
-		});
-		/*Login Panel Ends
-		 * 
-		 * 
-		 * OrderPanel Begins
-		 */
+		
 		GroupLayout gl_ParentAccountPanel = new GroupLayout(ParentAccountPanel);
 		gl_ParentAccountPanel.setHorizontalGroup(
 			gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
@@ -528,17 +592,17 @@ public class LunchHour {
 		Menu_Panel.add(StudentNameLabel);
 		OrderPanel.setLayout(gl_OrderPanel);
 		
-		JPanel ConfirmPanel = new JPanel();
-		ConfirmPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		ConfirmPanel.setLayout(new BorderLayout(0, 0));
-		frame1.getContentPane().add(ConfirmPanel, "name_275723673854486");
-		
 		/*
 		 * End of Order Panel
 		 * 
 		 * 
 		 * ConfirmPanel Begins
 		 */
+		
+		JPanel ConfirmPanel = new JPanel();
+		ConfirmPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		ConfirmPanel.setLayout(new BorderLayout(0, 0));
+		frame1.getContentPane().add(ConfirmPanel, "name_275723673854486");
 
 		JPanel Confirmpanel_1 = new JPanel();
 		ConfirmPanel.add(Confirmpanel_1, BorderLayout.CENTER);
@@ -575,22 +639,8 @@ public class LunchHour {
 		});
 		
 		JButton ConfirmOrderMoreBtn = new JButton("Confirm and Order More");
-		ConfirmOrderMoreBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ConfirmPanel.setVisible(false);
-				frame1.setSize(621,487);
-				OrderPanel.setVisible(true);
-			}
-		});
 		
 		JButton ConfirmandLogoutbtn = new JButton("Confirm and Logout");
-		ConfirmandLogoutbtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ConfirmPanel.setVisible(false);
-				frame1.setSize(621,487);
-				LoginPanel.setVisible(true);
-			}
-		});
 		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, ConfirmandLogoutbtn, 6, SpringLayout.SOUTH, ConfirmscrollPane);
 		sl_Confirmpanel_1.putConstraint(SpringLayout.EAST, ConfirmandLogoutbtn, -10, SpringLayout.EAST, Confirmpanel_1);
 		
@@ -641,13 +691,6 @@ public class LunchHour {
 						.addComponent(ConfirmandLogoutbtn)))
 		);
 		Confirmpanel_2.setLayout(gl_Confirmpanel_2);
-		OrderbtnOrder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(629, 300);
-				ConfirmPanel.setVisible(true);
-			}
-		});
 		/*End of Confirm Panel
 		 * 
 		 * 
@@ -656,13 +699,6 @@ public class LunchHour {
 		 */
 		JPanel CheckHistoryPanel = new JPanel();
 		frame1.getContentPane().add(CheckHistoryPanel, "name_277364005394280");
-		CheckHistoryBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(360, 493);
-				CheckHistoryPanel.setVisible(true);
-			}
-		});
 		CheckHistoryPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		CheckHistoryPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -723,14 +759,6 @@ public class LunchHour {
 		CheckHistoryPanel_2.add(ChkHistoryscrollPane);
 		
 		JButton ChkHistorybtnBack = new JButton("Back");
-		ChkHistorybtnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CheckHistoryPanel.setVisible(false);
-				frame1.setSize(621,487);
-				OrderPanel.setVisible(true);
-				
-			}
-		});
 		sl_CheckHistoryPanel_2.putConstraint(SpringLayout.NORTH, ChkHistorybtnBack, 6, SpringLayout.SOUTH, ChkHistoryscrollPane);
 		sl_CheckHistoryPanel_2.putConstraint(SpringLayout.WEST, ChkHistorybtnBack, 0, SpringLayout.WEST, CheckHistoryPanel_2);
 		CheckHistoryPanel_2.add(ChkHistorybtnBack);
@@ -748,5 +776,60 @@ public class LunchHour {
 		sl_CheckHistoryPanel_2.putConstraint(SpringLayout.NORTH, ChkHistorybtnSave, 6, SpringLayout.SOUTH, ChkHistoryscrollPane);
 		sl_CheckHistoryPanel_2.putConstraint(SpringLayout.EAST, ChkHistorybtnSave, 0, SpringLayout.EAST, ChkHistoryscrollPane);
 		CheckHistoryPanel_2.add(ChkHistorybtnSave);
+		/*
+		 * End of check history panel
+		 * 
+		 * Action listner for buttons begins
+		 */
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(true);
+				frame1.setSize(621,487);
+				LoginPanel.setVisible(false);	
+			}
+		});
+		OrderLogoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				frame1.setSize(628,505);
+				LoginPanel.setVisible(true);	
+			}
+		});
+		ChkHistorybtnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CheckHistoryPanel.setVisible(false);
+				frame1.setSize(621,487);
+				OrderPanel.setVisible(true);
+				
+			}
+		});
+		CheckHistoryBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				frame1.setSize(360, 493);
+				CheckHistoryPanel.setVisible(true);
+			}
+		});
+		OrderbtnOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				frame1.setSize(629, 300);
+				ConfirmPanel.setVisible(true);
+			}
+		});
+		ConfirmOrderMoreBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConfirmPanel.setVisible(false);
+				frame1.setSize(621,487);
+				OrderPanel.setVisible(true);
+			}
+		});
+		ConfirmandLogoutbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConfirmPanel.setVisible(false);
+				frame1.setSize(621,487);
+				LoginPanel.setVisible(true);
+			}
+		});
 	}
 }
