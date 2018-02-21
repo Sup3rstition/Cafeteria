@@ -37,6 +37,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LunchHour {
 	private JFrame frame1;
@@ -128,49 +130,63 @@ public class LunchHour {
 		JButton btnLogin = new JButton("Login");
 		
 		JLabel lblForogtPassord = new JLabel("Forgot Password?");
+		
+		JLabel lblCreateAnAccount = new JLabel("Create an Account");
 		GroupLayout gl_LoginPanel_1 = new GroupLayout(LoginPanel_1);
 		gl_LoginPanel_1.setHorizontalGroup(
-			gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_LoginPanel_1.createSequentialGroup()
+			gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_LoginPanel_1.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, gl_LoginPanel_1.createSequentialGroup()
-							.addComponent(chckbxRememberMe)
-							.addGap(18)
-							.addComponent(lblForogtPassord, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addGroup(Alignment.LEADING, gl_LoginPanel_1.createSequentialGroup()
+					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_LoginPanel_1.createSequentialGroup()
 							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblPassowrd)
-								.addComponent(lblUsernameemail))
+								.addGroup(gl_LoginPanel_1.createSequentialGroup()
+									.addGap(18)
+									.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_LoginPanel_1.createSequentialGroup()
+											.addComponent(chckbxRememberMe)
+											.addGap(18)
+											.addComponent(lblForogtPassord, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+										.addGroup(gl_LoginPanel_1.createSequentialGroup()
+											.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
+												.addComponent(lblPassowrd)
+												.addComponent(lblUsernameemail))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
+												.addComponent(txtUsernmewebsitecom, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+												.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)))))
+								.addGroup(gl_LoginPanel_1.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblCreateAnAccount)))
+							.addContainerGap())
+						.addGroup(Alignment.TRAILING, gl_LoginPanel_1.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtUsernmewebsitecom, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-								.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)))
-						.addComponent(btnLogin))
-					.addContainerGap())
+							.addComponent(btnLogin)
+							.addGap(17))))
 		);
 		gl_LoginPanel_1.setVerticalGroup(
 			gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_LoginPanel_1.createSequentialGroup()
-					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 496, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_LoginPanel_1.createSequentialGroup()
-							.addGap(191)
-							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblUsernameemail)
-								.addComponent(txtUsernmewebsitecom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPassowrd)
-								.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
-								.addComponent(chckbxRememberMe)
-								.addComponent(lblForogtPassord))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnLogin)))
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 496, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(gl_LoginPanel_1.createSequentialGroup()
+					.addGap(191)
+					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblUsernameemail)
+						.addComponent(txtUsernmewebsitecom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPassowrd)
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(chckbxRememberMe)
+						.addComponent(lblForogtPassord))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnLogin)
+					.addPreferredGap(ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+					.addComponent(lblCreateAnAccount)
+					.addGap(25))
 		);
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
