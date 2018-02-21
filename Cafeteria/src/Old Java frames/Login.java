@@ -71,14 +71,6 @@ public class Login {
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Remember me");
 		
 		JButton btnNewButton = new JButton("Login");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-					frmElvelsCafeteria.dispose();
-					OrderPage orderPage = new OrderPage();
-					orderPage.setVisible(true);
-	
-			}
-		});
 		SpringLayout sl_panel = new SpringLayout();
 		sl_panel.putConstraint(SpringLayout.NORTH, passwordField, 156, SpringLayout.NORTH, panel);
 		sl_panel.putConstraint(SpringLayout.SOUTH, passwordField, -102, SpringLayout.SOUTH, panel);

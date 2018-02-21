@@ -9,6 +9,9 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.BoxLayout;
 import javax.swing.SpringLayout;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import javax.swing.JSeparator;
 
 public class AdminPage extends JFrame {
 
@@ -35,44 +38,55 @@ public class AdminPage extends JFrame {
 	 */
 	public AdminPage() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 162, 258);
+		setBounds(100, 100, 440, 309);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.CENTER);
-		SpringLayout sl_panel = new SpringLayout();
-		panel.setLayout(sl_panel);
+		contentPane.add(panel, BorderLayout.NORTH);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton btnNewButton = new JButton("Menu Editor");
-		sl_panel.putConstraint(SpringLayout.NORTH, btnNewButton, 10, SpringLayout.NORTH, panel);
-		sl_panel.putConstraint(SpringLayout.EAST, btnNewButton, 148, SpringLayout.WEST, panel);
-		panel.add(btnNewButton);
+		JLabel lblHello = new JLabel("Welcome,");
+		panel.add(lblHello);
 		
-		JButton btnGetReports = new JButton("Get Order");
-		sl_panel.putConstraint(SpringLayout.NORTH, btnGetReports, 66, SpringLayout.NORTH, panel);
-		sl_panel.putConstraint(SpringLayout.WEST, btnGetReports, 10, SpringLayout.WEST, panel);
-		sl_panel.putConstraint(SpringLayout.EAST, btnGetReports, -4, SpringLayout.EAST, panel);
-		sl_panel.putConstraint(SpringLayout.WEST, btnNewButton, 0, SpringLayout.WEST, btnGetReports);
-		sl_panel.putConstraint(SpringLayout.SOUTH, btnNewButton, -6, SpringLayout.NORTH, btnGetReports);
-		panel.add(btnGetReports);
+		JLabel lbladministratorName = new JLabel("(Administrator Name)");
+		panel.add(lbladministratorName);
 		
-		JButton btnGetDelievery = new JButton("Get Report");
-		sl_panel.putConstraint(SpringLayout.NORTH, btnGetDelievery, 114, SpringLayout.NORTH, panel);
-		sl_panel.putConstraint(SpringLayout.WEST, btnGetDelievery, 10, SpringLayout.WEST, panel);
-		sl_panel.putConstraint(SpringLayout.EAST, btnGetDelievery, -4, SpringLayout.EAST, panel);
-		sl_panel.putConstraint(SpringLayout.SOUTH, btnGetReports, -6, SpringLayout.NORTH, btnGetDelievery);
-		sl_panel.putConstraint(SpringLayout.SOUTH, btnGetDelievery, 160, SpringLayout.NORTH, panel);
-		panel.add(btnGetDelievery);
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.CENTER);
+		SpringLayout sl_panel_1 = new SpringLayout();
+		panel_1.setLayout(sl_panel_1);
 		
-		JButton btnGetdelivery = new JButton("Get delivery");
-		sl_panel.putConstraint(SpringLayout.NORTH, btnGetdelivery, 6, SpringLayout.SOUTH, btnGetDelievery);
-		sl_panel.putConstraint(SpringLayout.WEST, btnGetdelivery, 10, SpringLayout.WEST, panel);
-		sl_panel.putConstraint(SpringLayout.SOUTH, btnGetdelivery, 50, SpringLayout.SOUTH, btnGetDelievery);
-		sl_panel.putConstraint(SpringLayout.EAST, btnGetdelivery, -4, SpringLayout.EAST, panel);
-		panel.add(btnGetdelivery);
+		JButton btnMenuEditor = new JButton("Menu Editor");
+		sl_panel_1.putConstraint(SpringLayout.NORTH, btnMenuEditor, 10, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, btnMenuEditor, 10, SpringLayout.WEST, panel_1);
+		panel_1.add(btnMenuEditor);
+		
+		JButton btnGetReports = new JButton("View Reports");
+		sl_panel_1.putConstraint(SpringLayout.NORTH, btnGetReports, 5, SpringLayout.SOUTH, btnMenuEditor);
+		sl_panel_1.putConstraint(SpringLayout.WEST, btnGetReports, 0, SpringLayout.WEST, btnMenuEditor);
+		panel_1.add(btnGetReports);
+		
+		JButton btnNewButton = new JButton("Get Cafeteria Order");
+		sl_panel_1.putConstraint(SpringLayout.NORTH, btnNewButton, 7, SpringLayout.SOUTH, btnGetReports);
+		sl_panel_1.putConstraint(SpringLayout.WEST, btnNewButton, 0, SpringLayout.WEST, btnMenuEditor);
+		panel_1.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Get Delievery Order");
+		sl_panel_1.putConstraint(SpringLayout.NORTH, btnNewButton_1, 6, SpringLayout.SOUTH, btnNewButton);
+		sl_panel_1.putConstraint(SpringLayout.EAST, btnNewButton_1, 0, SpringLayout.EAST, btnNewButton);
+		panel_1.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Edit Parent's Balance");
+		sl_panel_1.putConstraint(SpringLayout.NORTH, btnNewButton_2, 6, SpringLayout.SOUTH, btnNewButton_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, btnNewButton_2, 0, SpringLayout.WEST, btnMenuEditor);
+		panel_1.add(btnNewButton_2);
+		
+		JButton btnLogOut = new JButton("Log Out");
+		sl_panel_1.putConstraint(SpringLayout.NORTH, btnLogOut, 6, SpringLayout.SOUTH, btnNewButton_2);
+		sl_panel_1.putConstraint(SpringLayout.WEST, btnLogOut, 0, SpringLayout.WEST, btnMenuEditor);
+		panel_1.add(btnLogOut);
 	}
-
 }
