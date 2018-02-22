@@ -79,6 +79,7 @@ public class LunchHour {
 	/**
 	 * Launch the application.
 	 */
+	//new comment
 	public static void main(String[] args) throws Exception {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
