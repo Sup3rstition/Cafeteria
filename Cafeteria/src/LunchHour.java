@@ -112,7 +112,7 @@ public class LunchHour {
 		LoginPanel.add(LoginPanel_1, BorderLayout.CENTER);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 204, 0));
+		panel.setBackground(new Color(53, 73, 93));
 		
 		JLabel lblUsernameemail = new JLabel("Username/Email:");
 		
