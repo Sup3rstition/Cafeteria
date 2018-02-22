@@ -36,6 +36,8 @@ import javax.swing.JSplitPane;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+import com.mysql.jdbc.Statement;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -44,6 +46,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import java.sql.ResultSet;
 import java.awt.TextField;
 import javax.swing.JSeparator;
@@ -74,13 +78,12 @@ public class LunchHour {
 	private JTextField ChkHistorytextField_1;
 	private JTextField Usernametxt;
 	private JPasswordField pwdPassword;
-	java.sql.Connection con;
 
 	/**
 	 * Launch the application.
 	 */
 	//new comment
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -100,6 +103,40 @@ public class LunchHour {
 	public LunchHour() throws Exception {
 		initialize();
 	}
+	private static Connection getRemoteConnection() {
+		Connection con = null;
+		// TODO Auto-generated method stub
+		try {
+		    System.out.println("Loading driver...");
+		    Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Driver loaded!");
+		  } catch (ClassNotFoundException e) {
+		    throw new RuntimeException("Cannot find the driver in the classpath!", e);
+		  }
+		
+		      try {
+		      Class.forName("com.mysql.jdbc.Driver");
+		      String dbName = "Cafeteria";
+		      String userName = "LunchHourAdmin";
+		      String password = "FGCUADMIN123";
+		      String hostname = "lunchhourdb.codmmpb86f3e.us-east-1.rds.amazonaws.com";
+		      String port = "3306";
+		      String jdbcUrl = "jdbc:mysql://" + hostname + ":" +
+		    		    port + "/" + dbName + "?user=" + userName + "&password=" + password;
+		      System.out.println(jdbcUrl);
+		      con = DriverManager.getConnection(jdbcUrl,userName,password);
+		      System.out.println("Success on conncetion");
+		      return con;
+		    }
+		    catch (ClassNotFoundException e) {System.out.print("Driver Connection problem"); }
+		    catch (SQLException ex) {
+		        // Handle any errors
+		        System.out.println("SQLException: " + ex.getMessage());
+		        System.out.println("SQLState: " + ex.getSQLState());
+		        System.out.println("VendorError: " + ex.getErrorCode());
+		      }
+	    return null;
+	  }
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -792,9 +829,31 @@ public class LunchHour {
 		 */
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-									OrderPanel.setVisible(true);
-									frame1.setSize(621,487);
-									LoginPanel.setVisible(false);
+				String Username = Usernametxt.getText();
+				String Password = pwdPassword.getText();
+				
+				Connection con = getRemoteConnection();
+				Statement st;
+				try {
+					int badlogin =0;
+					st = (Statement) con.createStatement();
+					ResultSet rs = st.executeQuery("Select * from Cafeteria. Parents;");
+					while (rs.next()){
+						if(rs.getString(1).equals(Username) && rs.getString(2).equals(Password)) {
+							OrderPanel.setVisible(true);
+							frame1.setSize(621,487);
+							LoginPanel.setVisible(false);
+						}else { 
+							 badlogin = 1;
+						}
+						}
+						if(badlogin == 1) {
+							System.out.println("Wrong Info");
+						}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 								
 			}
 			
