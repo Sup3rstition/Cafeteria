@@ -52,6 +52,8 @@ import java.sql.ResultSet;
 import java.awt.TextField;
 import javax.swing.JSeparator;
 import net.miginfocom.swing.MigLayout;
+import java.awt.Dimension;
+import javax.swing.SwingConstants;
 
 public class LunchHour {
 	private JFrame frame1;
@@ -117,8 +119,8 @@ public class LunchHour {
 		      try {
 		      Class.forName("com.mysql.jdbc.Driver");
 		      String dbName = "Cafeteria";
-		      String userName = "LunchHourAdmin";
-		      String password = "FGCUADMIN123";
+		      String userName = "root";
+		      String password = "root";
 		      String hostname = "lunchhourdb.codmmpb86f3e.us-east-1.rds.amazonaws.com";
 		      String port = "3306";
 		      String jdbcUrl = "jdbc:mysql://" + hostname + ":" +
@@ -142,12 +144,14 @@ public class LunchHour {
 	 */
 	private void initialize() throws Exception {
 		frame1 = new JFrame();
+		frame1.setForeground(new Color(255, 255, 255));
+		frame1.setBackground(new Color(255, 255, 255));
 		frame1.setTitle("Login \n");
 		frame1.setResizable(false);
 		frame1.setBounds(100, 100, 628,505);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.getContentPane().setLayout(new CardLayout(0, 0));
-		
+		Connection con = getRemoteConnection();
 		/*
 		 * Login Panel Begins
 		 */
@@ -156,108 +160,69 @@ public class LunchHour {
 		LoginPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel LoginPanel_1 = new JPanel();
-		LoginPanel_1.setBackground(new Color(102, 102, 102));
-		LoginPanel.add(LoginPanel_1, BorderLayout.CENTER);
-		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(53, 73, 93));
+		LoginPanel_1.setBackground(new Color(236, 240, 241));
+		LoginPanel.add(LoginPanel_1, BorderLayout.EAST);
 		
 		JLabel lblUsernameemail = new JLabel("Username/Email:");
+		lblUsernameemail.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		
 		Usernametxt = new JTextField();
+		Usernametxt.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		Usernametxt.setBorder(null);
 		Usernametxt.setText("Username@website.com");
-		Usernametxt.setBackground(new Color(102, 102, 102));
+		Usernametxt.setBackground(new Color(236, 240, 241));
 		Usernametxt.setColumns(10);
 		
 		JLabel lblPassowrd = new JLabel("Password:");
+		lblPassowrd.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		
 		pwdPassword = new JPasswordField();
+		pwdPassword.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		pwdPassword.setText("Password");
-		pwdPassword.setBackground(new Color(102,102,102));
+		pwdPassword.setBackground(new Color(236, 240, 241));
 		pwdPassword.setBorder(null);
 		
 		JCheckBox chckbxRememberMe = new JCheckBox("Remember Me");
-		
-		JButton btnLogin = new JButton("Login");
+		chckbxRememberMe.setBackground(new Color(236, 240, 241));
 		
 		JLabel lblForogtPassord = new JLabel("Forgot Password?");
-		
-		JLabel lblCreateAnAccount = new JLabel("Create an Account");
+		lblForogtPassord.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JSeparator separator = new JSeparator();
 		
 		JSeparator separator_1 = new JSeparator();
-		GroupLayout gl_LoginPanel_1 = new GroupLayout(LoginPanel_1);
-		gl_LoginPanel_1.setHorizontalGroup(
-			gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_LoginPanel_1.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE)
-					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_LoginPanel_1.createSequentialGroup()
-							.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_LoginPanel_1.createSequentialGroup()
-									.addGap(18)
-									.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-										.addGroup(Alignment.TRAILING, gl_LoginPanel_1.createSequentialGroup()
-											.addComponent(chckbxRememberMe)
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(lblForogtPassord, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
-										.addGroup(gl_LoginPanel_1.createSequentialGroup()
-											.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.TRAILING)
-												.addComponent(lblPassowrd)
-												.addComponent(lblUsernameemail))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-												.addComponent(Usernametxt, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-												.addComponent(pwdPassword, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-												.addComponent(separator_1, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-												.addComponent(separator, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE)))))
-								.addGroup(gl_LoginPanel_1.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblCreateAnAccount)))
-							.addContainerGap())
-						.addGroup(gl_LoginPanel_1.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnLogin)
-							.addGap(17))))
-		);
-		gl_LoginPanel_1.setVerticalGroup(
-			gl_LoginPanel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_LoginPanel_1.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 496, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGroup(gl_LoginPanel_1.createSequentialGroup()
-					.addGap(191)
-					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblUsernameemail)
-						.addComponent(Usernametxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(12)
-					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblPassowrd)
-						.addComponent(pwdPassword, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_LoginPanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblForogtPassord)
-						.addComponent(chckbxRememberMe))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnLogin)
-					.addPreferredGap(ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
-					.addComponent(lblCreateAnAccount)
-					.addGap(25))
-		);
-		SpringLayout sl_panel = new SpringLayout();
-		panel.setLayout(sl_panel);
 		
-		JLabel lblSchoolLogo = new JLabel("School Logo");
-		sl_panel.putConstraint(SpringLayout.NORTH, lblSchoolLogo, 231, SpringLayout.NORTH, panel);
-		sl_panel.putConstraint(SpringLayout.WEST, lblSchoolLogo, 106, SpringLayout.WEST, panel);
-		panel.add(lblSchoolLogo);
-		LoginPanel_1.setLayout(gl_LoginPanel_1);
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(145,180,150));
+		
+		JButton btnLogin = new JButton("Login");
+		btnLogin.setBackground(new Color(145,180,150));
+		btnLogin.setMinimumSize(new Dimension(60, 23));
+		btnLogin.setMaximumSize(new Dimension(250, 100));
+		LoginPanel_1.setLayout(new MigLayout("", "[290px][130px][48px][136px]", "[152px][10px][16px][8px][1px][10px][16px][11px][16px][8px][1px][13px][23px][11px][23px][129px][14px]"));
+		LoginPanel_1.add(chckbxRememberMe, "cell 1 12,alignx right,aligny top");
+		LoginPanel_1.add(lblForogtPassord, "cell 3 12,alignx left,aligny center");
+		LoginPanel_1.add(lblPassowrd, "cell 1 6,alignx left,aligny top");
+		LoginPanel_1.add(lblUsernameemail, "cell 1 0,alignx left,aligny bottom");
+		LoginPanel_1.add(Usernametxt, "cell 1 2 3 1,growx,aligny top");
+		LoginPanel_1.add(pwdPassword, "cell 1 8 3 1,growx,aligny top");
+		LoginPanel_1.add(separator_1, "cell 1 10 3 1,grow");
+		LoginPanel_1.add(separator, "cell 1 4 3 1,grow");
+		
+		JLabel lblCreateAnAccount = new JLabel("Create an Account");
+		lblCreateAnAccount.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+			}
+		});
+		lblCreateAnAccount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		LoginPanel_1.add(lblCreateAnAccount, "cell 1 14,alignx right,aligny top");
+		LoginPanel_1.add(btnLogin, "cell 3 14,grow");
+		LoginPanel_1.add(panel, "cell 0 0 1 17,grow");
+		
+		JLabel lblCreatedByLunchhour = new JLabel("Created By LunchHour");
+		LoginPanel_1.add(lblCreatedByLunchhour, "cell 3 16,alignx right");
 		
 				/*Login Panel Ends
 				 * 
@@ -271,66 +236,22 @@ public class LunchHour {
 		ParentAccountPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		
 		JLabel AccountLabel = new JLabel("Account:");
+		AccountLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JLabel BalanceLabel = new JLabel("Balance:");
+		BalanceLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JLabel lblCurrentDateLabel = new JLabel("Current Date:");
+		lblCurrentDateLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JLabel CurrentDateLabel = new JLabel("??/??/????");
+		CurrentDateLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
 		
 		JLabel lblparentnameLabel = new JLabel("(ParentName)");
+		lblparentnameLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
 		
 		JLabel BalanceAmount = new JLabel("??.??");
-		
-		JButton CheckHistoryBtn = new JButton("Check History");
-		
-		JButton OrderLogoutBtn = new JButton("Log Out");
-		
-		GroupLayout gl_ParentAccountPanel = new GroupLayout(ParentAccountPanel);
-		gl_ParentAccountPanel.setHorizontalGroup(
-			gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_ParentAccountPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_ParentAccountPanel.createSequentialGroup()
-							.addComponent(CheckHistoryBtn)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(OrderLogoutBtn))
-						.addGroup(gl_ParentAccountPanel.createSequentialGroup()
-							.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(AccountLabel)
-								.addComponent(BalanceLabel)
-								.addComponent(lblCurrentDateLabel))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
-									.addComponent(BalanceAmount)
-									.addComponent(CurrentDateLabel))
-								.addComponent(lblparentnameLabel))))
-					.addContainerGap(25, Short.MAX_VALUE))
-		);
-		gl_ParentAccountPanel.setVerticalGroup(
-			gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_ParentAccountPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblparentnameLabel)
-						.addComponent(AccountLabel))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(BalanceLabel)
-						.addComponent(BalanceAmount))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblCurrentDateLabel)
-						.addComponent(CurrentDateLabel))
-					.addGap(14)
-					.addGroup(gl_ParentAccountPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(CheckHistoryBtn)
-						.addComponent(OrderLogoutBtn))
-					.addGap(17))
-		);
-		ParentAccountPanel.setLayout(gl_ParentAccountPanel);
+		BalanceAmount.setFont(new Font("Dialog", Font.PLAIN, 14));
 		
 		JPanel Menu_Panel = new JPanel();
 		Menu_Panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -353,47 +274,6 @@ public class LunchHour {
 		JButton OrderbtnOrder = new JButton("Order");
 		
 		JButton OrderBtnClear = new JButton("Clear");
-		GroupLayout gl_layeredPane = new GroupLayout(layeredPane);
-		gl_layeredPane.setHorizontalGroup(
-			gl_layeredPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_layeredPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addGroup(gl_layeredPane.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_layeredPane.createSequentialGroup()
-									.addComponent(TotalOrder)
-									.addGap(18)
-									.addComponent(TotalTxtOrder, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane.createSequentialGroup()
-									.addComponent(OrderBalanceRemaingLabel)
-									.addGap(18)
-									.addComponent(BalanceRemainingTxt, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)))
-							.addGap(5))
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addComponent(OrderBtnClear)
-							.addPreferredGap(ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-							.addComponent(OrderbtnOrder)
-							.addContainerGap())))
-		);
-		gl_layeredPane.setVerticalGroup(
-			gl_layeredPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_layeredPane.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(TotalTxtOrder, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(TotalOrder))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(OrderBalanceRemaingLabel)
-						.addComponent(BalanceRemainingTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(OrderbtnOrder)
-						.addComponent(OrderBtnClear))
-					.addGap(37))
-		);
-		layeredPane.setLayout(gl_layeredPane);
 		
 		JLabel lblOrderProblemsContactUsLabel = new JLabel("Problems? Contact the school.");
 		
@@ -411,63 +291,34 @@ public class LunchHour {
 		
 		
 		JLabel lblStudentsOrderLabel = new JLabel("Students");
+		lblStudentsOrderLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JPanel ExtraPanel = new JPanel();
 		
 		JPanel PickItemPanel = new JPanel();
 		PickItemPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		ParentAccountPanel.setLayout(new MigLayout("", "[67px][6px][26px][][6px][71px]", "[14px][14px][14px][23px][]"));
 		
+		JButton CheckHistoryBtn = new JButton("Check History");
+		CheckHistoryBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		ParentAccountPanel.add(CheckHistoryBtn, "cell 0 3,alignx left,aligny top");
+		CheckHistoryBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				frame1.setSize(360, 493);
+				CheckHistoryPanel.setVisible(true);
+			}
+		});
+		ParentAccountPanel.add(AccountLabel, "cell 0 0,alignx left,aligny top");
+		ParentAccountPanel.add(BalanceLabel, "cell 0 1,alignx left,aligny top");
+		ParentAccountPanel.add(lblCurrentDateLabel, "cell 0 2,alignx left,aligny top");
+		ParentAccountPanel.add(BalanceAmount, "cell 2 1,alignx left,aligny top");
+		ParentAccountPanel.add(CurrentDateLabel, "cell 2 2 4 1,alignx left,aligny top");
+		ParentAccountPanel.add(lblparentnameLabel, "cell 2 0 4 1,alignx left,aligny top");
 		
-		GroupLayout gl_OrderPanel = new GroupLayout(OrderPanel);
-		gl_OrderPanel.setHorizontalGroup(
-			gl_OrderPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_OrderPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_OrderPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_OrderPanel.createSequentialGroup()
-							.addGap(44)
-							.addComponent(lblStudentsOrderLabel))
-						.addGroup(gl_OrderPanel.createSequentialGroup()
-							.addGap(1)
-							.addComponent(OrderList, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE))
-						.addComponent(PickItemPanel, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_OrderPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(Menu_Panel, 0, 0, Short.MAX_VALUE)
-						.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblOrderProblemsContactUsLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-						.addComponent(ParentAccountPanel, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(ExtraPanel, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
-					.addGap(12))
-		);
-		gl_OrderPanel.setVerticalGroup(
-			gl_OrderPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_OrderPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_OrderPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_OrderPanel.createSequentialGroup()
-							.addComponent(ExtraPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(gl_OrderPanel.createSequentialGroup()
-							.addGroup(gl_OrderPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, gl_OrderPanel.createSequentialGroup()
-									.addComponent(lblStudentsOrderLabel)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(OrderList, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(PickItemPanel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-									.addGap(9))
-								.addGroup(gl_OrderPanel.createSequentialGroup()
-									.addComponent(ParentAccountPanel, GroupLayout.PREFERRED_SIZE, 118, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(Menu_Panel, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblOrderProblemsContactUsLabel)))
-							.addGap(12))))
-		);
+		JButton OrderLogoutBtn = new JButton("Log Out");
+		OrderLogoutBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		ParentAccountPanel.add(OrderLogoutBtn, "cell 3 3,alignx left,aligny top");
 		PickItemPanel.setLayout(new MigLayout("", "[41px][6px][3px][6px][61px]", "[31px][16px][1px][6px][16px][16px][16px][16px][16px]"));
 		
 		JLabel lblMenu_1Label = new JLabel("Menu 1:");
@@ -514,41 +365,15 @@ public class LunchHour {
 		PickItemPanel.add(Add_3itemLabel, "cell 2 8 3 1,alignx left,aligny top");
 		
 		JLabel lblOrderExtrasLabel = new JLabel("Extras");
+		lblOrderExtrasLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		DefaultTableModel Order_model = new DefaultTableModel(Order_extras,Order_column_headers); 
+		ExtraPanel.setLayout(new MigLayout("", "[157px]", "[14px][424px]"));
 		table = new JTable(Order_model);
 		JScrollPane OrderscrollPane = new JScrollPane(table);
-		
-		GroupLayout gl_ExtraPanel = new GroupLayout(ExtraPanel);
-		gl_ExtraPanel.setHorizontalGroup(
-			gl_ExtraPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_ExtraPanel.createSequentialGroup()
-					.addGroup(gl_ExtraPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_ExtraPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(OrderscrollPane, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_ExtraPanel.createSequentialGroup()
-							.addGap(66)
-							.addComponent(lblOrderExtrasLabel)))
-					.addContainerGap(8, Short.MAX_VALUE))
-		);
-		gl_ExtraPanel.setVerticalGroup(
-			gl_ExtraPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_ExtraPanel.createSequentialGroup()
-					.addComponent(lblOrderExtrasLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(OrderscrollPane, GroupLayout.PREFERRED_SIZE, 424, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		ExtraPanel.setLayout(gl_ExtraPanel);
+		ExtraPanel.add(OrderscrollPane, "cell 0 1,grow");
+		ExtraPanel.add(lblOrderExtrasLabel, "cell 0 0,alignx center,aligny top");
 		
 		JLabel lblDayLabel = new JLabel("Day:");
-		
-		JComboBox DayComboBox = new JComboBox();
-		DayComboBox.setModel(new DefaultComboBoxModel(new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"}));
-		
-		JLabel OrderMenuLabel = new JLabel("Menu");
-		
-		JLabel lblAdditionalItemsLabel = new JLabel("Additional Items:");
 		
 		JRadioButton Menu1Radio = new JRadioButton("Menu 1");
 		OrderButtonGroup.add(Menu1Radio);
@@ -559,84 +384,63 @@ public class LunchHour {
 		JRadioButton rdbtnMenu_3 = new JRadioButton("Menu 3");
 		OrderButtonGroup.add(rdbtnMenu_3);
 		
-		JLabel lblOrderAdd3Label = new JLabel("Add 1:");
-		
-		JLabel lblOrderAdd2Label = new JLabel("Add 2:");
-		
-		JLabel lblOrderAdd1Label = new JLabel("Add 3:");
-		
 		JSpinner OrderSpinner = new JSpinner();
 		
 		JSpinner OrderSpinner_1 = new JSpinner();
 		
 		JSpinner OrderSpinner_2 = new JSpinner();
-		SpringLayout sl_Menu_Panel = new SpringLayout();
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, OrderSpinner_2, -1, SpringLayout.NORTH, rdbtnMenu_3);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, OrderSpinner_2, 0, SpringLayout.EAST, OrderSpinner_1);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, OrderSpinner, 171, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, OrderSpinner_1, 171, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.SOUTH, OrderSpinner, -3, SpringLayout.NORTH, OrderSpinner_1);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, lblOrderAdd2Label, 31, SpringLayout.EAST, rdbtnMenu_2);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, lblOrderAdd2Label, -6, SpringLayout.WEST, OrderSpinner_1);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, OrderSpinner_1, -1, SpringLayout.NORTH, rdbtnMenu_2);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, lblOrderAdd1Label, 31, SpringLayout.EAST, rdbtnMenu_3);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, lblOrderAdd2Label, 4, SpringLayout.NORTH, rdbtnMenu_2);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, lblOrderAdd1Label, 4, SpringLayout.NORTH, rdbtnMenu_3);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, DayComboBox, -4, SpringLayout.NORTH, lblDayLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, DayComboBox, 91, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, DayComboBox, 0, SpringLayout.EAST, lblAdditionalItemsLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, lblDayLabel, 0, SpringLayout.WEST, OrderMenuLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, lblDayLabel, 72, SpringLayout.WEST, OrderMenuLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, rdbtnMenu_2, 8, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, rdbtnMenu_3, 8, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, Menu1Radio, 8, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, lblOrderAdd3Label, -13, SpringLayout.WEST, OrderSpinner);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, lblOrderAdd3Label, 4, SpringLayout.NORTH, Menu1Radio);
-		sl_Menu_Panel.putConstraint(SpringLayout.SOUTH, rdbtnMenu_2, -6, SpringLayout.NORTH, rdbtnMenu_3);
-		sl_Menu_Panel.putConstraint(SpringLayout.SOUTH, rdbtnMenu_3, -10, SpringLayout.SOUTH, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, Menu1Radio, 6, SpringLayout.SOUTH, OrderMenuLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, lblAdditionalItemsLabel, 103, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, OrderMenuLabel, 8, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, OrderMenuLabel, -17, SpringLayout.WEST, lblAdditionalItemsLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, lblAdditionalItemsLabel, -36, SpringLayout.EAST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, OrderMenuLabel, 0, SpringLayout.NORTH, lblAdditionalItemsLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.SOUTH, lblAdditionalItemsLabel, -6, SpringLayout.NORTH, OrderSpinner);
-		Menu_Panel.setLayout(sl_Menu_Panel);
-		Menu_Panel.add(lblDayLabel);
-		Menu_Panel.add(DayComboBox);
-		Menu_Panel.add(OrderMenuLabel);
-		Menu_Panel.add(Menu1Radio);
-		Menu_Panel.add(rdbtnMenu_3);
-		Menu_Panel.add(rdbtnMenu_2);
-		Menu_Panel.add(lblOrderAdd1Label);
-		Menu_Panel.add(OrderSpinner_2);
-		Menu_Panel.add(lblOrderAdd2Label);
-		Menu_Panel.add(OrderSpinner_1);
-		Menu_Panel.add(lblAdditionalItemsLabel);
-		Menu_Panel.add(lblOrderAdd3Label);
-		Menu_Panel.add(OrderSpinner);
+		Menu_Panel.setLayout(new MigLayout("", "[78px][][74px][][][6px][59px]", "[14px][20px][14px][14px][23px][24px][24px]"));
+		Menu_Panel.add(lblDayLabel, "cell 0 1,alignx center,aligny center");
 		
-		JLabel lblWeekLabel = new JLabel("Week:");
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, lblWeekLabel, 8, SpringLayout.WEST, Menu_Panel);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, lblDayLabel, 6, SpringLayout.SOUTH, lblWeekLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, lblWeekLabel, 10, SpringLayout.NORTH, Menu_Panel);
-		Menu_Panel.add(lblWeekLabel);
-		
-		JLabel WeekLabel = new JLabel("??/??/??-??/??/??");
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, WeekLabel, 0, SpringLayout.NORTH, lblWeekLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.EAST, WeekLabel, -60, SpringLayout.EAST, Menu_Panel);
-		Menu_Panel.add(WeekLabel);
-		
-		JLabel StudentLabel = new JLabel("Student:");
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, StudentLabel, 8, SpringLayout.SOUTH, lblDayLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, StudentLabel, 0, SpringLayout.WEST, lblDayLabel);
-		Menu_Panel.add(StudentLabel);
+		JComboBox DayComboBox = new JComboBox();
+		DayComboBox.setModel(new DefaultComboBoxModel(new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"}));
+		Menu_Panel.add(DayComboBox, "cell 1 1,growx,aligny top");
 		
 		JLabel StudentNameLabel = new JLabel("First Last");
-		sl_Menu_Panel.putConstraint(SpringLayout.NORTH, StudentNameLabel, 0, SpringLayout.NORTH, StudentLabel);
-		sl_Menu_Panel.putConstraint(SpringLayout.WEST, StudentNameLabel, 57, SpringLayout.EAST, StudentLabel);
-		Menu_Panel.add(StudentNameLabel);
-		OrderPanel.setLayout(gl_OrderPanel);
+		Menu_Panel.add(StudentNameLabel, "cell 1 2,alignx center,aligny top");
+		
+		JLabel OrderMenuLabel = new JLabel("Menu");
+		Menu_Panel.add(OrderMenuLabel, "cell 0 3,alignx center,aligny top");
+		
+		JLabel lblAdditionalItemsLabel = new JLabel("Additional Items:");
+		Menu_Panel.add(lblAdditionalItemsLabel, "cell 1 3,alignx center,aligny top");
+		Menu_Panel.add(Menu1Radio, "cell 0 4,alignx center,aligny top");
+		
+		JLabel lblOrderAdd3Label = new JLabel("Add 1:");
+		Menu_Panel.add(lblOrderAdd3Label, "cell 1 4,alignx center,aligny center");
+		
+		JLabel lblOrderAdd2Label = new JLabel("Add 2:");
+		Menu_Panel.add(lblOrderAdd2Label, "cell 1 5,alignx center,aligny center");
+		Menu_Panel.add(rdbtnMenu_3, "cell 0 6,alignx center,aligny bottom");
+		Menu_Panel.add(rdbtnMenu_2, "cell 0 5,alignx center,aligny bottom");
+		
+		JLabel lblOrderAdd1Label = new JLabel("Add 3:");
+		Menu_Panel.add(lblOrderAdd1Label, "cell 1 6,alignx center,aligny center");
+		Menu_Panel.add(OrderSpinner_2, "cell 6 6,alignx left,aligny top");
+		Menu_Panel.add(OrderSpinner_1, "cell 6 5,alignx left,aligny top");
+		Menu_Panel.add(OrderSpinner, "cell 6 4,alignx left,aligny top");
+		
+		JLabel lblWeekLabel = new JLabel("Week:");
+		Menu_Panel.add(lblWeekLabel, "cell 0 0,alignx center,aligny top");
+		
+		JLabel StudentLabel = new JLabel("Student:");
+		Menu_Panel.add(StudentLabel, "cell 0 2,alignx center,aligny top");
+		OrderPanel.setLayout(new MigLayout("", "[147px][270px][171px]", "[14px][6px][97px][11px][73px][11px][121px][6px][99px][6px][15px]"));
+		OrderPanel.add(lblStudentsOrderLabel, "cell 0 0,alignx center,aligny top");
+		OrderPanel.add(OrderList, "cell 0 2 1 3,grow");
+		OrderPanel.add(PickItemPanel, "cell 0 6 1 5,grow");
+		OrderPanel.add(Menu_Panel, "cell 1 4 1 3,grow");
+		OrderPanel.add(layeredPane, "cell 1 8,grow");
+		layeredPane.setLayout(new MigLayout("", "[57px][20px][28px][111px]", "[20px][20px][23px]"));
+		layeredPane.add(TotalOrder, "cell 2 0,alignx left,aligny center");
+		layeredPane.add(TotalTxtOrder, "cell 3 0,growx,aligny top");
+		layeredPane.add(OrderBalanceRemaingLabel, "cell 0 1 3 1,alignx right,aligny center");
+		layeredPane.add(BalanceRemainingTxt, "cell 3 1,growx,aligny top");
+		layeredPane.add(OrderBtnClear, "cell 0 2,alignx left,aligny top");
+		layeredPane.add(OrderbtnOrder, "cell 3 2,alignx right,aligny top");
+		OrderPanel.add(lblOrderProblemsContactUsLabel, "cell 1 10,growx,aligny top");
+		OrderPanel.add(ParentAccountPanel, "cell 1 0 1 3,grow");
+		OrderPanel.add(ExtraPanel, "cell 2 0 1 11,alignx left,aligny top");
 		
 		/*
 		 * End of Order Panel
@@ -831,11 +635,8 @@ public class LunchHour {
 			public void actionPerformed(ActionEvent e) {
 				String Username = Usernametxt.getText();
 				String Password = pwdPassword.getText();
-				
-				Connection con = getRemoteConnection();
 				Statement st;
 				try {
-					int badlogin =0;
 					st = (Statement) con.createStatement();
 					ResultSet rs = st.executeQuery("Select * from Cafeteria. Parents;");
 					while (rs.next()){
@@ -843,27 +644,21 @@ public class LunchHour {
 							OrderPanel.setVisible(true);
 							frame1.setSize(621,487);
 							LoginPanel.setVisible(false);
-						}else { 
-							 badlogin = 1;
+							PullInfo(lblparentnameLabel,con,Username);
+							break;
 						}
-						}
-						if(badlogin == 1) {
-							System.out.println("Wrong Info");
-						}
-				} catch (SQLException e1) {
+					}
+					} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 								
 			}
-			
-		});
-		OrderLogoutBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(628,505);
-				LoginPanel.setVisible(true);	
+
+			private void reopen(Connection con) {
+				con = getRemoteConnection();
 			}
+			
 		});
 		ChkHistorybtnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -871,13 +666,6 @@ public class LunchHour {
 				frame1.setSize(621,487);
 				OrderPanel.setVisible(true);
 				
-			}
-		});
-		CheckHistoryBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(360, 493);
-				CheckHistoryPanel.setVisible(true);
 			}
 		});
 		OrderbtnOrder.addActionListener(new ActionListener() {
@@ -901,5 +689,24 @@ public class LunchHour {
 				LoginPanel.setVisible(true);
 			}
 		});
+		OrderLogoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Usernametxt.setText("Username@website.com");
+				pwdPassword.setText("Password");
+				OrderPanel.setVisible(false);
+				frame1.setSize(628,505);
+				LoginPanel.setVisible(true);	
+			}
+		});
+	}
+	public void PullInfo(JLabel lblparentnameLabel, Connection con ,String Username) throws SQLException {
+		Statement str = (Statement) con.createStatement();
+		ResultSet res = str.executeQuery("Select `First Name`,`Last Name` from `Cafeteria`.`Parents`"
+				+ "where `Username` = '"+ Username + "';");
+		while(res.next()){
+		String FirstName = res.getString(1);
+		String LastName = res.getString(2);
+		lblparentnameLabel.setText(FirstName +" " + LastName);
+		}
 	}
 }
