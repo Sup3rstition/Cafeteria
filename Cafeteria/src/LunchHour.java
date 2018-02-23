@@ -169,7 +169,7 @@ public class LunchHour {
 		Usernametxt = new JTextField();
 		Usernametxt.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		Usernametxt.setBorder(null);
-		Usernametxt.setText("Username@website.com");
+		Usernametxt.setText("Username");
 		Usernametxt.setBackground(new Color(236, 240, 241));
 		Usernametxt.setColumns(10);
 		
@@ -189,8 +189,12 @@ public class LunchHour {
 		lblForogtPassord.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JSeparator separator = new JSeparator();
+		separator.setBackground(Color.BLACK);
+		separator.setForeground(Color.BLACK);
 		
 		JSeparator separator_1 = new JSeparator();
+		separator_1.setForeground(Color.BLACK);
+		separator_1.setBackground(Color.BLACK);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(145,180,150));
@@ -206,8 +210,8 @@ public class LunchHour {
 		LoginPanel_1.add(lblUsernameemail, "cell 1 0,alignx left,aligny bottom");
 		LoginPanel_1.add(Usernametxt, "cell 1 2 3 1,growx,aligny top");
 		LoginPanel_1.add(pwdPassword, "cell 1 8 3 1,growx,aligny top");
-		LoginPanel_1.add(separator_1, "cell 1 10 3 1,grow");
-		LoginPanel_1.add(separator, "cell 1 4 3 1,grow");
+		LoginPanel_1.add(separator_1, "cell 1 9 3 2,grow");
+		LoginPanel_1.add(separator, "cell 1 3 3 2,grow");
 		
 		JLabel lblCreateAnAccount = new JLabel("Create an Account");
 		lblCreateAnAccount.addMouseListener(new MouseAdapter() {
@@ -232,7 +236,8 @@ public class LunchHour {
 		JPanel OrderPanel = new JPanel();
 		frame1.getContentPane().add(OrderPanel, "name_272189214436444");
 		
-		JPanel ParentAccountPanel = new JPanel();
+		JPanel ParentAccountPanel = 
+				new JPanel();
 		ParentAccountPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		
 		JLabel AccountLabel = new JLabel("Account:");
@@ -633,7 +638,7 @@ public class LunchHour {
 		 */
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String Username = Usernametxt.getText();
+				String Username = Usernametxt.getText().toUpperCase();
 				String Password = pwdPassword.getText();
 				Statement st;
 				try {
@@ -644,7 +649,7 @@ public class LunchHour {
 							OrderPanel.setVisible(true);
 							frame1.setSize(621,487);
 							LoginPanel.setVisible(false);
-							PullInfo(lblparentnameLabel,con,Username);
+							PullInfo(lblparentnameLabel,BalanceAmount,con,Username);
 							break;
 						}
 					}
@@ -691,7 +696,7 @@ public class LunchHour {
 		});
 		OrderLogoutBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Usernametxt.setText("Username@website.com");
+				Usernametxt.setText("Username");
 				pwdPassword.setText("Password");
 				OrderPanel.setVisible(false);
 				frame1.setSize(628,505);
@@ -699,14 +704,17 @@ public class LunchHour {
 			}
 		});
 	}
-	public void PullInfo(JLabel lblparentnameLabel, Connection con ,String Username) throws SQLException {
+	public void PullInfo(JLabel ParentName,JLabel BalanceAmount, Connection con ,String Username) throws SQLException {
 		Statement str = (Statement) con.createStatement();
-		ResultSet res = str.executeQuery("Select `First Name`,`Last Name` from `Cafeteria`.`Parents`"
+		ResultSet res = str.executeQuery("Select `First Name`,`Last Name`,`Balance` from `Cafeteria`.`Parents`"
 				+ "where `Username` = '"+ Username + "';");
 		while(res.next()){
 		String FirstName = res.getString(1);
 		String LastName = res.getString(2);
-		lblparentnameLabel.setText(FirstName +" " + LastName);
+		String Balance =  res.getString(3);
+		ParentName.setText(FirstName +" " + LastName);
+		BalanceAmount.setText(Balance);
+		
 		}
 	}
 }
