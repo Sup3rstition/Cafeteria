@@ -264,7 +264,7 @@ public class LunchHour {
 		JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
-		JLabel TotalOrder = new JLabel("Total:");
+		JLabel TotalOrder = new JLabel("Total;");
 		
 		TotalTxtOrder = new JTextField();
 		TotalTxtOrder.setText("$0.00");
