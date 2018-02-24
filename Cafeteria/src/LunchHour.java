@@ -46,6 +46,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.sql.ResultSet;
@@ -54,6 +57,10 @@ import javax.swing.JSeparator;
 import net.miginfocom.swing.MigLayout;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.border.MatteBorder;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 public class LunchHour {
 	private JFrame frame1;
@@ -148,7 +155,7 @@ public class LunchHour {
 		frame1.setBackground(new Color(255, 255, 255));
 		frame1.setTitle("Login \n");
 		frame1.setResizable(false);
-		frame1.setBounds(100, 100, 628,505);
+		frame1.setBounds(100, 100, 608,560);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.getContentPane().setLayout(new CardLayout(0, 0));
 		Connection con = getRemoteConnection();
@@ -160,7 +167,7 @@ public class LunchHour {
 		LoginPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel LoginPanel_1 = new JPanel();
-		LoginPanel_1.setBackground(new Color(236, 240, 241));
+		LoginPanel_1.setBackground(new Color(236,236,236));
 		LoginPanel.add(LoginPanel_1, BorderLayout.EAST);
 		
 		JLabel lblUsernameemail = new JLabel("Username/Email:");
@@ -168,9 +175,9 @@ public class LunchHour {
 		
 		Usernametxt = new JTextField();
 		Usernametxt.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		Usernametxt.setBorder(null);
+		Usernametxt.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		Usernametxt.setText("Username");
-		Usernametxt.setBackground(new Color(236, 240, 241));
+		Usernametxt.setBackground(new Color(236,236,236));
 		Usernametxt.setColumns(10);
 		
 		JLabel lblPassowrd = new JLabel("Password:");
@@ -179,39 +186,30 @@ public class LunchHour {
 		pwdPassword = new JPasswordField();
 		pwdPassword.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		pwdPassword.setText("Password");
-		pwdPassword.setBackground(new Color(236, 240, 241));
-		pwdPassword.setBorder(null);
+		pwdPassword.setBackground(new Color(236,236,236));
+		pwdPassword.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		
 		JCheckBox chckbxRememberMe = new JCheckBox("Remember Me");
 		chckbxRememberMe.setBackground(new Color(236, 240, 241));
 		
 		JLabel lblForogtPassord = new JLabel("Forgot Password?");
-		lblForogtPassord.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		JSeparator separator = new JSeparator();
-		separator.setBackground(Color.BLACK);
-		separator.setForeground(Color.BLACK);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setForeground(Color.BLACK);
-		separator_1.setBackground(Color.BLACK);
+		lblForogtPassord.setFont(lblForogtPassord.getFont().deriveFont(lblForogtPassord.getFont().getStyle() | Font.ITALIC));
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(145,180,150));
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setForeground(new Color(0, 0, 0));
 		btnLogin.setBackground(new Color(145,180,150));
 		btnLogin.setMinimumSize(new Dimension(60, 23));
 		btnLogin.setMaximumSize(new Dimension(250, 100));
 		LoginPanel_1.setLayout(new MigLayout("", "[290px][130px][48px][136px]", "[152px][10px][16px][8px][1px][10px][16px][11px][16px][8px][1px][13px][23px][11px][23px][129px][14px]"));
 		LoginPanel_1.add(chckbxRememberMe, "cell 1 12,alignx right,aligny top");
-		LoginPanel_1.add(lblForogtPassord, "cell 3 12,alignx left,aligny center");
+		LoginPanel_1.add(lblForogtPassord, "cell 3 12,alignx left");
 		LoginPanel_1.add(lblPassowrd, "cell 1 6,alignx left,aligny top");
 		LoginPanel_1.add(lblUsernameemail, "cell 1 0,alignx left,aligny bottom");
 		LoginPanel_1.add(Usernametxt, "cell 1 2 3 1,growx,aligny top");
 		LoginPanel_1.add(pwdPassword, "cell 1 8 3 1,growx,aligny top");
-		LoginPanel_1.add(separator_1, "cell 1 9 3 2,grow");
-		LoginPanel_1.add(separator, "cell 1 3 3 2,grow");
 		
 		JLabel lblCreateAnAccount = new JLabel("Create an Account");
 		lblCreateAnAccount.addMouseListener(new MouseAdapter() {
@@ -220,7 +218,7 @@ public class LunchHour {
 				
 			}
 		});
-		lblCreateAnAccount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCreateAnAccount.setFont(lblCreateAnAccount.getFont().deriveFont(lblCreateAnAccount.getFont().getStyle() | Font.BOLD));
 		LoginPanel_1.add(lblCreateAnAccount, "cell 1 14,alignx right,aligny top");
 		LoginPanel_1.add(btnLogin, "cell 3 14,grow");
 		LoginPanel_1.add(panel, "cell 0 0 1 17,grow");
@@ -234,11 +232,23 @@ public class LunchHour {
 				 * OrderPanel Begins
 				 */
 		JPanel OrderPanel = new JPanel();
+		OrderPanel.setBackground(new Color(189, 195, 199));
 		frame1.getContentPane().add(OrderPanel, "name_272189214436444");
+		Date date = new Date();
+		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		int year  = localDate.getYear();
+		int month = localDate.getMonthValue();
+		int day   = localDate.getDayOfMonth();
+		DefaultTableModel Order_model = new DefaultTableModel(Order_extras,Order_column_headers);
+		OrderPanel.setLayout(new MigLayout("", "[][147px][][][grow][][][270px][171px][]", "[][14px][grow][][6px][97px][11px][][73px][11px][121px][6px][99px][6px][15px][]"));
+		
+		Component verticalStrut = Box.createVerticalStrut(20);
+		OrderPanel.add(verticalStrut, "cell 4 0");
 		
 		JPanel ParentAccountPanel = 
 				new JPanel();
-		ParentAccountPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		ParentAccountPanel.setBackground(new Color(145,180,150));
+		ParentAccountPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		
 		JLabel AccountLabel = new JLabel("Account:");
 		AccountLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -248,145 +258,79 @@ public class LunchHour {
 		
 		JLabel lblCurrentDateLabel = new JLabel("Current Date:");
 		lblCurrentDateLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		JLabel CurrentDateLabel = new JLabel("??/??/????");
-		CurrentDateLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
-		
-		JLabel lblparentnameLabel = new JLabel("(ParentName)");
-		lblparentnameLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
-		
-		JLabel BalanceAmount = new JLabel("??.??");
-		BalanceAmount.setFont(new Font("Dialog", Font.PLAIN, 14));
-		
-		JPanel Menu_Panel = new JPanel();
-		Menu_Panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		
-		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		
-		JLabel TotalOrder = new JLabel("Total;");
-		
-		TotalTxtOrder = new JTextField();
-		TotalTxtOrder.setText("$0.00");
-		TotalTxtOrder.setColumns(10);
-		
-		JLabel OrderBalanceRemaingLabel = new JLabel("Balance remaining:");
-		
-		BalanceRemainingTxt = new JTextField();
-		BalanceRemainingTxt.setText("$0.00");
-		BalanceRemainingTxt.setColumns(10);
-		
-		JButton OrderbtnOrder = new JButton("Order");
-		
-		JButton OrderBtnClear = new JButton("Clear");
-		
-		JLabel lblOrderProblemsContactUsLabel = new JLabel("Problems? Contact the school.");
-		
-		JList OrderList = new JList();
-		OrderList.setBorder(new LineBorder(new Color(0, 0, 0)));
-		OrderList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Cordes,Bryan", "Cordes,Bryan", "Cordes,Bryan", "Cordes,Bryan", "Cordes,Bryan", "Cordes,Bryan", "Cordes,Bryan", "Cordes,Bryan", "Cordes,Bryan", ""};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		
-		
-		JLabel lblStudentsOrderLabel = new JLabel("Students");
-		lblStudentsOrderLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		JPanel ExtraPanel = new JPanel();
-		
-		JPanel PickItemPanel = new JPanel();
-		PickItemPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		ParentAccountPanel.setLayout(new MigLayout("", "[67px][6px][26px][][6px][71px]", "[14px][14px][14px][23px][]"));
+		ParentAccountPanel.setLayout(new MigLayout("", "[67px,grow][][][6px][26px][][6px][71px]", "[14px][14px][14px][23px][][][grow][][]"));
 		
 		JButton CheckHistoryBtn = new JButton("Check History");
 		CheckHistoryBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		ParentAccountPanel.add(CheckHistoryBtn, "cell 0 3,alignx left,aligny top");
-		CheckHistoryBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(360, 493);
-				CheckHistoryPanel.setVisible(true);
-			}
-		});
-		ParentAccountPanel.add(AccountLabel, "cell 0 0,alignx left,aligny top");
-		ParentAccountPanel.add(BalanceLabel, "cell 0 1,alignx left,aligny top");
-		ParentAccountPanel.add(lblCurrentDateLabel, "cell 0 2,alignx left,aligny top");
-		ParentAccountPanel.add(BalanceAmount, "cell 2 1,alignx left,aligny top");
-		ParentAccountPanel.add(CurrentDateLabel, "cell 2 2 4 1,alignx left,aligny top");
-		ParentAccountPanel.add(lblparentnameLabel, "cell 2 0 4 1,alignx left,aligny top");
+		ParentAccountPanel.add(CheckHistoryBtn, "flowx,cell 0 3,alignx left,aligny top");
+		ParentAccountPanel.add(AccountLabel, "flowx,cell 0 0,alignx left,aligny top");
+		ParentAccountPanel.add(BalanceLabel, "flowx,cell 0 1,alignx left,aligny top");
+		ParentAccountPanel.add(lblCurrentDateLabel, "flowx,cell 0 2,alignx left,aligny top");
+		OrderPanel.add(ParentAccountPanel, "cell 1 1 1 11,grow");
+		
+		
+		JLabel lblStudentsOrderLabel = new JLabel("Student:");
+		ParentAccountPanel.add(lblStudentsOrderLabel, "flowx,cell 0 4");
+		lblStudentsOrderLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		ParentAccountPanel.add(scrollPane, "cell 0 6 7 3,grow");
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Bryan Cordes", "Britt Cordes", "Hayley Knights"}));
+		ParentAccountPanel.add(comboBox, "cell 0 4");
+		
+		JLabel lblparentnameLabel = new JLabel("(ParentName)");
+		lblparentnameLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
+		ParentAccountPanel.add(lblparentnameLabel, "cell 0 0,alignx left,aligny top");
+		
+		JLabel BalanceAmount = new JLabel("??.??");
+		BalanceAmount.setFont(new Font("Dialog", Font.PLAIN, 14));
+		ParentAccountPanel.add(BalanceAmount, "cell 0 1,alignx left,aligny top");
+		
+		JLabel CurrentDateLabel = new JLabel("??/??/????");
+		CurrentDateLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
+		ParentAccountPanel.add(CurrentDateLabel, "cell 0 2,alignx left,aligny top");
+		
+		Component horizontalStrut = Box.createHorizontalStrut(20);
+		ParentAccountPanel.add(horizontalStrut, "cell 0 3");
 		
 		JButton OrderLogoutBtn = new JButton("Log Out");
 		OrderLogoutBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		ParentAccountPanel.add(OrderLogoutBtn, "cell 3 3,alignx left,aligny top");
-		PickItemPanel.setLayout(new MigLayout("", "[41px][6px][3px][6px][61px]", "[31px][16px][1px][6px][16px][16px][16px][16px][16px]"));
+		ParentAccountPanel.add(OrderLogoutBtn, "cell 0 3,alignx left,aligny top");
 		
-		JLabel lblMenu_1Label = new JLabel("Menu 1:");
-		PickItemPanel.add(lblMenu_1Label, "cell 0 2 3 1,alignx left,growy");
+		JLabel lblCart = new JLabel("Cart");
+		lblCart.setFont(new Font("Tahoma", Font.BOLD, 16));
+		ParentAccountPanel.add(lblCart, "cell 0 5,alignx center");
+		OrderLogoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!chckbxRememberMe.isSelected()) {
+					Usernametxt.setText("Username");
+				}
+				pwdPassword.setText("Password");
+				OrderPanel.setVisible(false);
+				frame1.setSize(628,505);
+				LoginPanel.setVisible(true);	
+			}
+		});
 		
-		JLabel lblMenu_3Label = new JLabel("Menu 2:");
-		PickItemPanel.add(lblMenu_3Label, "cell 0 4 3 1,alignx left,aligny top");
-		
-		JLabel lblMenu_4Label = new JLabel("Menu 3:");
-		PickItemPanel.add(lblMenu_4Label, "cell 0 5 3 1,alignx left,aligny top");
-		
-		JLabel lblAddLabel = new JLabel("Add 1:");
-		PickItemPanel.add(lblAddLabel, "cell 0 6,alignx left,aligny top");
-		
-		JLabel lblAdd_1Label = new JLabel("Add 2:");
-		PickItemPanel.add(lblAdd_1Label, "cell 0 7,alignx left,aligny top");
-		
-		JLabel lblAdd_2Label = new JLabel("Add 3:");
-		PickItemPanel.add(lblAdd_2Label, "cell 0 8,alignx left,aligny top");
-		
-		JLabel lblMenuBoxLabel = new JLabel("Menu");
-		lblMenuBoxLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-		PickItemPanel.add(lblMenuBoxLabel, "cell 0 0 5 1,alignx center,growy");
-		
-		JLabel lblMenu_2WeekLabel = new JLabel("??/??/????");
-		PickItemPanel.add(lblMenu_2WeekLabel, "cell 0 1 5 1,alignx center,aligny top");
-		
-		JLabel Menu_1ItemLabel = new JLabel("New label");
-		PickItemPanel.add(Menu_1ItemLabel, "cell 4 2 1 3,alignx left,aligny top");
-		
-		JLabel Menu_2ItemLabel = new JLabel("New label");
-		PickItemPanel.add(Menu_2ItemLabel, "cell 4 4,alignx left,aligny top");
-		
-		JLabel Menu_3ItemLabel = new JLabel("New label");
-		PickItemPanel.add(Menu_3ItemLabel, "cell 4 5,alignx left,aligny top");
-		
-		JLabel Add_1ItemLabel = new JLabel("New label");
-		PickItemPanel.add(Add_1ItemLabel, "cell 2 6 3 1,alignx left,aligny top");
-		
-		JLabel Add_2itemLabel = new JLabel("New label");
-		PickItemPanel.add(Add_2itemLabel, "cell 2 7 3 1,alignx left,aligny top");
-		
-		JLabel Add_3itemLabel = new JLabel("New label");
-		PickItemPanel.add(Add_3itemLabel, "cell 2 8 3 1,alignx left,aligny top");
-		
-		JLabel lblOrderExtrasLabel = new JLabel("Extras");
-		lblOrderExtrasLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		DefaultTableModel Order_model = new DefaultTableModel(Order_extras,Order_column_headers); 
-		ExtraPanel.setLayout(new MigLayout("", "[157px]", "[14px][424px]"));
-		table = new JTable(Order_model);
-		JScrollPane OrderscrollPane = new JScrollPane(table);
-		ExtraPanel.add(OrderscrollPane, "cell 0 1,grow");
-		ExtraPanel.add(lblOrderExtrasLabel, "cell 0 0,alignx center,aligny top");
+		JPanel Menu_Panel = new JPanel();
+		Menu_Panel.setForeground(new Color(0, 255, 255));
+		Menu_Panel.setBackground(new Color(145,180,150));
+		Menu_Panel.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		
 		JLabel lblDayLabel = new JLabel("Day:");
 		
 		JRadioButton Menu1Radio = new JRadioButton("Menu 1");
+		Menu1Radio.setBackground(new Color(145,180,150));
 		OrderButtonGroup.add(Menu1Radio);
 		
 		JRadioButton rdbtnMenu_2 = new JRadioButton("Menu 2");
+		rdbtnMenu_2.setBackground(new Color(145,180,150));
 		OrderButtonGroup.add(rdbtnMenu_2);
 		
 		JRadioButton rdbtnMenu_3 = new JRadioButton("Menu 3");
+		rdbtnMenu_3.setBackground(new Color(145,180,150));
 		OrderButtonGroup.add(rdbtnMenu_3);
 		
 		JSpinner OrderSpinner = new JSpinner();
@@ -394,7 +338,7 @@ public class LunchHour {
 		JSpinner OrderSpinner_1 = new JSpinner();
 		
 		JSpinner OrderSpinner_2 = new JSpinner();
-		Menu_Panel.setLayout(new MigLayout("", "[78px][][74px][][][6px][59px]", "[14px][20px][14px][14px][23px][24px][24px]"));
+		Menu_Panel.setLayout(new MigLayout("", "[78px][][][][74px][][][6px][59px]", "[14px][20px][14px][14px][23px][24px][24px][][][][]"));
 		Menu_Panel.add(lblDayLabel, "cell 0 1,alignx center,aligny center");
 		
 		JComboBox DayComboBox = new JComboBox();
@@ -421,31 +365,72 @@ public class LunchHour {
 		
 		JLabel lblOrderAdd1Label = new JLabel("Add 3:");
 		Menu_Panel.add(lblOrderAdd1Label, "cell 1 6,alignx center,aligny center");
-		Menu_Panel.add(OrderSpinner_2, "cell 6 6,alignx left,aligny top");
-		Menu_Panel.add(OrderSpinner_1, "cell 6 5,alignx left,aligny top");
-		Menu_Panel.add(OrderSpinner, "cell 6 4,alignx left,aligny top");
+		Menu_Panel.add(OrderSpinner_2, "cell 8 6,alignx left,aligny top");
+		Menu_Panel.add(OrderSpinner_1, "cell 8 5,alignx left,aligny top");
+		Menu_Panel.add(OrderSpinner, "cell 8 4,alignx left,aligny top");
 		
 		JLabel lblWeekLabel = new JLabel("Week:");
 		Menu_Panel.add(lblWeekLabel, "cell 0 0,alignx center,aligny top");
 		
 		JLabel StudentLabel = new JLabel("Student:");
 		Menu_Panel.add(StudentLabel, "cell 0 2,alignx center,aligny top");
-		OrderPanel.setLayout(new MigLayout("", "[147px][270px][171px]", "[14px][6px][97px][11px][73px][11px][121px][6px][99px][6px][15px]"));
-		OrderPanel.add(lblStudentsOrderLabel, "cell 0 0,alignx center,aligny top");
-		OrderPanel.add(OrderList, "cell 0 2 1 3,grow");
-		OrderPanel.add(PickItemPanel, "cell 0 6 1 5,grow");
-		OrderPanel.add(Menu_Panel, "cell 1 4 1 3,grow");
-		OrderPanel.add(layeredPane, "cell 1 8,grow");
-		layeredPane.setLayout(new MigLayout("", "[57px][20px][28px][111px]", "[20px][20px][23px]"));
-		layeredPane.add(TotalOrder, "cell 2 0,alignx left,aligny center");
-		layeredPane.add(TotalTxtOrder, "cell 3 0,growx,aligny top");
-		layeredPane.add(OrderBalanceRemaingLabel, "cell 0 1 3 1,alignx right,aligny center");
-		layeredPane.add(BalanceRemainingTxt, "cell 3 1,growx,aligny top");
-		layeredPane.add(OrderBtnClear, "cell 0 2,alignx left,aligny top");
-		layeredPane.add(OrderbtnOrder, "cell 3 2,alignx right,aligny top");
-		OrderPanel.add(lblOrderProblemsContactUsLabel, "cell 1 10,growx,aligny top");
-		OrderPanel.add(ParentAccountPanel, "cell 1 0 1 3,grow");
-		OrderPanel.add(ExtraPanel, "cell 2 0 1 11,alignx left,aligny top");
+		OrderPanel.add(Menu_Panel, "cell 4 1 1 14,grow");
+		
+		JLabel lblOrderExtrasLabel = new JLabel("Extras");
+		Menu_Panel.add(lblOrderExtrasLabel, "cell 0 7");
+		lblOrderExtrasLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		table = new JTable(Order_model);
+		JScrollPane OrderscrollPane = new JScrollPane(table);
+		Menu_Panel.add(OrderscrollPane, "cell 0 8 9 1");
+		
+		JButton btnClearStudent = new JButton("Clear Student");
+		Menu_Panel.add(btnClearStudent, "cell 0 9,alignx left,growy");
+		
+		JButton btnAddToCart = new JButton("Add to Cart");
+		Menu_Panel.add(btnAddToCart, "cell 1 9");
+		
+		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
+		OrderPanel.add(horizontalStrut_2, "cell 0 8");
+		
+		JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane.setForeground(new Color(255, 255, 255));
+		layeredPane.setBackground(new Color(255, 255, 255));
+		layeredPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		OrderPanel.add(layeredPane, "cell 1 12,grow");
+		layeredPane.setLayout(new MigLayout("", "[57px][][20px][][][][][28px][][111px]", "[20px][20px][23px]"));
+		
+		JLabel TotalOrder = new JLabel("Total:");
+		layeredPane.add(TotalOrder, "cell 1 0,alignx left,aligny center");
+		
+		TotalTxtOrder = new JTextField();
+		TotalTxtOrder.setText("$0.00");
+		TotalTxtOrder.setColumns(10);
+		layeredPane.add(TotalTxtOrder, "cell 6 0,alignx right,aligny top");
+		
+		JLabel OrderBalanceRemaingLabel = new JLabel("Balance remaining:");
+		layeredPane.add(OrderBalanceRemaingLabel, "cell 1 1,alignx right,aligny center");
+		
+		BalanceRemainingTxt = new JTextField();
+		BalanceRemainingTxt.setText("$0.00");
+		BalanceRemainingTxt.setColumns(10);
+		layeredPane.add(BalanceRemainingTxt, "cell 6 1,alignx left,aligny top");
+		
+		JButton OrderBtnClear = new JButton("Clear Cart");
+		layeredPane.add(OrderBtnClear, "cell 1 2,alignx left,aligny top");
+		
+		JButton OrderbtnOrder = new JButton("Order");
+		layeredPane.add(OrderbtnOrder, "cell 6 2,alignx left,aligny top");
+		layeredPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{TotalOrder, BalanceRemainingTxt, OrderBtnClear, OrderbtnOrder}));
+		
+		
+		JLabel lblOrderProblemsContactUsLabel = new JLabel("Problems? Contact the school.");
+		OrderPanel.add(lblOrderProblemsContactUsLabel, "cell 1 14,growx,aligny top");
+		
+		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
+		OrderPanel.add(horizontalStrut_1, "cell 5 9");
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		OrderPanel.add(verticalStrut_1, "cell 2 15");
 		
 		/*
 		 * End of Order Panel
@@ -647,7 +632,7 @@ public class LunchHour {
 					while (rs.next()){
 						if(rs.getString(1).equals(Username) && rs.getString(2).equals(Password)) {
 							OrderPanel.setVisible(true);
-							frame1.setSize(621,487);
+							frame1.setSize(608,560);
 							LoginPanel.setVisible(false);
 							PullInfo(lblparentnameLabel,BalanceAmount,con,Username);
 							break;
@@ -668,41 +653,43 @@ public class LunchHour {
 		ChkHistorybtnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CheckHistoryPanel.setVisible(false);
-				frame1.setSize(621,487);
+				frame1.setSize(608,560);
 				OrderPanel.setVisible(true);
 				
-			}
-		});
-		OrderbtnOrder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(629, 300);
-				ConfirmPanel.setVisible(true);
 			}
 		});
 		ConfirmOrderMoreBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ConfirmPanel.setVisible(false);
-				frame1.setSize(621,487);
+				frame1.setSize(608,560);
 				OrderPanel.setVisible(true);
 			}
 		});
 		ConfirmandLogoutbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ConfirmPanel.setVisible(false);
-				frame1.setSize(621,487);
+				frame1.setSize(608,560);
 				LoginPanel.setVisible(true);
-			}
-		});
-		OrderLogoutBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Usernametxt.setText("Username");
 				pwdPassword.setText("Password");
-				OrderPanel.setVisible(false);
-				frame1.setSize(628,505);
-				LoginPanel.setVisible(true);	
+				if(!chckbxRememberMe.isSelected()) {
+					Usernametxt.setText("Username");
+				}
 			}
 		});
+	CheckHistoryBtn.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			OrderPanel.setVisible(false);
+			frame1.setSize(360, 493);
+			CheckHistoryPanel.setVisible(true);
+		}
+	});
+	OrderbtnOrder.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			OrderPanel.setVisible(false);
+			frame1.setSize(629, 300);
+			ConfirmPanel.setVisible(true);
+		}
+	});
 	}
 	public void PullInfo(JLabel ParentName,JLabel BalanceAmount, Connection con ,String Username) throws SQLException {
 		Statement str = (Statement) con.createStatement();
