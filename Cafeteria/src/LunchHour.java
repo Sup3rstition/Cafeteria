@@ -91,6 +91,7 @@ public class LunchHour {
 	private JTextField ChkHistorytextField_1;
 	private JTextField Usernametxt;
 	private JPasswordField pwdPassword;
+	private JLabel lblOrderProblemsContactUsLabel;
 
 	/**
 	 * Launch the application.
@@ -164,8 +165,7 @@ public class LunchHour {
 		frame1.setForeground(new Color(255, 255, 255));
 		frame1.setBackground(new Color(255, 255, 255));
 		frame1.setTitle("Login \n");
-		frame1.setResizable(false);
-		frame1.setBounds(100, 100, 544,533);
+		frame1.setBounds(100, 100, 552,533);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.getContentPane().setLayout(new CardLayout(0, 0));
 		Connection con = getRemoteConnection();
@@ -186,7 +186,7 @@ public class LunchHour {
 		Usernametxt = new JTextField();
 		Usernametxt.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		Usernametxt.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
-		Usernametxt.setText("Username");
+		Usernametxt.setText("Cordes96");
 		Usernametxt.setBackground(new Color(236,236,236));
 		Usernametxt.setColumns(10);
 		
@@ -195,7 +195,7 @@ public class LunchHour {
 		
 		pwdPassword = new JPasswordField();
 		pwdPassword.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		pwdPassword.setText("Password");
+		pwdPassword.setText("123");
 		pwdPassword.setBackground(new Color(236,236,236));
 		pwdPassword.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		
@@ -250,12 +250,42 @@ public class LunchHour {
 		int month = localDate.getMonthValue();
 		int day   = localDate.getDayOfMonth();
 		DefaultTableModel Order_model = new DefaultTableModel(Order_extras,Order_column_headers);
-		GridBagLayout gbl_OrderPanel = new GridBagLayout();
-		gbl_OrderPanel.columnWidths = new int[]{260, 267, 0};
-		gbl_OrderPanel.rowHeights = new int[]{386, 87, 14, 0};
-		gbl_OrderPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_OrderPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		OrderPanel.setLayout(gbl_OrderPanel);
+		
+		JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane.setForeground(new Color(255, 255, 255));
+		layeredPane.setBackground(new Color(255, 255, 255));
+		layeredPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		layeredPane.setLayout(new MigLayout("", "[57px][][20px][][][][][28px][][111px]", "[20px][20px][23px]"));
+		
+		JLabel TotalOrder = new JLabel("Total:");
+		layeredPane.add(TotalOrder, "cell 1 0,alignx left,aligny center");
+		
+		TotalTxtOrder = new JTextField();
+		TotalTxtOrder.setText("$0.00");
+		TotalTxtOrder.setColumns(10);
+		layeredPane.add(TotalTxtOrder, "cell 6 0,alignx right,aligny top");
+		
+		JLabel OrderBalanceRemaingLabel = new JLabel("Balance remaining:");
+		layeredPane.add(OrderBalanceRemaingLabel, "cell 1 1,alignx right,aligny center");
+		
+		BalanceRemainingTxt = new JTextField();
+		BalanceRemainingTxt.setText("$0.00");
+		BalanceRemainingTxt.setColumns(10);
+		layeredPane.add(BalanceRemainingTxt, "cell 6 1,alignx left,aligny top");
+		
+		JButton OrderBtnClear = new JButton("Clear Cart");
+		layeredPane.add(OrderBtnClear, "cell 1 2,alignx left,aligny top");
+		
+		JButton OrderbtnOrder = new JButton("Order");
+		layeredPane.add(OrderbtnOrder, "cell 6 2,alignx left,aligny top");
+		layeredPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{TotalOrder, BalanceRemainingTxt, OrderBtnClear, OrderbtnOrder}));
+		OrderbtnOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				frame1.setSize(629, 300);
+				ConfirmPanel.setVisible(true);
+			}
+		});
 		
 		JPanel ParentAccountPanel = 
 				new JPanel();
@@ -278,12 +308,6 @@ public class LunchHour {
 		ParentAccountPanel.add(AccountLabel, "flowx,cell 0 0,alignx left,aligny top");
 		ParentAccountPanel.add(BalanceLabel, "flowx,cell 0 1,alignx left,aligny top");
 		ParentAccountPanel.add(lblCurrentDateLabel, "flowx,cell 0 2,alignx left,aligny top");
-		GridBagConstraints gbc_ParentAccountPanel = new GridBagConstraints();
-		gbc_ParentAccountPanel.fill = GridBagConstraints.BOTH;
-		gbc_ParentAccountPanel.insets = new Insets(0, 0, 5, 5);
-		gbc_ParentAccountPanel.gridx = 0;
-		gbc_ParentAccountPanel.gridy = 0;
-		OrderPanel.add(ParentAccountPanel, gbc_ParentAccountPanel);
 		
 		
 		JLabel lblStudentsOrderLabel = new JLabel("Student:");
@@ -330,13 +354,6 @@ public class LunchHour {
 				LoginPanel.setVisible(true);	
 			}
 		});
-		CheckHistoryBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(360, 493);
-				CheckHistoryPanel.setVisible(true);
-			}
-		});
 		
 		JPanel Menu_Panel = new JPanel();
 		Menu_Panel.setForeground(new Color(0, 255, 255));
@@ -362,113 +379,147 @@ public class LunchHour {
 		JSpinner OrderSpinner_1 = new JSpinner();
 		
 		JSpinner OrderSpinner_2 = new JSpinner();
-		Menu_Panel.setLayout(new MigLayout("", "[78px][][][][74px][][][6px][59px]", "[14px][20px][14px][14px][23px][24px][24px][][][][]"));
-		Menu_Panel.add(lblDayLabel, "cell 0 1,alignx center,aligny center");
 		
 		JComboBox DayComboBox = new JComboBox();
 		DayComboBox.setModel(new DefaultComboBoxModel(new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"}));
-		Menu_Panel.add(DayComboBox, "cell 1 1,growx,aligny top");
 		
 		JLabel StudentNameLabel = new JLabel("First Last");
-		Menu_Panel.add(StudentNameLabel, "cell 1 2,alignx center,aligny top");
 		
 		JLabel OrderMenuLabel = new JLabel("Menu");
-		Menu_Panel.add(OrderMenuLabel, "cell 0 3,alignx center,aligny top");
 		
 		JLabel lblAdditionalItemsLabel = new JLabel("Additional Items:");
-		Menu_Panel.add(lblAdditionalItemsLabel, "cell 1 3,alignx center,aligny top");
-		Menu_Panel.add(Menu1Radio, "cell 0 4,alignx center,aligny top");
 		
 		JLabel lblOrderAdd3Label = new JLabel("Add 1:");
-		Menu_Panel.add(lblOrderAdd3Label, "cell 1 4,alignx center,aligny center");
 		
 		JLabel lblOrderAdd2Label = new JLabel("Add 2:");
-		Menu_Panel.add(lblOrderAdd2Label, "cell 1 5,alignx center,aligny center");
-		Menu_Panel.add(rdbtnMenu_3, "cell 0 6,alignx center,aligny bottom");
-		Menu_Panel.add(rdbtnMenu_2, "cell 0 5,alignx center,aligny bottom");
 		
 		JLabel lblOrderAdd1Label = new JLabel("Add 3:");
-		Menu_Panel.add(lblOrderAdd1Label, "cell 1 6,alignx center,aligny center");
-		Menu_Panel.add(OrderSpinner_2, "cell 8 6,alignx left,aligny top");
-		Menu_Panel.add(OrderSpinner_1, "cell 8 5,alignx left,aligny top");
-		Menu_Panel.add(OrderSpinner, "cell 8 4,alignx left,aligny top");
 		
 		JLabel lblWeekLabel = new JLabel("Week:");
-		Menu_Panel.add(lblWeekLabel, "cell 0 0,alignx center,aligny top");
 		
 		JLabel StudentLabel = new JLabel("Student:");
-		Menu_Panel.add(StudentLabel, "cell 0 2,alignx center,aligny top");
-		GridBagConstraints gbc_Menu_Panel = new GridBagConstraints();
-		gbc_Menu_Panel.fill = GridBagConstraints.BOTH;
-		gbc_Menu_Panel.gridheight = 3;
-		gbc_Menu_Panel.gridx = 1;
-		gbc_Menu_Panel.gridy = 0;
-		OrderPanel.add(Menu_Panel, gbc_Menu_Panel);
 		
 		JLabel lblOrderExtrasLabel = new JLabel("Extras");
-		Menu_Panel.add(lblOrderExtrasLabel, "cell 0 7");
 		lblOrderExtrasLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		table = new JTable(Order_model);
 		JScrollPane OrderscrollPane = new JScrollPane(table);
-		Menu_Panel.add(OrderscrollPane, "cell 0 8 9 1");
 		
 		JButton btnClearStudent = new JButton("Clear Student");
-		Menu_Panel.add(btnClearStudent, "cell 0 9,alignx left,growy");
 		
 		JButton btnAddToCart = new JButton("Add to Cart");
-		Menu_Panel.add(btnAddToCart, "cell 1 9");
+		GroupLayout gl_Menu_Panel = new GroupLayout(Menu_Panel);
+		gl_Menu_Panel.setHorizontalGroup(
+			gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(41)
+					.addComponent(lblWeekLabel))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(45)
+					.addComponent(lblDayLabel)
+					.addGap(42)
+					.addComponent(DayComboBox, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(36)
+					.addComponent(StudentLabel)
+					.addGap(55)
+					.addComponent(StudentNameLabel))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(44)
+					.addComponent(OrderMenuLabel)
+					.addGap(44)
+					.addComponent(lblAdditionalItemsLabel))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(26)
+					.addComponent(Menu1Radio)
+					.addGap(52)
+					.addComponent(lblOrderAdd3Label)
+					.addGap(56)
+					.addComponent(OrderSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(26)
+					.addComponent(rdbtnMenu_2)
+					.addGap(52)
+					.addComponent(lblOrderAdd2Label)
+					.addGap(56)
+					.addComponent(OrderSpinner_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(26)
+					.addComponent(rdbtnMenu_3)
+					.addGap(52)
+					.addComponent(lblOrderAdd1Label)
+					.addGap(56)
+					.addComponent(OrderSpinner_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(7)
+					.addComponent(lblOrderExtrasLabel))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(7)
+					.addComponent(btnClearStudent)
+					.addGap(4)
+					.addComponent(btnAddToCart))
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(7)
+					.addComponent(OrderscrollPane, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_Menu_Panel.setVerticalGroup(
+			gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_Menu_Panel.createSequentialGroup()
+					.addGap(7)
+					.addComponent(lblWeekLabel)
+					.addGap(4)
+					.addGroup(gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_Menu_Panel.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblDayLabel))
+						.addComponent(DayComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(4)
+					.addGroup(gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(StudentLabel)
+						.addComponent(StudentNameLabel))
+					.addGap(4)
+					.addGroup(gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(OrderMenuLabel)
+						.addComponent(lblAdditionalItemsLabel))
+					.addGap(4)
+					.addGroup(gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(Menu1Radio)
+						.addGroup(gl_Menu_Panel.createSequentialGroup()
+							.addGap(5)
+							.addComponent(lblOrderAdd3Label))
+						.addComponent(OrderSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(4)
+					.addGroup(gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(rdbtnMenu_2)
+						.addGroup(gl_Menu_Panel.createSequentialGroup()
+							.addGap(5)
+							.addComponent(lblOrderAdd2Label))
+						.addComponent(OrderSpinner_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(4)
+					.addGroup(gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(rdbtnMenu_3)
+						.addGroup(gl_Menu_Panel.createSequentialGroup()
+							.addGap(5)
+							.addComponent(lblOrderAdd1Label))
+						.addComponent(OrderSpinner_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(4)
+					.addComponent(lblOrderExtrasLabel)
+					.addGap(4)
+					.addComponent(OrderscrollPane, GroupLayout.PREFERRED_SIZE, 259, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_Menu_Panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnClearStudent)
+						.addComponent(btnAddToCart)))
+		);
+		Menu_Panel.setLayout(gl_Menu_Panel);
 		
-		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setForeground(new Color(255, 255, 255));
-		layeredPane.setBackground(new Color(255, 255, 255));
-		layeredPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		GridBagConstraints gbc_layeredPane = new GridBagConstraints();
-		gbc_layeredPane.fill = GridBagConstraints.BOTH;
-		gbc_layeredPane.insets = new Insets(0, 0, 5, 5);
-		gbc_layeredPane.gridx = 0;
-		gbc_layeredPane.gridy = 1;
-		OrderPanel.add(layeredPane, gbc_layeredPane);
-		layeredPane.setLayout(new MigLayout("", "[57px][][20px][][][][][28px][][111px]", "[20px][20px][23px]"));
 		
-		JLabel TotalOrder = new JLabel("Total:");
-		layeredPane.add(TotalOrder, "cell 1 0,alignx left,aligny center");
-		
-		TotalTxtOrder = new JTextField();
-		TotalTxtOrder.setText("$0.00");
-		TotalTxtOrder.setColumns(10);
-		layeredPane.add(TotalTxtOrder, "cell 6 0,alignx right,aligny top");
-		
-		JLabel OrderBalanceRemaingLabel = new JLabel("Balance remaining:");
-		layeredPane.add(OrderBalanceRemaingLabel, "cell 1 1,alignx right,aligny center");
-		
-		BalanceRemainingTxt = new JTextField();
-		BalanceRemainingTxt.setText("$0.00");
-		BalanceRemainingTxt.setColumns(10);
-		layeredPane.add(BalanceRemainingTxt, "cell 6 1,alignx left,aligny top");
-		
-		JButton OrderBtnClear = new JButton("Clear Cart");
-		layeredPane.add(OrderBtnClear, "cell 1 2,alignx left,aligny top");
-		
-		JButton OrderbtnOrder = new JButton("Order");
-		layeredPane.add(OrderbtnOrder, "cell 6 2,alignx left,aligny top");
-		layeredPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{TotalOrder, BalanceRemainingTxt, OrderBtnClear, OrderbtnOrder}));
-		OrderbtnOrder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OrderPanel.setVisible(false);
-				frame1.setSize(629, 300);
-				ConfirmPanel.setVisible(true);
-			}
-		});
-		
-		
-		JLabel lblOrderProblemsContactUsLabel = new JLabel("Problems? Contact the school.");
-		GridBagConstraints gbc_lblOrderProblemsContactUsLabel = new GridBagConstraints();
-		gbc_lblOrderProblemsContactUsLabel.anchor = GridBagConstraints.NORTH;
-		gbc_lblOrderProblemsContactUsLabel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblOrderProblemsContactUsLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_lblOrderProblemsContactUsLabel.gridx = 0;
-		gbc_lblOrderProblemsContactUsLabel.gridy = 2;
-		OrderPanel.add(lblOrderProblemsContactUsLabel, gbc_lblOrderProblemsContactUsLabel);
+		lblOrderProblemsContactUsLabel = new JLabel("Problems? Contact the school.");
+		OrderPanel.setLayout(new MigLayout("", "[260px][260px]", "[353px][5px][87px][5px][37px]"));
+		OrderPanel.add(ParentAccountPanel, "cell 0 0,grow");
+		OrderPanel.add(Menu_Panel, "cell 1 0 1 5,grow");
+		OrderPanel.add(layeredPane, "cell 0 2,growx,aligny top");
+		OrderPanel.add(lblOrderProblemsContactUsLabel, "cell 0 4,growx,aligny top");
 		
 		/*
 		 * End of Order Panel
@@ -478,34 +529,22 @@ public class LunchHour {
 		 */
 		
 		JPanel ConfirmPanel = new JPanel();
+		ConfirmPanel.setVisible(false);
 		ConfirmPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		ConfirmPanel.setLayout(new BorderLayout(0, 0));
 		frame1.getContentPane().add(ConfirmPanel, "name_275723673854486");
 
 		JPanel Confirmpanel_1 = new JPanel();
-		ConfirmPanel.add(Confirmpanel_1, BorderLayout.CENTER);
-		SpringLayout sl_Confirmpanel_1 = new SpringLayout();
-		Confirmpanel_1.setLayout(sl_Confirmpanel_1);
 		
 		JLabel lblOrderConfirmation = new JLabel("Order Confirmation");
 		lblOrderConfirmation.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, lblOrderConfirmation, 10, SpringLayout.NORTH, Confirmpanel_1);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.WEST, lblOrderConfirmation, 10, SpringLayout.WEST, Confirmpanel_1);
-		Confirmpanel_1.add(lblOrderConfirmation);
 		
 		DefaultTableModel Confirm_model = new DefaultTableModel(Confirm_Order,Confirm_column_headers);
 		Confirmtable = new JTable(Confirm_model);
 		Confirmtable.setEnabled(false);
 		Confirmtable.setSurrendersFocusOnKeystroke(true);
 		JScrollPane ConfirmscrollPane = new JScrollPane(Confirmtable);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, ConfirmscrollPane, 18, SpringLayout.SOUTH, lblOrderConfirmation);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.WEST, ConfirmscrollPane, 10, SpringLayout.WEST, Confirmpanel_1);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.SOUTH, ConfirmscrollPane, -29, SpringLayout.SOUTH, Confirmpanel_1);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.EAST, ConfirmscrollPane, 609, SpringLayout.WEST, Confirmpanel_1);
-		Confirmpanel_1.add(ConfirmscrollPane);
 		
 		JPanel Confirmpanel_2 = new JPanel();
-		ConfirmPanel.add(Confirmpanel_2, BorderLayout.SOUTH);
 		
 		JButton ConfirmCancelButton = new JButton("Cancel ");
 		ConfirmCancelButton.addActionListener(new ActionListener() {
@@ -519,34 +558,53 @@ public class LunchHour {
 		JButton ConfirmOrderMoreBtn = new JButton("Confirm and Order More");
 		
 		JButton ConfirmandLogoutbtn = new JButton("Confirm and Logout");
-		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, ConfirmandLogoutbtn, 6, SpringLayout.SOUTH, ConfirmscrollPane);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.EAST, ConfirmandLogoutbtn, -10, SpringLayout.EAST, Confirmpanel_1);
 		
 		JLabel ConfirmOrderTotalLabel = new JLabel("Order's Total:");
-		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, ConfirmOrderTotalLabel, 6, SpringLayout.SOUTH, ConfirmscrollPane);
-		Confirmpanel_1.add(ConfirmOrderTotalLabel);
 		
 		ConfirmBalanceTxtfield = new JTextField();
-		sl_Confirmpanel_1.putConstraint(SpringLayout.WEST, ConfirmBalanceTxtfield, 342, SpringLayout.WEST, Confirmpanel_1);
 		ConfirmBalanceTxtfield.setEditable(false);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, ConfirmBalanceTxtfield, 1, SpringLayout.SOUTH, ConfirmscrollPane);
-		Confirmpanel_1.add(ConfirmBalanceTxtfield);
 		ConfirmBalanceTxtfield.setColumns(10);
 		
 		JLabel lblConfirmRemainingLabel = new JLabel("Remaining Balance:");
-		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, lblConfirmRemainingLabel, 0, SpringLayout.NORTH, ConfirmOrderTotalLabel);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.EAST, lblConfirmRemainingLabel, -6, SpringLayout.WEST, ConfirmBalanceTxtfield);
-		Confirmpanel_1.add(lblConfirmRemainingLabel);
 		
 		ConfirmOrderTotalTxtField = new JTextField();
-		sl_Confirmpanel_1.putConstraint(SpringLayout.NORTH, ConfirmOrderTotalTxtField, 1, SpringLayout.SOUTH, ConfirmscrollPane);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.EAST, ConfirmOrderTotalLabel, -4, SpringLayout.WEST, ConfirmOrderTotalTxtField);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.WEST, ConfirmOrderTotalTxtField, 536, SpringLayout.WEST, Confirmpanel_1);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.EAST, ConfirmOrderTotalTxtField, -22, SpringLayout.EAST, Confirmpanel_1);
-		sl_Confirmpanel_1.putConstraint(SpringLayout.EAST, ConfirmBalanceTxtfield, -133, SpringLayout.WEST, ConfirmOrderTotalTxtField);
 		ConfirmOrderTotalTxtField.setEditable(false);
-		Confirmpanel_1.add(ConfirmOrderTotalTxtField);
 		ConfirmOrderTotalTxtField.setColumns(10);
+		GroupLayout gl_Confirmpanel_1 = new GroupLayout(Confirmpanel_1);
+		gl_Confirmpanel_1.setHorizontalGroup(
+			gl_Confirmpanel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_Confirmpanel_1.createSequentialGroup()
+					.addGap(10)
+					.addComponent(lblOrderConfirmation))
+				.addGroup(gl_Confirmpanel_1.createSequentialGroup()
+					.addGap(10)
+					.addComponent(ConfirmscrollPane, GroupLayout.PREFERRED_SIZE, 599, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_Confirmpanel_1.createSequentialGroup()
+					.addGap(243)
+					.addComponent(lblConfirmRemainingLabel)
+					.addGap(6)
+					.addComponent(ConfirmBalanceTxtfield, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+					.addGap(63)
+					.addComponent(ConfirmOrderTotalLabel))
+		);
+		gl_Confirmpanel_1.setVerticalGroup(
+			gl_Confirmpanel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_Confirmpanel_1.createSequentialGroup()
+					.addGap(10)
+					.addComponent(lblOrderConfirmation)
+					.addGap(18)
+					.addComponent(ConfirmscrollPane, GroupLayout.PREFERRED_SIZE, 383, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addGroup(gl_Confirmpanel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_Confirmpanel_1.createSequentialGroup()
+							.addGap(5)
+							.addComponent(lblConfirmRemainingLabel))
+						.addComponent(ConfirmBalanceTxtfield, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_Confirmpanel_1.createSequentialGroup()
+							.addGap(5)
+							.addComponent(ConfirmOrderTotalLabel))))
+		);
+		Confirmpanel_1.setLayout(gl_Confirmpanel_1);
 		GroupLayout gl_Confirmpanel_2 = new GroupLayout(Confirmpanel_2);
 		gl_Confirmpanel_2.setHorizontalGroup(
 			gl_Confirmpanel_2.createParallelGroup(Alignment.LEADING)
@@ -569,6 +627,19 @@ public class LunchHour {
 						.addComponent(ConfirmandLogoutbtn)))
 		);
 		Confirmpanel_2.setLayout(gl_Confirmpanel_2);
+		GroupLayout gl_ConfirmPanel = new GroupLayout(ConfirmPanel);
+		gl_ConfirmPanel.setHorizontalGroup(
+			gl_ConfirmPanel.createParallelGroup(Alignment.LEADING)
+				.addComponent(Confirmpanel_1, GroupLayout.PREFERRED_SIZE, 536, GroupLayout.PREFERRED_SIZE)
+				.addComponent(Confirmpanel_2, GroupLayout.PREFERRED_SIZE, 536, GroupLayout.PREFERRED_SIZE)
+		);
+		gl_ConfirmPanel.setVerticalGroup(
+			gl_ConfirmPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_ConfirmPanel.createSequentialGroup()
+					.addComponent(Confirmpanel_1, GroupLayout.PREFERRED_SIZE, 460, GroupLayout.PREFERRED_SIZE)
+					.addComponent(Confirmpanel_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+		);
+		ConfirmPanel.setLayout(gl_ConfirmPanel);
 		/*End of Confirm Panel
 		 * 
 		 * 
@@ -576,6 +647,7 @@ public class LunchHour {
 		 * Check History Panel Begins
 		 */
 		JPanel CheckHistoryPanel = new JPanel();
+		CheckHistoryPanel.setVisible(false);
 		frame1.getContentPane().add(CheckHistoryPanel, "name_277364005394280");
 		CheckHistoryPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		CheckHistoryPanel.setLayout(new BorderLayout(0, 0));
@@ -670,8 +742,8 @@ public class LunchHour {
 					while (rs.next()){
 						if(rs.getString(1).equals(Username) && rs.getString(2).equals(Password)) {
 							OrderPanel.setVisible(true);
-							frame1.setSize(608,560);
 							LoginPanel.setVisible(false);
+							frame1.pack();
 							PullInfo(lblparentnameLabel,BalanceAmount,con,Username);
 							break;
 						}
@@ -712,6 +784,13 @@ public class LunchHour {
 				if(!chckbxRememberMe.isSelected()) {
 					Usernametxt.setText("Username");
 				}
+			}
+		});
+		CheckHistoryBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				CheckHistoryPanel.setVisible(true);
+				frame1.pack();
 			}
 		});
 	}
