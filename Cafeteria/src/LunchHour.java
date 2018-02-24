@@ -62,6 +62,9 @@ import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.border.MatteBorder;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class LunchHour {
 	private JFrame frame1;
@@ -162,7 +165,7 @@ public class LunchHour {
 		frame1.setBackground(new Color(255, 255, 255));
 		frame1.setTitle("Login \n");
 		frame1.setResizable(false);
-		frame1.setBounds(100, 100, 608,560);
+		frame1.setBounds(100, 100, 544,533);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.getContentPane().setLayout(new CardLayout(0, 0));
 		Connection con = getRemoteConnection();
@@ -247,10 +250,12 @@ public class LunchHour {
 		int month = localDate.getMonthValue();
 		int day   = localDate.getDayOfMonth();
 		DefaultTableModel Order_model = new DefaultTableModel(Order_extras,Order_column_headers);
-		OrderPanel.setLayout(new MigLayout("", "[][147px][][][grow][][][270px][171px][]", "[][14px][grow][][6px][97px][11px][][73px][11px][121px][6px][99px][6px][15px][]"));
-		
-		Component verticalStrut = Box.createVerticalStrut(20);
-		OrderPanel.add(verticalStrut, "cell 4 0");
+		GridBagLayout gbl_OrderPanel = new GridBagLayout();
+		gbl_OrderPanel.columnWidths = new int[]{260, 267, 0};
+		gbl_OrderPanel.rowHeights = new int[]{386, 87, 14, 0};
+		gbl_OrderPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_OrderPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		OrderPanel.setLayout(gbl_OrderPanel);
 		
 		JPanel ParentAccountPanel = 
 				new JPanel();
@@ -273,7 +278,12 @@ public class LunchHour {
 		ParentAccountPanel.add(AccountLabel, "flowx,cell 0 0,alignx left,aligny top");
 		ParentAccountPanel.add(BalanceLabel, "flowx,cell 0 1,alignx left,aligny top");
 		ParentAccountPanel.add(lblCurrentDateLabel, "flowx,cell 0 2,alignx left,aligny top");
-		OrderPanel.add(ParentAccountPanel, "cell 1 1 1 11,grow");
+		GridBagConstraints gbc_ParentAccountPanel = new GridBagConstraints();
+		gbc_ParentAccountPanel.fill = GridBagConstraints.BOTH;
+		gbc_ParentAccountPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_ParentAccountPanel.gridx = 0;
+		gbc_ParentAccountPanel.gridy = 0;
+		OrderPanel.add(ParentAccountPanel, gbc_ParentAccountPanel);
 		
 		
 		JLabel lblStudentsOrderLabel = new JLabel("Student:");
@@ -318,6 +328,13 @@ public class LunchHour {
 				OrderPanel.setVisible(false);
 				frame1.setSize(628,505);
 				LoginPanel.setVisible(true);	
+			}
+		});
+		CheckHistoryBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				frame1.setSize(360, 493);
+				CheckHistoryPanel.setVisible(true);
 			}
 		});
 		
@@ -381,7 +398,12 @@ public class LunchHour {
 		
 		JLabel StudentLabel = new JLabel("Student:");
 		Menu_Panel.add(StudentLabel, "cell 0 2,alignx center,aligny top");
-		OrderPanel.add(Menu_Panel, "cell 4 1 1 14,grow");
+		GridBagConstraints gbc_Menu_Panel = new GridBagConstraints();
+		gbc_Menu_Panel.fill = GridBagConstraints.BOTH;
+		gbc_Menu_Panel.gridheight = 3;
+		gbc_Menu_Panel.gridx = 1;
+		gbc_Menu_Panel.gridy = 0;
+		OrderPanel.add(Menu_Panel, gbc_Menu_Panel);
 		
 		JLabel lblOrderExtrasLabel = new JLabel("Extras");
 		Menu_Panel.add(lblOrderExtrasLabel, "cell 0 7");
@@ -396,14 +418,16 @@ public class LunchHour {
 		JButton btnAddToCart = new JButton("Add to Cart");
 		Menu_Panel.add(btnAddToCart, "cell 1 9");
 		
-		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
-		OrderPanel.add(horizontalStrut_2, "cell 0 8");
-		
 		JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setForeground(new Color(255, 255, 255));
 		layeredPane.setBackground(new Color(255, 255, 255));
 		layeredPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		OrderPanel.add(layeredPane, "cell 1 12,grow");
+		GridBagConstraints gbc_layeredPane = new GridBagConstraints();
+		gbc_layeredPane.fill = GridBagConstraints.BOTH;
+		gbc_layeredPane.insets = new Insets(0, 0, 5, 5);
+		gbc_layeredPane.gridx = 0;
+		gbc_layeredPane.gridy = 1;
+		OrderPanel.add(layeredPane, gbc_layeredPane);
 		layeredPane.setLayout(new MigLayout("", "[57px][][20px][][][][][28px][][111px]", "[20px][20px][23px]"));
 		
 		JLabel TotalOrder = new JLabel("Total:");
@@ -428,16 +452,23 @@ public class LunchHour {
 		JButton OrderbtnOrder = new JButton("Order");
 		layeredPane.add(OrderbtnOrder, "cell 6 2,alignx left,aligny top");
 		layeredPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{TotalOrder, BalanceRemainingTxt, OrderBtnClear, OrderbtnOrder}));
+		OrderbtnOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderPanel.setVisible(false);
+				frame1.setSize(629, 300);
+				ConfirmPanel.setVisible(true);
+			}
+		});
 		
 		
 		JLabel lblOrderProblemsContactUsLabel = new JLabel("Problems? Contact the school.");
-		OrderPanel.add(lblOrderProblemsContactUsLabel, "cell 1 14,growx,aligny top");
-		
-		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
-		OrderPanel.add(horizontalStrut_1, "cell 5 9");
-		
-		Component verticalStrut_1 = Box.createVerticalStrut(20);
-		OrderPanel.add(verticalStrut_1, "cell 2 15");
+		GridBagConstraints gbc_lblOrderProblemsContactUsLabel = new GridBagConstraints();
+		gbc_lblOrderProblemsContactUsLabel.anchor = GridBagConstraints.NORTH;
+		gbc_lblOrderProblemsContactUsLabel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblOrderProblemsContactUsLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_lblOrderProblemsContactUsLabel.gridx = 0;
+		gbc_lblOrderProblemsContactUsLabel.gridy = 2;
+		OrderPanel.add(lblOrderProblemsContactUsLabel, gbc_lblOrderProblemsContactUsLabel);
 		
 		/*
 		 * End of Order Panel
@@ -683,20 +714,6 @@ public class LunchHour {
 				}
 			}
 		});
-	CheckHistoryBtn.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			OrderPanel.setVisible(false);
-			frame1.setSize(360, 493);
-			CheckHistoryPanel.setVisible(true);
-		}
-	});
-	OrderbtnOrder.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			OrderPanel.setVisible(false);
-			frame1.setSize(629, 300);
-			ConfirmPanel.setVisible(true);
-		}
-	});
 	}
 	public void PullInfo(JLabel ParentName,JLabel BalanceAmount, Connection con ,String Username) throws SQLException {
 		Statement str = (Statement) con.createStatement();
