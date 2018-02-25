@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="517.0" prefWidth="604.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1">
+   <children>
+      <ScrollPane layoutX="365.0" layoutY="41.0" prefHeight="468.0" prefWidth="241.0">
+         <content>
+            <TableView prefHeight="474.0" prefWidth="226.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Extra Item" />
+                <TableColumn prefWidth="75.0" text="Price" />
+                  <TableColumn prefWidth="75.0" text="#" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
+      <Label layoutX="16.0" layoutY="88.0" prefHeight="31.0" prefWidth="57.0" text="Menu">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label layoutX="446.0" layoutY="9.0" text="Extras">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <RadioButton layoutX="16.0" layoutY="127.0" mnemonicParsing="false" text="Menu1:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="16.0" layoutY="164.0" mnemonicParsing="false" text="Menu2:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="16.0" layoutY="202.0" mnemonicParsing="false" text="Menu3:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+      <Label layoutX="16.0" layoutY="247.0" text="Additionals">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label layoutX="16.0" layoutY="287.0" text="Additional 1:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="16.0" layoutY="330.0" text="Additional 2:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="16.0" layoutY="372.0" text="Additional 3:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField editable="false" layoutX="115.0" layoutY="416.0" />
+      <Label layoutX="50.0" layoutY="418.0" text="Total:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Button layoutX="75.0" layoutY="456.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Clear" />
+      <Button layoutX="184.0" layoutY="456.0" mnemonicParsing="false" text="Add to Cart" />
+      <Label layoutX="115.0" layoutY="129.0" text="Label" />
+      <Label layoutX="115.0" layoutY="166.0" text="Label" />
+      <Label layoutX="115.0" layoutY="204.0" text="Label" />
+      <Label layoutX="115.0" layoutY="289.0" text="Label" />
+      <Label layoutX="115.0" layoutY="332.0" text="Label" />
+      <Label layoutX="115.0" layoutY="374.0" text="Label" />
+      <Spinner layoutX="300.0" layoutY="282.0" prefHeight="31.0" prefWidth="57.0" />
+      <Spinner layoutX="301.0" layoutY="325.0" prefHeight="31.0" prefWidth="56.0" />
+      <Spinner layoutX="301.0" layoutY="367.0" prefHeight="31.0" prefWidth="57.0" />
+      <Label layoutX="242.0" layoutY="129.0" text="Price" />
+      <Label layoutX="242.0" layoutY="166.0" text="Price" />
+      <Label layoutX="242.0" layoutY="204.0" text="Price" />
+      <Label layoutX="24.0" layoutY="14.0" text="Student:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="112.0" layoutY="14.0" text="(studentName)">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="24.0" layoutY="40.0" text="Menu Date:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="115.0" layoutY="39.0" text="??/??/????">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="109.0" layoutY="63.0" prefWidth="150.0" />
+      <Label layoutX="24.0" layoutY="65.0" prefWidth="68.0" text="Menu Day">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="242.0" layoutY="290.0" text="Price" />
+      <Label layoutX="242.0" layoutY="332.0" text="Price" />
+      <Label layoutX="242.0" layoutY="374.0" text="Price" />
+      <Label layoutX="285.0" layoutY="284.0" text="#">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="285.0" layoutY="327.0" text="#">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="285.0" layoutY="369.0" text="#">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

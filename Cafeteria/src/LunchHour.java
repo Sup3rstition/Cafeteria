@@ -165,7 +165,7 @@ public class LunchHour {
 		frame1.setForeground(new Color(255, 255, 255));
 		frame1.setBackground(new Color(255, 255, 255));
 		frame1.setTitle("Login \n");
-		frame1.setBounds(100, 100, 552,533);
+		frame1.setBounds(100, 100, 791,533);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.getContentPane().setLayout(new CardLayout(0, 0));
 		Connection con = getRemoteConnection();
@@ -630,13 +630,17 @@ public class LunchHour {
 		GroupLayout gl_ConfirmPanel = new GroupLayout(ConfirmPanel);
 		gl_ConfirmPanel.setHorizontalGroup(
 			gl_ConfirmPanel.createParallelGroup(Alignment.LEADING)
-				.addComponent(Confirmpanel_1, GroupLayout.PREFERRED_SIZE, 536, GroupLayout.PREFERRED_SIZE)
-				.addComponent(Confirmpanel_2, GroupLayout.PREFERRED_SIZE, 536, GroupLayout.PREFERRED_SIZE)
+				.addGroup(gl_ConfirmPanel.createSequentialGroup()
+					.addGroup(gl_ConfirmPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(Confirmpanel_2, GroupLayout.PREFERRED_SIZE, 536, GroupLayout.PREFERRED_SIZE)
+						.addComponent(Confirmpanel_1, GroupLayout.PREFERRED_SIZE, 677, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(88, Short.MAX_VALUE))
 		);
 		gl_ConfirmPanel.setVerticalGroup(
 			gl_ConfirmPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_ConfirmPanel.createSequentialGroup()
 					.addComponent(Confirmpanel_1, GroupLayout.PREFERRED_SIZE, 460, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(Confirmpanel_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
 		ConfirmPanel.setLayout(gl_ConfirmPanel);
