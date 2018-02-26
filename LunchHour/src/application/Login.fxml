@@ -3,19 +3,51 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="445.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="445.0" prefWidth="480.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Logincontroller">
    <children>
-      <Button layoutX="367.0" layoutY="246.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" text="Login" />
-      <TextField layoutX="310.0" layoutY="177.0" />
-      <TextField layoutX="310.0" layoutY="210.0" />
-      <CheckBox layoutX="238.0" layoutY="250.0" mnemonicParsing="false" text="Remember me" />
-      <Label layoutX="233.0" layoutY="181.0" text="Username:" />
-      <Label layoutX="234.0" layoutY="214.0" text="Password:" />
-      <AnchorPane prefHeight="445.0" prefWidth="229.0" style="-fx-background-color: #1abc9c;" />
-      <Label layoutX="242.0" layoutY="282.0" text="Forgot password?" />
-      <Label layoutX="369.0" layoutY="282.0" text="Create Account" />
+      <Button fx:id="LoginBtn" layoutX="367.0" layoutY="246.0" mnemonicParsing="false" onAction="#performLoginAction" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #AFC6AF;" text="Login" />
+      <TextField fx:id="Username_txt" layoutX="310.0" layoutY="177.0" promptText="Username" />
+      <CheckBox fx:id="Remember_Chck" layoutX="238.0" layoutY="250.0" mnemonicParsing="false" text="Remember me" textFill="#1a6c4a" />
+      <AnchorPane prefHeight="445.0" prefWidth="229.0" style="-fx-background-color: #AFC6AF;">
+         <children>
+            <ImageView fx:id="Logo" fitHeight="150.0" fitWidth="148.0" layoutX="54.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="http://elvel.com/yahoo_site_admin/assets/images/1Logo.239145929_large.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="15.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="http://elvel.com/yahoo_site_admin/assets/images/1Letters.239150007_std.jpg" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <Label layoutX="238.0" layoutY="181.0" text="Username:" textFill="#1a6c4a" />
+      <Label layoutX="238.0" layoutY="214.0" text="Password:" textFill="#1a6c4a" />
+      <Label fx:id="Wronginfo" layoutX="272.0" layoutY="311.0" text="Wrong Username/Password" textFill="RED" visible="false" />
+      <Button fx:id="exitBtn" layoutX="410.0" layoutY="406.0" mnemonicParsing="false" style="-fx-background-color: AFC6AF;" text="Close" />
+      <PasswordField fx:id="Password_txt" layoutX="310.0" layoutY="210.0" promptText="Password" />
+      <ImageView fx:id="LoginLock" fitHeight="72.0" fitWidth="122.0" layoutX="300.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="http://www.darwinpresbyterian.org.au/images/large_lock.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="Invalidinfo" layoutX="282.0" layoutY="321.0" text="Invalid Username/Password" textFill="RED" visible="false" />
+      <Label layoutX="282.0" layoutY="123.0" prefHeight="32.0" prefWidth="160.0" text="Cafeteria Login" textFill="#7b977b">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="Createaccount" layoutX="377.0" layoutY="278.0" onMouseClicked="#opencreateaccount" text="Create Account">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

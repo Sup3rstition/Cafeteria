@@ -4,15 +4,13 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="463.0" prefWidth="557.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1">
+<AnchorPane prefHeight="516.0" prefWidth="549.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <DatePicker layoutX="110.0" layoutY="53.0" />
       <Label layoutX="12.0" layoutY="14.0" text="Check History">
@@ -39,24 +37,20 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <ScrollPane layoutX="10.0" layoutY="179.0" prefHeight="236.0" prefWidth="539.0">
-         <content>
-            <TableView prefHeight="274.0" prefWidth="523.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="Order Date" />
-                <TableColumn prefWidth="75.0" text="Student" />
-                  <TableColumn prefWidth="75.0" text="Menu Week" />
-                  <TableColumn prefWidth="75.0" text="Menu Item" />
-                  <TableColumn prefWidth="99.0" text="Additional Item" />
-                  <TableColumn prefWidth="70.0" text="Extra items" />
-                  <TableColumn prefWidth="54.0" text="Total" />
-              </columns>
-            </TableView>
-         </content>
-      </ScrollPane>
-      <Button layoutX="405.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Save" />
-      <Button layoutX="483.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Print" />
-      <Button layoutX="18.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Back" />
+      <Button layoutX="369.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Save to file" />
+      <Button layoutX="475.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Print" />
+      <Button layoutX="14.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Back" />
       <Button layoutX="291.0" layoutY="138.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Search" />
+      <TableView layoutX="12.0" layoutY="188.0" prefHeight="274.0" prefWidth="523.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="Order Date" />
+          <TableColumn prefWidth="75.0" text="Student" />
+            <TableColumn prefWidth="75.0" text="Menu Week" />
+            <TableColumn prefWidth="75.0" text="Menu Item" />
+            <TableColumn prefWidth="99.0" text="Additional Item" />
+            <TableColumn prefWidth="70.0" text="Extra items" />
+            <TableColumn prefWidth="54.0" text="Total" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

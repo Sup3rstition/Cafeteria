@@ -4,7 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -12,26 +12,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="517.0" prefWidth="604.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1">
+<AnchorPane prefHeight="517.0" prefWidth="604.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ScrollPane layoutX="365.0" layoutY="41.0" prefHeight="468.0" prefWidth="241.0">
-         <content>
-            <TableView prefHeight="474.0" prefWidth="226.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="Extra Item" />
-                <TableColumn prefWidth="75.0" text="Price" />
-                  <TableColumn prefWidth="75.0" text="#" />
-              </columns>
-            </TableView>
-         </content>
-      </ScrollPane>
-      <Label layoutX="16.0" layoutY="88.0" prefHeight="31.0" prefWidth="57.0" text="Menu">
+      <Label layoutX="17.0" layoutY="83.0" prefHeight="31.0" prefWidth="57.0" text="Menu">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Label layoutX="446.0" layoutY="9.0" text="Extras">
+      <Label layoutX="462.0" layoutY="7.0" text="Extras">
          <font>
             <Font size="21.0" />
          </font>
@@ -51,7 +39,7 @@
             <Font size="15.0" />
          </font>
       </RadioButton>
-      <Label layoutX="16.0" layoutY="247.0" text="Additionals">
+      <Label layoutX="16.0" layoutY="237.0" text="Additionals">
          <font>
             <Font size="21.0" />
          </font>
@@ -71,14 +59,14 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField editable="false" layoutX="115.0" layoutY="416.0" />
-      <Label layoutX="50.0" layoutY="418.0" text="Total:">
+      <TextField editable="false" layoutX="137.0" layoutY="423.0" />
+      <Label layoutX="74.0" layoutY="425.0" text="Total:">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Button layoutX="75.0" layoutY="456.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Clear" />
-      <Button layoutX="184.0" layoutY="456.0" mnemonicParsing="false" text="Add to Cart" />
+      <Button layoutX="87.0" layoutY="462.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Clear" />
+      <Button layoutX="216.0" layoutY="462.0" mnemonicParsing="false" text="Add to Cart" />
       <Label layoutX="115.0" layoutY="129.0" text="Label" />
       <Label layoutX="115.0" layoutY="166.0" text="Label" />
       <Label layoutX="115.0" layoutY="204.0" text="Label" />
@@ -135,5 +123,16 @@
             <Font size="19.0" />
          </font>
       </Label>
+      <TableView layoutX="377.0" layoutY="39.0" prefHeight="478.0" prefWidth="227.0">
+        <columns>
+          <TableColumn editable="false" prefWidth="75.0" text="Extra Item" />
+          <TableColumn editable="false" prefWidth="75.0" text="Price" />
+            <TableColumn prefWidth="75.0" text="#" />
+        </columns>
+      </TableView>
+      <Separator layoutX="17.0" layoutY="113.0" prefHeight="3.0" prefWidth="328.0" />
+      <Separator layoutX="3.0" layoutY="267.0" prefHeight="3.0" prefWidth="328.0" />
+      <Separator layoutX="377.0" layoutY="34.0" prefHeight="3.0" prefWidth="227.0" />
+      <Separator layoutX="12.0" layoutY="415.0" prefHeight="3.0" prefWidth="328.0" />
    </children>
 </AnchorPane>
