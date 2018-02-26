@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="652.0" prefWidth="478.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
+<AnchorPane prefHeight="678.0" prefWidth="484.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
    <children>
       <Separator layoutX="16.0" layoutY="553.0" prefHeight="3.0" prefWidth="456.0" />
       <ImageView fitHeight="123.0" fitWidth="200.0" layoutX="339.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
@@ -41,7 +41,7 @@
             <Font name="System Bold" size="17.0" />
          </font>
       </Label>
-      <TableView fx:id="cartable" layoutX="7.0" layoutY="242.0" prefHeight="300.0" prefWidth="464.0">
+      <TableView fx:id="cartable" layoutX="7.0" layoutY="242.0" prefHeight="300.0" prefWidth="468.0">
          <columns>
             <TableColumn prefWidth="75.0" text="Student" />
             <TableColumn prefWidth="75.0" text="Day" />
@@ -57,7 +57,7 @@
       <TextField editable="false" layoutX="258.0" layoutY="597.0" />
       <Button fx:id="clearbtn" layoutX="255.0" layoutY="635.0" mnemonicParsing="false" onAction="#clearcart" text="Clear Cart" />
       <Button fx:id="orderbtn" layoutX="356.0" layoutY="635.0" mnemonicParsing="false" onAction="#submitorder" text="Order" />
-      <Label layoutX="191.0" layoutY="671.0" text="If a problem has occured please contact elvel school." />
+      <Label layoutX="89.0" layoutY="661.0" text="If a problem has occured please contact elvel school." />
       <Label layoutX="17.0" layoutY="14.0" text="Account Info">
          <font>
             <Font name="System Bold" size="19.0" />
