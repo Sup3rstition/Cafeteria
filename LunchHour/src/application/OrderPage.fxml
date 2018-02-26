@@ -10,32 +10,37 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="678.0" prefWidth="484.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
+<AnchorPane prefHeight="684.0" prefWidth="484.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
    <children>
       <Separator layoutX="16.0" layoutY="553.0" prefHeight="3.0" prefWidth="456.0" />
-      <ImageView fitHeight="123.0" fitWidth="200.0" layoutX="339.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="123.0" fitWidth="200.0" layoutX="357.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@1Logo.239145929_large.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="18.0" layoutY="56.0" text="Account:" />
-      <Label fx:id="parentsname" layoutX="84.0" layoutY="56.0" text="(ParentName)" />
-      <Label layoutX="18.0" layoutY="78.0" text="Balance:" />
-      <Label fx:id="Balanceamountlabel" layoutX="92.0" layoutY="78.0" text="??.??" />
-      <Label fx:id="currentdatelabel" layoutX="121.0" layoutY="101.0" text="??/??/????" />
-      <Label layoutX="18.0" layoutY="101.0" text="Current Date:" />
-      <Label layoutX="19.0" layoutY="148.0" text="Last Order Date:" />
-      <Label layoutX="18.0" layoutY="124.0" text="Balance Update:" />
-      <Label fx:id="currentdatelabel1" layoutX="121.0" layoutY="124.0" text="??/??/????" />
-      <Label fx:id="currentdatelabel2" layoutX="121.0" layoutY="148.0" text="??/??/????" />
-      <Label layoutX="19.0" layoutY="190.0" text="Student:" />
+      <Label layoutX="19.0" layoutY="191.0" text="Student:">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
       <Separator layoutX="17.0" layoutY="178.0" prefHeight="3.0" prefWidth="444.0" />
       <ChoiceBox fx:id="studentcombox" layoutX="73.0" layoutY="189.0" prefWidth="150.0" />
-      <Button fx:id="menubtn" layoutX="314.0" layoutY="185.0" mnemonicParsing="false" onAction="#menuopen" prefHeight="32.0" prefWidth="131.0" text="Menu" />
-      <Button fx:id="Checkhistorybtn" layoutX="200.0" layoutY="74.0" mnemonicParsing="false" onAction="#checkhistory" text="Check History" />
-      <Button fx:id="logutbtn" layoutX="217.0" layoutY="120.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
+      <Button fx:id="menubtn" layoutX="314.0" layoutY="185.0" mnemonicParsing="false" onAction="#menuopen" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #AFC6AF;" text="Menu">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font></Button>
+      <Button fx:id="Checkhistorybtn" layoutX="244.0" layoutY="74.0" mnemonicParsing="false" onAction="#checkhistory" style="-fx-background-color: #AFC6AF;" text="Check History">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font></Button>
+      <Button fx:id="logutbtn" layoutX="261.0" layoutY="123.0" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: #AFC6AF;" text="Logout">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font></Button>
       <Label layoutX="224.0" layoutY="216.0" text="Cart">
          <font>
             <Font name="System Bold" size="17.0" />
@@ -55,15 +60,65 @@
       <Label layoutX="134.0" layoutY="601.0" text="Balance Remaing:" />
       <TextField editable="false" layoutX="258.0" layoutY="564.0" />
       <TextField editable="false" layoutX="258.0" layoutY="597.0" />
-      <Button fx:id="clearbtn" layoutX="255.0" layoutY="635.0" mnemonicParsing="false" onAction="#clearcart" text="Clear Cart" />
-      <Button fx:id="orderbtn" layoutX="356.0" layoutY="635.0" mnemonicParsing="false" onAction="#submitorder" text="Order" />
-      <Label layoutX="89.0" layoutY="661.0" text="If a problem has occured please contact elvel school." />
+      <Button fx:id="clearbtn" layoutX="262.0" layoutY="635.0" mnemonicParsing="false" onAction="#clearcart" style="-fx-background-color: #AFC6AF;" text="Clear Cart">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font></Button>
+      <Button fx:id="orderbtn" layoutX="356.0" layoutY="635.0" mnemonicParsing="false" onAction="#submitorder" style="-fx-background-color: #AFC6AF;" text="Order">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font></Button>
+      <Label layoutX="9.0" layoutY="662.0" text="If a problem has occured please contact elvel school." />
       <Label layoutX="17.0" layoutY="14.0" text="Account Info">
          <font>
             <Font name="System Bold" size="19.0" />
          </font>
       </Label>
       <Separator layoutX="17.0" layoutY="47.0" prefHeight="3.0" prefWidth="279.0" />
-      <Button layoutX="27.0" layoutY="635.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Close" />
+      <GridPane layoutX="16.0" layoutY="45.0" prefHeight="132.0" prefWidth="200.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Account:" />
+            <Label fx:id="parentsname" text="(ParentName)" GridPane.columnIndex="1">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label text="Balance:" GridPane.rowIndex="1" />
+            <Label fx:id="Balanceamountlabel" text="??.??" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="currentdatelabel" text="??/??/????" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label text="Current Date:" GridPane.rowIndex="2" />
+            <Label text="Balance Update:" GridPane.rowIndex="3" />
+            <Label fx:id="currentdatelabel1" text="??/??/????" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label text="Last Order Date:" GridPane.rowIndex="4" />
+            <Label fx:id="currentdatelabel2" text="??/??/????" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
