@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="647.0" prefWidth="420.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
+<AnchorPane prefHeight="647.0" prefWidth="484.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
    <children>
       <AnchorPane prefHeight="142.0" prefWidth="315.0">
          <children>
@@ -26,11 +26,11 @@
             <Button fx:id="logutbtn" layoutX="152.0" layoutY="103.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="130.0" prefHeight="364.0" prefWidth="315.0">
+      <AnchorPane layoutX="10.0" layoutY="130.0" prefHeight="369.0" prefWidth="466.0">
          <children>
             <ChoiceBox fx:id="studentcombox" layoutX="66.0" layoutY="14.0" prefWidth="150.0" />
             <Label layoutX="14.0" layoutY="18.0" text="Student:" />
-            <TableView fx:id="cartable" layoutY="69.0" prefHeight="300.0" prefWidth="479.0">
+            <TableView fx:id="cartable" layoutY="69.0" prefHeight="300.0" prefWidth="464.0">
                <columns>
                   <TableColumn prefWidth="75.0" text="Student" />
                   <TableColumn prefWidth="75.0" text="Day" />
@@ -46,7 +46,7 @@
                </font>
             </Label>
             <Button fx:id="menubtn" layoutX="305.0" layoutY="11.0" mnemonicParsing="false" onAction="#menuopen" prefHeight="32.0" prefWidth="131.0" text="Menu" />
-            <Separator layoutX="12.0" layoutY="4.0" prefHeight="2.0" prefWidth="463.0" />
+            <Separator layoutX="12.0" layoutY="4.0" prefHeight="3.0" prefWidth="315.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="156.0" layoutY="494.0" prefHeight="153.0" prefWidth="319.0">
