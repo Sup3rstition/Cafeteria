@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+
+<AnchorPane prefHeight="388.0" prefWidth="501.0" style="-fx-background-color: #DDECDD;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1">
+   <children>
+      <Label layoutX="20.0" layoutY="14.0" text="Welcome, (Administrator Name)">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Separator layoutX="13.0" layoutY="40.0" prefHeight="4.0" prefWidth="471.0" />
+      <Button layoutX="47.0" layoutY="73.0" mnemonicParsing="false" text="Parent Account Editor" />
+      <Button layoutX="45.0" layoutY="119.0" mnemonicParsing="false" text="Get Delivery Report" />
+      <Button layoutX="45.0" layoutY="162.0" mnemonicParsing="false" text="Get Order Report" />
+      <Button layoutX="47.0" layoutY="205.0" mnemonicParsing="false" text="Menu Editor" />
+      <Button layoutX="47.0" layoutY="247.0" mnemonicParsing="false" text="Get FDF" />
+      <Button layoutX="45.0" layoutY="291.0" mnemonicParsing="false" text="Logout" />
+      <Separator layoutX="13.0" layoutY="352.0" prefHeight="4.0" prefWidth="471.0" />
+   </children>
 </AnchorPane>
-
