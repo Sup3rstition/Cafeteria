@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,8 +9,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 
-import com.mysql.jdbc.Statement;
-
+import application.Student.Student;
 import connection.Lunchhourdb;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,17 +17,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class Createaccountcontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
-	private ResultSet rs = null;
+	private ResultSet rs = null;	
     @FXML
     private TextField Username_txt;
 
@@ -47,7 +52,19 @@ public class Createaccountcontroller implements Initializable {
     private TextField Lastnametxt;
 
     @FXML
-    private TableView<?> studenttable;
+    private TableView<Student> studenttable;
+
+    @FXML
+    private TableColumn<Student, String> firstNamecol;
+
+    @FXML
+    private TableColumn<Student, String> lastnamecol;
+
+    @FXML
+    private TableColumn<Student, String> gradecol;
+
+    @FXML
+    private TableColumn<Student, String> sectioncol;
 
     @FXML
     private Button removebtn;
@@ -71,12 +88,30 @@ public class Createaccountcontroller implements Initializable {
     private Label Emaillabel;
 
     @FXML
-    void Addstudentable(ActionEvent event) {
+    void Addstudentable(ActionEvent event) throws IOException {
+    	 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("application/CreateStudent.fxml"));
+         loader.load();
+         Createstudentcontroller controller = loader.getController();
+         Parent popup = loader.getRoot();
+         controller.setItems(studenttable.getItems());
 
+         // Display popup
+         Stage stage = new Stage();
+         stage.setScene(new Scene(popup));
+         stage.showAndWait();
+         studenttable.refresh();
+         
     }
 
     @FXML
-    void backtologin(ActionEvent event) {
+    void backtologin(ActionEvent event) throws IOException, SQLException {
+    	conn.close();
+    	Parent Loginpage = FXMLLoader.load(getClass().getClassLoader().getResource("application/Login.fxml"));
+        Scene Login = new Scene(Loginpage);
+        Stage window = (Stage) backbtn.getScene().getWindow();
+        window.setScene(Login);
+        window.show();
+
 
     }
     @FXML
@@ -92,13 +127,25 @@ public class Createaccountcontroller implements Initializable {
     private Label Uservalid;
 
     @FXML
-    void createanaccount(ActionEvent event) throws SQLException {
+    void createanaccount(ActionEvent event) throws SQLException, IOException {
+    	//how to get the table info per row.
+    	for(int i=0; i < studenttable.getItems().size();i++) {
+    	Student tableRow = studenttable.getItems().get(i);
+    String name = tableRow.getFirstName();
+    String lastname = tableRow.getLastName();
+    String Grade = tableRow.getGrade();
+    String Section = tableRow.getSection();
+    	System.out.println(name);
+    	System.out.println(lastname);
+    	System.out.println(Grade);
+    	System.out.println(Section);
+    	}
+    	//Creates a c
     	String userName = Username_txt.getText().toUpperCase();
 	    String password = Password_txt1.getText().trim();
 	    String Firstname = Firstnametxt.getText().trim();
 	    String Lastname = Lastnametxt.getText().trim();
 	    String Email = Emailaddress_txt.getText().trim().toUpperCase();
-	    System.out.println("asd");
 	    if(userName.length() >= 6 && !userName.contains(" ")) {
 	    	Uservalid.setVisible(false);
 	    	Userlength.setVisible(false);
@@ -127,15 +174,30 @@ public class Createaccountcontroller implements Initializable {
 		             		+ "VAlUES('"+userName+"','"+Email+"','"+password+"','"+Firstname+"','"+Lastname+"',0);";
 		             ps = conn.prepareStatement(Insertaccount);
 		        	 ps.execute();
-		        	 conn.close();
-		        	 System.out.println("account inserted");
-		        	}else if(password.length()< 8){
+		        	 conn.close();    					// Closes connection
+		        	 
+		        	 /*
+		        	  * Creates an alert to tell the user the account was created.
+		        	  */
+		        	 Alert alert = new Alert(AlertType.INFORMATION, "Account Created", ButtonType.OK);
+		        	 alert.showAndWait();
+
+		        	 if (alert.getResult() == ButtonType.OK) {
+		        		 
+		        	    	Parent CreateStudent = FXMLLoader.load(getClass().getClassLoader().getResource("application/Login.fxml"));
+		        	        Scene Login = new Scene(CreateStudent);
+		        	        Stage window = (Stage) backbtn.getScene().getWindow();
+		        	        window.setScene(Login);
+		        	        window.show();
+		        	 }
+		        	}else if(password.length()< 8){			// If password isn't long enough shows error
 		        		Passlength.setVisible(true);
-		        	}else if(!password.equals(Password_txt2.getText())) {
+		        	}else if(!password.equals(Password_txt2.getText())) {			//if the 2 passwords don't match show error.
 		        		Passwordlabel.setVisible(true);
 		        	}
 		        	else {
-		        		System.out.println("Accountfailed");
+		        		Alert alert = new Alert(AlertType.ERROR, "Account Failed");
+			        	 alert.showAndWait();
 		        	}
 		        	}
 		        }else {
@@ -160,14 +222,26 @@ public class Createaccountcontroller implements Initializable {
 
     @FXML
     void removeselected(ActionEvent event) {
+    	
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + studenttable.getSelectionModel().getSelectedItem().getFirstName() +" "+studenttable.getSelectionModel().getSelectedItem().getLastName() +" from Student table?" , ButtonType.YES, ButtonType.CANCEL);
+   	 alert.showAndWait();
+
+   	 if (alert.getResult() == ButtonType.YES) {
+    	Student selectedItem = studenttable.getSelectionModel().getSelectedItem();
+        studenttable.getItems().remove(selectedItem);
+   	 }
 
     }
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		conn = Lunchhourdb.get();
+		firstNamecol.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
+		lastnamecol.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
+		gradecol.setCellValueFactory(new PropertyValueFactory<Student, String>("Grade"));
+		sectioncol.setCellValueFactory(new PropertyValueFactory<Student, String>("Section"));
 		
+	    
 	}
-
 }
 
