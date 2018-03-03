@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="499.0" prefWidth="513.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Editusercontroller">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Edit Parent Account">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Separator layoutX="14.0" layoutY="45.0" prefHeight="4.0" prefWidth="470.0" />
+      <TreeTableView layoutX="11.0" layoutY="94.0" prefHeight="317.0" prefWidth="492.0">
+        <columns>
+          <TreeTableColumn editable="false" prefWidth="75.0" text="Username" />
+          <TreeTableColumn editable="false" prefWidth="84.0" text="Email Address" />
+            <TreeTableColumn editable="false" prefWidth="75.0" text="Balance" />
+            <TreeTableColumn editable="false" prefWidth="129.0" text="Full Name">
+               <columns>
+                  <TreeTableColumn editable="false" prefWidth="75.0" text="First Name" />
+                  <TreeTableColumn editable="false" prefWidth="75.0" text="Last Name" />
+               </columns>
+            </TreeTableColumn>
+            <TreeTableColumn editable="false" prefWidth="104.0" text="Children Name(s)" />
+        </columns>
+      </TreeTableView>
+      <Button layoutX="397.0" layoutY="417.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Edit Information" />
+      <Button layoutX="306.0" layoutY="417.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Add Account" />
+      <Button layoutX="251.0" layoutY="417.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Delete" />
+      <Button layoutX="125.0" layoutY="417.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Add Funds" />
+      <Button layoutX="14.0" layoutY="463.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Back" />
+      <Separator layoutX="13.0" layoutY="452.0" prefHeight="4.0" prefWidth="482.0" />
+      <Label layoutX="17.0" layoutY="58.0" text="Parent Search:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField layoutX="110.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="First Name" />
+      <Button layoutX="414.0" layoutY="56.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Search" />
+      <TextField layoutX="207.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="Last Name" />
+      <TextField layoutX="304.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="Username" />
+      <TextField layoutX="17.0" layoutY="417.0" prefHeight="25.0" prefWidth="102.0" promptText="Add to Balance" />
+   </children>
+</AnchorPane>
