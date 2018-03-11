@@ -40,8 +40,10 @@ public class Createstudentcontroller implements Initializable{
 	private Stage stage;
     @FXML
     void addstudent(ActionEvent event) { 
+    	// gets the values and text of the answers the user supplies and inputs them into the table on createAccount
     	student.add(new Student(Studentfirst_txt.getText(),Studentlast_txt.getText(),Grade.getValue(),
     			Section.getValue()));
+    	//Clears the values in the fields
     	Studentfirst_txt.clear();
     	Studentlast_txt.clear();
     	Grade.getSelectionModel().clearSelection();
@@ -51,6 +53,7 @@ public class Createstudentcontroller implements Initializable{
 
     @FXML
     void backtocreateaccount(ActionEvent event) {
+    	//Clears everything and closes the stage.
      Studentfirst_txt.clear();
     	Studentlast_txt.clear();
     	Grade.getSelectionModel().clearSelection();
@@ -60,6 +63,7 @@ public class Createstudentcontroller implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		//sets the stage and also fills the comboboxs
 		setStage(stage);
 		Grade.getItems().addAll("Pre-K","K","1","2","3","4","5","6","7","8","9","10","11");
 		Section.getItems().addAll("A","B","C");

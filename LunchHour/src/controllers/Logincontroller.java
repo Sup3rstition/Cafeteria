@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,13 +28,14 @@ public class Logincontroller implements Initializable{
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
+	private Stage curstage;
     @FXML
     private Button LoginBtn;
 
     @FXML
     private TextField Username_txt;
 
-    @FXML
+	@FXML
     private PasswordField Password_txt;
 
     @FXML
@@ -48,7 +50,7 @@ public class Logincontroller implements Initializable{
     @FXML
     private Button exitBtn;
     
-    @FXML
+    @FXML	//if the user wants a new account they will click on the create account label.
     void opencreateaccount(MouseEvent event) throws IOException {
         Parent CreateAccount = FXMLLoader.load(getClass().getClassLoader().getResource("application/CreateAccountPage.fxml"));
         Scene CreateAccountPage = new Scene(CreateAccount);
@@ -63,14 +65,14 @@ public class Logincontroller implements Initializable{
     @FXML
     private Label Invalidinfo;
     /*
-     * The action for the login button to create a connection to the database to search for the user name and the password.
+     * The action for  the login button to create a connection to the database to search for the user name and the password.
      */
+    private  String username;
     @FXML
     void performLoginAction(ActionEvent event) {
-    		conn = Lunchhourdb.get();
-    	 	String userName = Username_txt.getText().trim().toUpperCase(); // removes any space after the username and capitlize it to make a make sure username isn't case-sensitive.
+    	 	 username = Username_txt.getText().trim().toUpperCase(); // removes any space after the username and capitlize it to make a make sure username isn't case-sensitive.
     	    String password = Password_txt.getText().trim();
-    	    if(userName.length() >=6 && password.length() >= 3) {
+    	    if(username.length() >=6 && password.length() >= 3) {
     	    	Invalidinfo.setVisible(false);
     	    	/*
     	    	 * creates a sql command to search the parents for the username and password.
@@ -79,19 +81,27 @@ public class Logincontroller implements Initializable{
     	    try {
     	    	// Creates the prepared statement to search the database with.
     	        ps = conn.prepareStatement(sql);
-    	        ps.setString(1, userName);
+    	        ps.setString(1, username);
     	        ps.setString(2, password);
     	        rs = ps.executeQuery();		// this is the result from the query and will be check to see if any result came back.
     	        
     	        if (rs.next()) {		// if there is a result from the serach in the database this changes the stage to the order page.
-    	        		Wronginfo.setVisible(false);
-    	        		conn.close();
-    	            Parent Orderpage = FXMLLoader.load(getClass().getClassLoader().getResource("application/OrderPage.fxml"));
-    	            Scene OrderpageView = new Scene(Orderpage);
-    	            Stage window = (Stage) LoginBtn.getScene().getWindow();
-    	            window.setScene(OrderpageView);
-    	            window.show();
-    	            
+    	        	Wronginfo.setVisible(false); 
+    	        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/OrderPage.fxml"));
+    	        	loader.load();
+    	        	Parent order = loader.getRoot();
+    	       
+    	             Orderpagecontroller controller = loader.getController();
+    	            controller.setUsername(Username_txt.getText());
+
+    	             // Display popup
+    	             Stage stage = new Stage();
+    	             stage.setScene(new Scene(order));
+    	             //This displays the stage and waits for the input
+    	             stage.show();
+    	           	((Node)(event.getSource())).getScene().getWindow().hide();
+    	       
+    	        		
     	        } else {
     	            Wronginfo.setVisible(true);		// if the search fails it sets the wrong info label to visible and once it becomes true
     	            									// it'll set the wronginfo to false.
@@ -113,6 +123,6 @@ public class Logincontroller implements Initializable{
      */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		conn = Lunchhourdb.get();
 	}
 }

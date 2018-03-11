@@ -89,6 +89,7 @@ public class Createaccountcontroller implements Initializable {
 
     @FXML
     void Addstudentable(ActionEvent event) throws IOException {
+    	// opens the add student to table stage instead of changing the scene.
     	 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("application/CreateStudent.fxml"));
          loader.load();
          Createstudentcontroller controller = loader.getController();
@@ -98,6 +99,7 @@ public class Createaccountcontroller implements Initializable {
          // Display popup
          Stage stage = new Stage();
          stage.setScene(new Scene(popup));
+         //This displays the stage and waits for the input
          stage.showAndWait();
          studenttable.refresh();
          
@@ -105,7 +107,6 @@ public class Createaccountcontroller implements Initializable {
 
     @FXML
     void backtologin(ActionEvent event) throws IOException, SQLException {
-    	conn.close();
     	Parent Loginpage = FXMLLoader.load(getClass().getClassLoader().getResource("application/Login.fxml"));
         Scene Login = new Scene(Loginpage);
         Stage window = (Stage) backbtn.getScene().getWindow();
@@ -140,20 +141,23 @@ public class Createaccountcontroller implements Initializable {
     	System.out.println(Grade);
     	System.out.println(Section);
     	}
-    	//Creates a c
-    	String userName = Username_txt.getText().toUpperCase();
+    	//Text box to variables
+    	String userName = Username_txt.getText().toUpperCase().trim();
 	    String password = Password_txt1.getText().trim();
 	    String Firstname = Firstnametxt.getText().trim();
 	    String Lastname = Lastnametxt.getText().trim();
 	    String Email = Emailaddress_txt.getText().trim().toUpperCase();
+	    //Checks to if the username is long and if it contains any spaces
 	    if(userName.length() >= 6 && !userName.contains(" ")) {
 	    	Uservalid.setVisible(false);
 	    	Userlength.setVisible(false);
 	    String usernamesql = "SELECT * from Cafeteria.Parents WHERE userName = ?;";
+	    //creates statement for the sql query
 	        ps = conn.prepareStatement(usernamesql);
 	        ps.setString(1, userName);
 	        rs = ps.executeQuery();
-	        if(!rs.next()) {
+	        if(!rs.next()) { // Checks to see if there is a username the same as the one that typed
+	        	
 	        	System.out.println("username passed");
 	        		Usernamelabel.setVisible(false);
 	        		if(!Email.contains(" ") && Email.contains("@")) {
@@ -162,17 +166,21 @@ public class Createaccountcontroller implements Initializable {
 	        	 ps = conn.prepareStatement(emailsql);
 	 	         ps.setString(1, Email);
 	 	         rs = ps.executeQuery();
-		        if(!rs.next()) {
+	 	         
+		        if(!rs.next()) {		//checks to see if there is any email in the parent table that is the same
 		        	System.out.println("email passed");{
 		        		Emaillabel.setVisible(false);
-		        	if(password.length() >= 8 && password.equals(Password_txt2.getText())) {
+		        		
+		        	if(password.length() >= 8 && password.equals(Password_txt2.getText())) {		//checks to see if the passwords match and if they are long enough
 		        		Passlength.setVisible(false);
 		        		Passwordlabel.setVisible(false);
-		        	 Calendar calendar = Calendar.getInstance();
+		        	 Calendar calendar = Calendar.getInstance();			// gets Creation time to insert into the table
 		             java.sql.Date startDate = new java.sql.Date(calendar.getTime().getTime());
+		             
 		             String Insertaccount = "Insert INTO Cafeteria.Parents(Username,EmailAddress,Password,`First Name`,`Last Name`,Balance) "
 		             		+ "VAlUES('"+userName+"','"+Email+"','"+password+"','"+Firstname+"','"+Lastname+"',0);";
 		             ps = conn.prepareStatement(Insertaccount);
+		             
 		        	 ps.execute();
 		        	 conn.close();    					// Closes connection
 		        	 
@@ -222,7 +230,7 @@ public class Createaccountcontroller implements Initializable {
 
     @FXML
     void removeselected(ActionEvent event) {
-    	
+    	//Remove alert to make sure you want to remove the student
     	Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + studenttable.getSelectionModel().getSelectedItem().getFirstName() +" "+studenttable.getSelectionModel().getSelectedItem().getLastName() +" from Student table?" , ButtonType.YES, ButtonType.CANCEL);
    	 alert.showAndWait();
 
@@ -236,6 +244,7 @@ public class Createaccountcontroller implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		conn = Lunchhourdb.get();
+		//this creates a reference to student to get the information from the other controller.
 		firstNamecol.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
 		lastnamecol.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
 		gradecol.setCellValueFactory(new PropertyValueFactory<Student, String>("Grade"));

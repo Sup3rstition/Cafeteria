@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="516.0" prefWidth="549.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="516.0" prefWidth="549.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CheckHistoryController">
    <children>
       <DatePicker layoutX="110.0" layoutY="53.0" />
       <Label layoutX="12.0" layoutY="14.0" text="Check History">
@@ -37,10 +37,10 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="369.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Save to file" />
-      <Button layoutX="475.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Print" />
-      <Button layoutX="14.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Back" />
-      <Button layoutX="291.0" layoutY="138.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Search" />
+      <Button fx:id="savebtn" layoutX="369.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Save to file" />
+      <Button fx:id="printbtn" layoutX="475.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Print" />
+      <Button fx:id="Backbtn" layoutX="14.0" layoutY="474.0" mnemonicParsing="false" onAction="#backtoorder" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Back" />
+      <Button fx:id="searchbtn" layoutX="291.0" layoutY="138.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Search" />
       <TableView layoutX="12.0" layoutY="188.0" prefHeight="274.0" prefWidth="523.0">
         <columns>
           <TableColumn prefWidth="75.0" text="Order Date" />
