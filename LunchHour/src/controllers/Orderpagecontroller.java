@@ -76,10 +76,16 @@ public class Orderpagecontroller implements Initializable {
     
     @FXML
     void checkhistory(ActionEvent event) throws IOException {
-    	Parent Loginpage = FXMLLoader.load(getClass().getResource("/application/CheckHistoryPage.fxml"));
-        Scene Login = new Scene(Loginpage);
-        Stage window = (Stage) logutbtn.getScene().getWindow();
-        window.setScene(Login);
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/CheckHistoryPage.fxml"));
+    	Parent CheckHistory = loader.load();
+    	
+        Scene Check = new Scene(CheckHistory);
+        CheckHistoryController controller = loader.getController();
+        controller.setUsername_(username);
+        Stage window = (Stage) Checkhistorybtn.getScene().getWindow();
+        
+        window.setScene(Check);
         window.show();
     }
 
@@ -89,7 +95,8 @@ public class Orderpagecontroller implements Initializable {
     }
 
     @FXML
-    void logout(ActionEvent event) throws IOException {
+    void logout(ActionEvent event) throws IOException, SQLException {
+    
     	Parent Loginpage = FXMLLoader.load(getClass().getResource("/application/Login.fxml"));
         Scene Login = new Scene(Loginpage);
         Stage window = (Stage) logutbtn.getScene().getWindow();
@@ -109,9 +116,14 @@ public class Orderpagecontroller implements Initializable {
 		balancerem_txt.setText("0.00");
 		
 	}	
+	private String username;
+	public String getUsername() {
+		return username;
+	}
+	
 	public void setUsername(String user) throws SQLException{
 		parentsname.setText(user);
-		String username = parentsname.getText();
+		 username = parentsname.getText();
 		Setinfo(username);
 	}
 	private int parentid;
@@ -139,7 +151,6 @@ public class Orderpagecontroller implements Initializable {
 	        
 	        
 	}
-	private String selectedstudentname;
 	private void addstudent(int parentid) throws SQLException {
 		String sql = "SELECT * from Cafeteria.Student WHERE `Parent ID` = ?";
 		 ps = conn.prepareStatement(sql);
@@ -153,7 +164,11 @@ public class Orderpagecontroller implements Initializable {
 		
 	}
     @FXML
-    void menuopen(ActionEvent event) {
-
+    void menuopen(ActionEvent event) throws IOException {
+    	Parent Loginpage = FXMLLoader.load(getClass().getResource("/application/MenuPage.fxml"));
+        Scene Login = new Scene(Loginpage);
+        Stage window = (Stage) logutbtn.getScene().getWindow();
+        window.setScene(Login);
+        window.show();
     }
 }

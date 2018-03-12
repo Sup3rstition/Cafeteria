@@ -28,7 +28,7 @@ public class Logincontroller implements Initializable{
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
-	private Stage curstage;
+	
     @FXML
     private Button LoginBtn;
 

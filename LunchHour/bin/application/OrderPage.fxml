@@ -18,7 +18,7 @@
 <AnchorPane prefHeight="684.0" prefWidth="484.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
    <children>
       <Separator layoutX="16.0" layoutY="553.0" prefHeight="3.0" prefWidth="456.0" />
-      <ImageView fitHeight="123.0" fitWidth="200.0" layoutX="357.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView blendMode="MULTIPLY" fitHeight="123.0" fitWidth="200.0" layoutX="357.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@1Logo.239145929_large.jpg" />
          </image>

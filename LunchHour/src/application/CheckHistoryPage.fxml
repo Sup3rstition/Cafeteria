@@ -52,5 +52,7 @@
             <TableColumn prefWidth="54.0" text="Total" />
         </columns>
       </TableView>
+      <Label layoutX="393.0" layoutY="17.0" text="Account:" />
+      <Label fx:id="username" layoutX="458.0" layoutY="17.0" text="Label" />
    </children>
 </AnchorPane>
