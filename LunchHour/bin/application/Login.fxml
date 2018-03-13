@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="445.0" prefWidth="480.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Logincontroller">
+<AnchorPane prefHeight="445.0" prefWidth="480.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Logincontroller">
    <children>
       <Button fx:id="LoginBtn" layoutX="367.0" layoutY="246.0" mnemonicParsing="false" onAction="#performLoginAction" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #AFC6AF;" text="Login" />
       <TextField fx:id="Username_txt" layoutX="310.0" layoutY="177.0" promptText="Username" />
@@ -27,7 +27,6 @@
                   <Image url="http://elvel.com/yahoo_site_admin/assets/images/1Letters.239150007_std.jpg" />
                </image>
             </ImageView>
-            <Label layoutX="13.0" layoutY="423.0" text="Created by 5byteHero" />
          </children></AnchorPane>
       <Label layoutX="238.0" layoutY="181.0" text="Username:" textFill="#1a6c4a" />
       <Label layoutX="238.0" layoutY="214.0" text="Password:" textFill="#1a6c4a" />

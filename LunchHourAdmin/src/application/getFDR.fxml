@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="516.0" prefWidth="549.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CheckHistoryController">
+<AnchorPane prefHeight="516.0" prefWidth="491.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CheckHistoryController">
    <children>
       <DatePicker layoutX="110.0" layoutY="53.0" />
-      <Label layoutX="12.0" layoutY="14.0" text="Check History">
+      <Label layoutX="12.0" layoutY="14.0" text="Get Food Delivery report">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -36,23 +36,20 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="savebtn" layoutX="369.0" layoutY="474.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Save to file" />
-      <Button fx:id="printbtn" layoutX="475.0" layoutY="474.0" mnemonicParsing="false" onAction="#print" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Print" />
+      <Button fx:id="savebtn" layoutX="291.0" layoutY="474.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Save to file" />
+      <Button fx:id="printbtn" layoutX="401.0" layoutY="474.0" mnemonicParsing="false" onAction="#print" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Print" />
       <Button fx:id="Backbtn" layoutX="14.0" layoutY="474.0" mnemonicParsing="false" onAction="#backtoorder" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Back" />
       <Button fx:id="searchbtn" layoutX="291.0" layoutY="138.0" mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Search" />
-      <TableView fx:id="orderhistory" layoutX="12.0" layoutY="188.0" prefHeight="274.0" prefWidth="523.0">
+      <TableView fx:id="orderhistory" layoutX="10.0" layoutY="186.0" prefHeight="274.0" prefWidth="472.0">
         <columns>
-          <TableColumn fx:id="order" prefWidth="75.0" text="Order Date" />
           <TableColumn fx:id="name" prefWidth="75.0" text="Student" />
-            <TableColumn fx:id="menu" prefWidth="75.0" text="Menu Week" />
+            <TableColumn prefWidth="75.0" text="Grade" />
+            <TableColumn prefWidth="75.0" text="Section" />
             <TableColumn fx:id="menuitem" prefWidth="75.0" text="Menu Item" />
             <TableColumn fx:id="add" prefWidth="99.0" text="Additional Item" />
             <TableColumn fx:id="extra" prefWidth="70.0" text="Extra items" />
-            <TableColumn fx:id="total" prefWidth="54.0" text="Total" />
         </columns>
       </TableView>
-      <Label layoutX="393.0" layoutY="17.0" text="Account:" />
-      <Label fx:id="username" layoutX="458.0" layoutY="17.0" text="Label" />
       <ComboBox layoutX="109.0" layoutY="139.0" prefWidth="150.0" promptText="All" />
    </children>
 </AnchorPane>
