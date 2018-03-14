@@ -143,8 +143,6 @@ public class Orderpagecontroller implements Initializable {
 	   	 if (alert.getResult() == ButtonType.YES) {
 	   		cartable.getItems().clear();
 	   		cartable.refresh();
-	   		Cart_txt.setText("0.00");
-	   		Balanceamountlabel.setText("990.90");
 	   		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	        Calendar cal = Calendar.getInstance();
 	        Lastupdate.setText(dateFormat.format(cal.getTime()));
@@ -161,8 +159,6 @@ public class Orderpagecontroller implements Initializable {
 		additionalcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("add"));
 		extracol.setCellValueFactory(new PropertyValueFactory<Cart, String>("extra"));
 		totalcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("total"));
-		Cart_txt.setText("0.00");
-		balancerem_txt.setText("999.99");
 		
 	}	
 	private String username;
@@ -252,21 +248,19 @@ public class Orderpagecontroller implements Initializable {
            }
        });
 		 cartable.refresh();
-		 Cart_txt.setText("0.00");
 	}
 
 	@FXML
 	private Button remove;
 	@FXML
 	void removeselected(ActionEvent event) {
-		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + cartable.getSelectionModel().getSelectedItem().getFullname() +" Order from cart?" , ButtonType.YES, ButtonType.CANCEL);
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + cartable.getSelectionModel().getSelectedItem().getFullname() + " " + cartable.getSelectionModel().getSelectedItem().getMenuitem() 
+				+" Order from cart?" , ButtonType.YES, ButtonType.CANCEL);
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
 	    	Cart selectedItem = cartable.getSelectionModel().getSelectedItem();
 	        cartable.getItems().remove(selectedItem);
-	        Cart_txt.setText("0.00");
-	        balancerem_txt.setText("999.99");
 	        
 	   	 }
 	}
@@ -284,8 +278,6 @@ public class Orderpagecontroller implements Initializable {
         stage.setScene(Menu);
         stage.showAndWait();
         cartable.refresh();
-        Cart_txt.setText("9.09");
-        balancerem_txt.setText("990.9");
     }
     @FXML
     private Button close;
