@@ -8,11 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import connection.Lunchhourdb;
+import controllers.Menupagecontroller.Extras;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +34,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.StringConverter;
 import application.Student.Student;
 import application.Student.Studentinfo;
@@ -43,6 +46,8 @@ public class Orderpagecontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
+	private ObservableList<Cart> cart = Cart.getList();
+	
     @FXML
     private Label parentsname;
 
@@ -102,7 +107,7 @@ public class Orderpagecontroller implements Initializable {
 
     @FXML
     private TextField balancerem_txt;
-    
+    NumberFormat formatter = new DecimalFormat("#0.00");
     @FXML
     void checkhistory(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
@@ -110,7 +115,6 @@ public class Orderpagecontroller implements Initializable {
     	Parent CheckHistory = loader.load();
         Scene Check = new Scene(CheckHistory);
         CheckHistoryController controller = loader.getController();
-        controller.setUsername_(username);
        // Stage window = (Stage) Checkhistorybtn.getScene().getWindow();
         
        // window.setScene(Check);
@@ -127,7 +131,7 @@ public class Orderpagecontroller implements Initializable {
 
     @FXML
     void logout(ActionEvent event) throws IOException, SQLException {
-    
+    	Cart.getList().clear();
     	Parent Loginpage = FXMLLoader.load(getClass().getResource("/application/Login.fxml"));
         Scene Login = new Scene(Loginpage);
         Stage window = (Stage) logutbtn.getScene().getWindow();
@@ -149,9 +153,25 @@ public class Orderpagecontroller implements Initializable {
 	   		
 	   	 }
     }
-
+    private double totalprice() {
+    	double totalprice=0;	
+    	for(int i=0; i < cartable.getItems().size();i++) {
+	    	Cart tableRow = cartable.getItems().get(i);
+	    double price = tableRow.getTotal();
+	    totalprice = totalprice + price;
+		}
+		return totalprice;
+    }
+    private double balancechange() {
+		double cartbal = Double.parseDouble(Cart_txt.getText());
+		double curbal = Double.parseDouble(Balanceamountlabel.getText());
+    	double newbalance = curbal-cartbal;
+    	return newbalance;
+    	
+    }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		  
 		conn = Lunchhourdb.get();
 		studentcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("fullname"));
 		daycol.setCellValueFactory(new PropertyValueFactory<Cart, String>("Day"));
@@ -159,20 +179,18 @@ public class Orderpagecontroller implements Initializable {
 		additionalcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("add"));
 		extracol.setCellValueFactory(new PropertyValueFactory<Cart, String>("extra"));
 		totalcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("total"));
+		cartable.setItems(cart);
+		try {
+			Setinfo();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-	}	
-	private String username;
-	public String getUsername() {
-		return username;
-	}
-	
-	public void setUsername(String user) throws SQLException{
-		parentsname.setText(user);
-		 username = parentsname.getText();
-		Setinfo(username);
 	}
 	private int parentid;
-	private void Setinfo(String user) throws SQLException {
+	public void Setinfo() throws SQLException {
+		String user = Logincontroller.getUsername();
 		 String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?";
 		 ps = conn.prepareStatement(sql);
 	        ps.setString(1, user);
@@ -192,6 +210,8 @@ public class Orderpagecontroller implements Initializable {
 	        Lastupdate.setText(dateFormat.format(dBalance.getTime()));
 	        parentid = rs.getInt("Id"); 
 	        addstudent(parentid);
+	        Cart_txt.setText(formatter.format(totalprice()));
+	        balancerem_txt.setText(formatter.format(balancechange()));
 	        }
 	        
 	        
@@ -254,15 +274,17 @@ public class Orderpagecontroller implements Initializable {
 	private Button remove;
 	@FXML
 	void removeselected(ActionEvent event) {
+		Cart selectedItem = cartable.getSelectionModel().getSelectedItem();
+		if(selectedItem != null) {
 		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + cartable.getSelectionModel().getSelectedItem().getFullname() + " " + cartable.getSelectionModel().getSelectedItem().getMenuitem() 
 				+" Order from cart?" , ButtonType.YES, ButtonType.CANCEL);
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
-	    	Cart selectedItem = cartable.getSelectionModel().getSelectedItem();
 	        cartable.getItems().remove(selectedItem);
 	        
 	   	 }
+		}
 	}
     @FXML
     void menuopen(ActionEvent event) throws IOException {
@@ -272,11 +294,9 @@ public class Orderpagecontroller implements Initializable {
         Scene Menu = new Scene(Menupage);
         Menupagecontroller controller = loader.getController();
         Studentinfo studentid = studentcombox.getValue();
-        controller.setinfo(username, studentid);
-        controller.setItems(cartable.getItems());
-        Stage stage = new Stage();
-        stage.setScene(Menu);
-        stage.showAndWait();
+        controller.setinfo(studentid);
+        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
+        window.setScene(Menu);
         cartable.refresh();
     }
     @FXML
@@ -286,4 +306,5 @@ public class Orderpagecontroller implements Initializable {
     	((Node)(event.getSource())).getScene().getWindow().hide();
     
     }
+    
 }

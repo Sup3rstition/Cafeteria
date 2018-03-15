@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="684.0" prefWidth="484.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
+<AnchorPane prefHeight="684.0" prefWidth="484.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
    <children>
       <Separator layoutX="16.0" layoutY="575.0" prefHeight="3.0" prefWidth="456.0" />
       <ImageView blendMode="MULTIPLY" fitHeight="123.0" fitWidth="200.0" layoutX="357.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
@@ -45,14 +45,14 @@
             <Font name="System Bold" size="17.0" />
          </font>
       </Label>
-      <TableView fx:id="cartable" layoutX="7.0" layoutY="242.0" prefHeight="300.0" prefWidth="468.0">
+      <TableView fx:id="cartable" layoutX="7.0" layoutY="242.0" prefHeight="300.0" prefWidth="477.0">
          <columns>
             <TableColumn fx:id="studentcol" prefWidth="75.0" text="Student" />
             <TableColumn fx:id="daycol" prefWidth="75.0" text="Day" />
             <TableColumn fx:id="menucol" prefWidth="75.0" text="Menu Item" />
             <TableColumn fx:id="additionalcol" prefWidth="99.0" text="Additional item" />
             <TableColumn fx:id="extracol" prefWidth="75.0" text="Extra item" />
-            <TableColumn fx:id="totalcol" prefWidth="75.0" text="Total" />
+            <TableColumn fx:id="totalcol" prefWidth="65.0" text="Total" />
          </columns>
       </TableView>
       <Label layoutX="181.0" layoutY="606.0" text="Cart Total:" />
@@ -121,6 +121,11 @@
       </GridPane>
       <ComboBox fx:id="studentcombox" layoutX="74.0" layoutY="190.0" prefWidth="150.0" />
       <Button fx:id="remove" layoutX="410.0" layoutY="546.0" mnemonicParsing="false" onAction="#removeselected" prefHeight="25.0" prefWidth="67.0" text="Remove" />
-      <Button fx:id="close" layoutX="48.0" layoutY="627.0" mnemonicParsing="false" onAction="#closewindow" text="Close" />
+      <Button fx:id="close" layoutX="52.0" layoutY="656.0" mnemonicParsing="false" onAction="#closewindow" text="Close" />
+      <Button fx:id="menubtn1" layoutX="9.0" layoutY="599.0" mnemonicParsing="false" onAction="#menuopen" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #AFC6AF;" text="Next week Menu">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

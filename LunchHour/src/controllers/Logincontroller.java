@@ -67,8 +67,12 @@ public class Logincontroller implements Initializable{
     /*
      * The action for  the login button to create a connection to the database to search for the user name and the password.
      */
-    private  String username;
-    @FXML
+    private static String username;
+    public static String getUsername() {
+		return username;
+	}
+
+	@FXML
     void performLoginAction(ActionEvent event) {
     	 	 username = Username_txt.getText().trim().toUpperCase(); // removes any space after the username and capitlize it to make a make sure username isn't case-sensitive.
     	    String password = Password_txt.getText().trim();
@@ -90,9 +94,6 @@ public class Logincontroller implements Initializable{
     	        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/OrderPage.fxml"));
     	        	loader.load();
     	        	Parent order = loader.getRoot();
-    	       
-    	             Orderpagecontroller controller = loader.getController();
-    	            controller.setUsername(Username_txt.getText());
 
     	             // Display popup
     	             Stage stage = new Stage();

@@ -10,10 +10,12 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,19 +33,22 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.stage.Stage;
+import javafx.util.Callback;
 import application.Student.Studentinfo;
 import connection.Lunchhourdb;
 
 public class Menupagecontroller implements Initializable {
-	ObservableList<Cart> cart = FXCollections.observableArrayList();
+	ObservableList<Cart> cart = Cart.getList();
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
@@ -111,7 +116,7 @@ public class Menupagecontroller implements Initializable {
     private TableColumn<Extras, Double> extrapricecol;
 
     @FXML
-    private TableColumn<Extras, Integer> extraamountcol;
+    private TableColumn<Extras, Extras> extraamountcol;
 
     @FXML
     private Label Studentname;
@@ -136,9 +141,6 @@ public class Menupagecontroller implements Initializable {
 
     @FXML
     private Label usern;
-    private int old1;
-    private int old2;
-    private int old3;
     
     
     @FXML
@@ -160,43 +162,65 @@ public class Menupagecontroller implements Initializable {
 			menuitem = Menu3.getText();
 		}
 
-    	cart.add(new Cart(Studentname.getText(), menuitem, menuday.getValue(), totaladd , "0", total_txt.getText(),menudate.getText()));
-    	((Node)(event.getSource())).getScene().getWindow().hide();
+    	cart.add(new Cart(Studentname.getText(), menuitem, menuday.getValue(), totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText()));
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
+    	Parent Orderpage = loader.load();
+        Scene Order = new Scene(Orderpage);
+        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
+        window.setScene(Order);
     }
 
     @FXML
     void backtoorder(ActionEvent event) throws SQLException, IOException {
-    	((Node)(event.getSource())).getScene().getWindow().hide();
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
+    	Parent Orderpage = loader.load();
+        Scene Order = new Scene(Orderpage);
+        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
+        window.setScene(Order);
     }
 
     @FXML
     void clearorder(ActionEvent event) {
-
+    	}
+    private int totalextra() {
+    	int totalextra=0;	
+    	for(int i=0; i < extratable.getItems().size();i++) {
+	    	Extras tableRow = extratable.getItems().get(i);
+	    int qty = tableRow.getItemCount();
+	    totalextra = totalextra + qty;
+		}
+		return totalextra;
     }
+    
 
     @FXML
     void selectday(ActionEvent event) {
 
     }
 
-	public void setinfo(String username, Studentinfo studentinfo) {
-		this.usern.setText(username);
+	public void setinfo(Studentinfo studentinfo) {
 		Studentname.setText(studentinfo.getFirstname() + " " + studentinfo.getLastname());
 		studentgrade.setText(studentinfo.getGrade());
 		studentsection.setText(studentinfo.getSection());
 	}
-
-	public void setItems(ObservableList<Cart> items) {
-		this.cart = items;
-		
-	}
 	 RadioButton selectedradio;
+		private ObservableList<Extras> extras  = FXCollections.observableArrayList();
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		extracol.setCellValueFactory(new PropertyValueFactory<Extras, String>("ExtraName"));
-		extrapricecol.setCellValueFactory(new PropertyValueFactory<Extras, Double>("ExtraPrice"));
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		//Getting connection
 		conn = Lunchhourdb.get();
+		//extras table Method
+		BuildExtraTable();
+		//Menu building method
+		BuildMenu();
+		//Sets the price for the text box
+		Totalchange();
+	}
+	//Menu building method
+	private void BuildMenu() {
 		IntegerSpinnerValueFactory add1fac = new IntegerSpinnerValueFactory(0, 99);
 		IntegerSpinnerValueFactory add2fac = new IntegerSpinnerValueFactory(0, 99);
 		IntegerSpinnerValueFactory add3fac = new IntegerSpinnerValueFactory(0, 99);
@@ -229,10 +253,8 @@ public class Menupagecontroller implements Initializable {
 				add1price.setText(rs.getString("Add 1 Price"));
 				add2price.setText(rs.getString("Add 2 Price"));
 				add3price.setText(rs.getString("Add 3 Price"));
-				buildData();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
@@ -251,35 +273,88 @@ public class Menupagecontroller implements Initializable {
 		add3qty.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
 			 Totalchange();
 	    });
-		Totalchange();
 	}
-	
-	private ObservableList<Extras> data;
+	// Builds the extra table
+	private void BuildExtraTable(){
+		extracol.setCellValueFactory(new PropertyValueFactory<Extras, String>("ExtraName"));
+		extrapricecol.setCellValueFactory(new PropertyValueFactory<Extras, Double>("ExtraPrice"));
+		extraamountcol.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> cd.getValue()));
+		   extraamountcol.setCellFactory(new Callback<TableColumn<Extras, Extras>, TableCell<Extras, Extras>>() {
+		        @Override
+		        public TableCell<Extras, Extras> call(TableColumn<Extras, Extras> param) {
+		            TableCell<Extras, Extras> cell = new TableCell<Extras, Extras>() {
 
-	public void buildData(){        
-	    data = FXCollections.observableArrayList();
-	    try{      
-	        String SQL = "Select * from Cafeteria.Extras;";            
-	        ps = conn.prepareStatement(SQL);
+		                private final Spinner<Integer> count;
+
+		                private final SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory;
+		                private final ChangeListener<Number> valueChangeListener;
+
+		                {
+		                    valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 0);
+		                    count = new Spinner<>(valueFactory);
+		                    count.setVisible(false);
+		                    setGraphic(count);
+		                    valueChangeListener = (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+		                        valueFactory.setValue(newValue.intValue());
+		                        Totalchange();
+		                    };
+		                    count.valueProperty().addListener((obs, oldValue, newValue) -> {
+		                        if (getItem() != null) {
+		                            // write new value to table item
+		                            getItem().setItemCount(newValue);
+		                            
+		                        }
+		                    });
+		                }
+
+		                @Override
+		                public void updateItem(Extras item, boolean empty) {
+
+		                    // unbind old values
+		                    valueFactory.maxProperty().unbind();
+		                    if (getItem() != null) {
+		                        getItem().itemCountProperty().removeListener(valueChangeListener);
+		                    }
+
+		                    super.updateItem(item, empty);
+
+		                    // update according to new item
+		                    if (empty || item == null) {
+		                        count.setVisible(false);
+		                    } else {
+		                        valueFactory.maxProperty().bind(item.itemMaxCountProperty());
+		                        valueFactory.setValue(item.getItemCount());
+		                        item.itemCountProperty().addListener(valueChangeListener);
+		                        count.setVisible(true);
+		                    }
+
+		                }
+		            };
+
+		            return cell;
+		        }
+		    });
+		 try{      
+	        String Sql = "Select * from Cafeteria.Extras";            
+	        ps = conn.prepareStatement(Sql);
 			rs = ps.executeQuery();
 	        while(rs.next()){
-	        		Extras ex = new Extras();
-	            ex.ExtraName.set(rs.getString("Extra_Name"));                       
-	            ex.ExtraPrice.set(rs.getDouble("Extra_Price"));
-	            data.add(ex);                  
+	        		extras.add(new Extras (rs.getString("Extra_Name"),rs.getDouble("Extra_Price"), 0, 99));
 	        }
-	        extratable.setItems(data);
+	        extratable.setItems(extras);
 	    }
 	    catch(Exception e){
 	          e.printStackTrace();
 	          System.out.println("Error on Building Data");            
 	    }
+		
 	}
 	
-	
+	//Method to change the Total for the menu total price
+	NumberFormat formatter = new DecimalFormat("#0.00");
 	private void Totalchange() {
 		double Menuprice = 0.00;
-		Double Total = 0.00;
+		Double Total;
 		if(selectedradio == Menu3) {
 			Menuprice = Double.parseDouble(menu3price.getText());
 		}else if(selectedradio == Menu2) {
@@ -287,39 +362,69 @@ public class Menupagecontroller implements Initializable {
 		}else {
 			Menuprice = Double.parseDouble(menu1price.getText());
 		}
-		NumberFormat formatter = new DecimalFormat("#0.00");
-	
+		double totalextra=0;	
+    	for(int i=0; i < extratable.getItems().size();i++) {
+	    Extras tableRow = extratable.getItems().get(i);
+	    int qty = tableRow.getItemCount();
+	    double extraprice = tableRow.getExtraPrice();
+	     totalextra = totalextra + (qty * extraprice);
+		}
 		double Totaladd1 = add1qty.getValue() * Double.parseDouble(add1price.getText());
 		double Totaladd2 = add2qty.getValue() * Double.parseDouble(add2price.getText());
 		double Totaladd3 = add3qty.getValue() * Double.parseDouble(add3price.getText());
 		totaladd = Integer.toString(add1qty.getValue() +add2qty.getValue()+add3qty.getValue());
-		Total = Total+Menuprice+Totaladd1+Totaladd2+Totaladd3;
+		Total = Menuprice+Totaladd1+Totaladd2+Totaladd3 + totalextra;
 		total_txt.setText(formatter.format(Total));
 	}
-}
-
-class Extras {
-	public SimpleStringProperty ExtraName = new SimpleStringProperty();
-	public SimpleDoubleProperty ExtraPrice = new SimpleDoubleProperty();
-	public int Extraqty;
 	
-	   public String getExtraName() {
+	
+	//Extra class
+public static class Extras {
+	private SimpleStringProperty ExtraName;
+	private SimpleDoubleProperty ExtraPrice;
+	 private final SimpleIntegerProperty itemMaxCount;
+	 private final SimpleIntegerProperty itemCount;
+	    	public final IntegerProperty itemMaxCountProperty() {
+	            return this.itemMaxCount;
+	        }
+
+	public Extras(String name, double price, int qty, int max) {
+		this.ExtraName = new SimpleStringProperty(name);
+		this.ExtraPrice = new SimpleDoubleProperty(price);
+		this.itemCount = new SimpleIntegerProperty(qty);
+		this.itemMaxCount = new SimpleIntegerProperty(max);
+	}
+	public String getExtraName() {
 		return ExtraName.get();
 	}
 	public void setExtraName(String extraName) {
 		ExtraName.set(extraName);
 	}
-	public Double getExtraPrice() {
+	public double getExtraPrice() {
 		return ExtraPrice.get();
 	}
-	public void setExtraPrice(Double extraPrice) {
+	public void setExtraPrice(double extraPrice) {
 		ExtraPrice.set(extraPrice);
 	}
-	public int getExtraqty() {
-		return Extraqty;
-	}
-	public void setExtraqty(int extraqty) {
-		Extraqty = extraqty;
-	}
+
+	    @Override
+	    public String toString() {
+	        return Integer.toString(getItemCount());
+	    }
+
 	   
+
+	    public final int getItemCount() {
+	        return this.itemCount.get();
+	    }
+
+	    public final void setItemCount(int value) {
+	        this.itemCount.set(value);
+	    }
+
+	    public final IntegerProperty itemCountProperty() {
+	        return this.itemCount;
+	    }
+
+}
 }

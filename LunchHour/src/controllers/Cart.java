@@ -1,6 +1,10 @@
 package controllers;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Cart {
 	private String Grade;
@@ -12,24 +16,29 @@ public class Cart {
 	private SimpleStringProperty fullname;
 	private SimpleStringProperty menuitem;
 	private SimpleStringProperty add;
-	private SimpleStringProperty extra;
-	private SimpleStringProperty total;
+	private SimpleIntegerProperty extra;
+	private SimpleDoubleProperty total;
 	private SimpleStringProperty Day;
 	private SimpleStringProperty menuweek;
 
-		public Cart(String name, String menu, String day, String add, String extra, String total ,String menuweek ) {
+		public Cart(String name, String menu, String day, String add, int extra, double total ,String menuweek ) {
 			this.fullname = new SimpleStringProperty(name);
 			this.Day = new SimpleStringProperty(day);
 			this.menuitem = new SimpleStringProperty(menu);
 			this.add = new SimpleStringProperty(add);
-			this.extra = new SimpleStringProperty(extra);
-			this.total = new SimpleStringProperty(total);
+			this.extra = new SimpleIntegerProperty(extra);
+			this.total = new SimpleDoubleProperty(total);
 			this.menuweek = new SimpleStringProperty(menuweek);
 		}
 		public String getMenuweek() {
 		return menuweek.get();
 	}
+		private static ObservableList<Cart> list= FXCollections.observableArrayList();
 
+		public static ObservableList<Cart> getList() {
+			return list;
+		}
+		
 	public void setMenuweek(String menuweek) {
 		this.menuweek.set(menuweek);
 	}
@@ -45,10 +54,10 @@ public class Cart {
 	public void setAdd(String add) {
 		this.add.set(add);
 	}
-	public String getTotal() {
+	public double getTotal() {
 		return total.get();
 	}
-	public void setTotal(String total) {
+	public void setTotal(double total) {
 		this.total.set(total);
 	}
 	public String getDay() {
@@ -99,10 +108,14 @@ public class Cart {
 	public void setAdd_3(int add_3) {
 		this.add_3 = add_3;
 	}
-	public String getExtra() {
+	public int getExtra() {
 		return extra.get();
 	}
-	public void setExtra(String extra) {
+	public void setExtra(int extra) {
 		this.extra.set(extra);
+	}
+	public void setList1(ObservableList<Cart> cart) {
+		// TODO Auto-generated method stub
+		
 	}
 }

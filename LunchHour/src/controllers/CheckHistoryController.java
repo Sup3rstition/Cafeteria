@@ -110,9 +110,6 @@ public class CheckHistoryController implements Initializable {
 
     @FXML
     void search(ActionEvent event) {
-    	ObservableList<Cart> data = FXCollections.observableArrayList(
-    	            new Cart ("Britt Cordes", "Menu 1 - meatloaf","Monday", "0", "0", "9.09","03/12/2018"));
-    	 orderhistory.setItems(data);
     }
 
 }
