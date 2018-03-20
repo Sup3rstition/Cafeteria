@@ -21,11 +21,11 @@ public class Cart {
 	private SimpleStringProperty Day;
 	private SimpleStringProperty menuweek;
 
-		public Cart(String name, String menu, String day, String add, int extra, double total ,String menuweek ) {
+		public Cart(String name, String menu, String day, String add1, int extra, double total ,String menuweek ) {
 			this.fullname = new SimpleStringProperty(name);
 			this.Day = new SimpleStringProperty(day);
 			this.menuitem = new SimpleStringProperty(menu);
-			this.add = new SimpleStringProperty(add);
+			this.add = new SimpleStringProperty(add1);
 			this.extra = new SimpleIntegerProperty(extra);
 			this.total = new SimpleDoubleProperty(total);
 			this.menuweek = new SimpleStringProperty(menuweek);

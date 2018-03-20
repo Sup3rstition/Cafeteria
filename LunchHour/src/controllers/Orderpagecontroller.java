@@ -10,11 +10,9 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import connection.Lunchhourdb;
-import controllers.Menupagecontroller.Extras;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,12 +29,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.StringConverter;
-import application.Student.Student;
 import application.Student.Studentinfo;
 import javafx.util.Callback;
 import javafx.scene.control.ListCell;
@@ -114,11 +113,6 @@ public class Orderpagecontroller implements Initializable {
     	loader.setLocation(getClass().getResource("/application/CheckHistoryPage.fxml"));
     	Parent CheckHistory = loader.load();
         Scene Check = new Scene(CheckHistory);
-        CheckHistoryController controller = loader.getController();
-       // Stage window = (Stage) Checkhistorybtn.getScene().getWindow();
-        
-       // window.setScene(Check);
-       // window.show();
         Stage stage = new Stage();
         stage.setScene(Check);
         stage.showAndWait();
@@ -183,11 +177,18 @@ public class Orderpagecontroller implements Initializable {
 		try {
 			Setinfo();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	TreeItem<Cart> root = new TreeItem<>(null);
+	tree.setRoot(root);
 	}
+	
+	
+	
+	
+	
+	
 	private int parentid;
 	public void Setinfo() throws SQLException {
 		String user = Logincontroller.getUsername();
@@ -306,5 +307,28 @@ public class Orderpagecontroller implements Initializable {
     	((Node)(event.getSource())).getScene().getWindow().hide();
     
     }
+
+    @FXML
+    private TreeTableView<Cart> tree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> nametree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> daytree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> menutree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> addtree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> extratree;
+
+    @FXML
+    private TreeTableColumn<Cart, Double> totaltree;
+
     
 }
+
