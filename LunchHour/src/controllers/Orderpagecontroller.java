@@ -50,6 +50,7 @@ public class Orderpagecontroller implements Initializable {
     @FXML
     private Label parentsname;
 
+    
     @FXML
     private Label Balanceamountlabel;
 
