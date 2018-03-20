@@ -1,18 +1,3 @@
 
 LunchHour/bin/
-LunchHour/bin/application/OrderPage.fxml
-LunchHour/bin/application/OrderPage.fxml
-LunchHour/bin/application/OrderPage.fxml
-LunchHour/bin/application/OrderPage.fxml
-LunchHour/bin/controllers/Cart.class
-LunchHour/bin/application/MenuPage.fxml
-LunchHour/bin/controllers/Item.class
-LunchHour/bin/controllers/Orderpagecontroller$2.class
-LunchHour/bin/controllers/Orderpagecontroller.class
-LunchHourAdmin/bin/application/Adminhomepage.fxml
-LunchHourAdmin/bin/application/Edititem.fxml
-LunchHourAdmin/bin/application/MenuEditor.fxml
-LunchHourAdmin/bin/application/GetDelivery.fxml
-LunchHourAdmin/bin/controllers/Adminhomepagecontroller.class
-LunchHourAdmin/bin/MenuEditor.fxml
-LunchHourAdmin/bin/application/GetDelivery.fxml
+LunchHourAdmin/bin/
