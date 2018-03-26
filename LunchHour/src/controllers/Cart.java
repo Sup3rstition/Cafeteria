@@ -1,10 +1,13 @@
 package controllers;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 
 public class Cart {
 	private String Grade;
@@ -16,34 +19,44 @@ public class Cart {
 	private SimpleStringProperty fullname;
 	private SimpleStringProperty menuitem;
 	private SimpleStringProperty add;
-	private SimpleIntegerProperty extra;
+	private SimpleStringProperty extra;
 	private SimpleDoubleProperty total;
 	private SimpleStringProperty Day;
 	private SimpleStringProperty menuweek;
-
-		public Cart(String name, String menu, String day, String add1, int extra, double total ,String menuweek ) {
+	
+	private static TreeItem<Cart>treeroot = new TreeItem<>(new Cart("Name","Menu","Day","add1","extra",0.0,"week"));
+	public static TreeItem<Cart> getTreeRoot() {
+		return treeroot;
+	}
+	private static ObservableList<Cart> list= FXCollections.observableArrayList();
+	public Cart(String extra) {
+		this.extra = new SimpleStringProperty(extra);
+	}
+		public Cart(String name, String menu, String day, String add1, String extra, double total ,String menuweek ) {
 			this.fullname = new SimpleStringProperty(name);
 			this.Day = new SimpleStringProperty(day);
 			this.menuitem = new SimpleStringProperty(menu);
 			this.add = new SimpleStringProperty(add1);
-			this.extra = new SimpleIntegerProperty(extra);
+			this.extra = new SimpleStringProperty(extra);
 			this.total = new SimpleDoubleProperty(total);
 			this.menuweek = new SimpleStringProperty(menuweek);
 		}
 		public String getMenuweek() {
 		return menuweek.get();
 	}
-		private static ObservableList<Cart> list= FXCollections.observableArrayList();
 
-		public static ObservableList<Cart> getList() {
-			return list;
-		}
+	public static ObservableList<Cart> getList() {
+		return list;
+	}
 		
 	public void setMenuweek(String menuweek) {
 		this.menuweek.set(menuweek);
 	}
 	public String getFullname() {
 		return fullname.get();
+	}
+	public SimpleStringProperty getFullnames() {
+		return fullname;
 	}
 	public void setFullname(String first, String second) {
 		this.fullname.set(first + second);
@@ -108,14 +121,39 @@ public class Cart {
 	public void setAdd_3(int add_3) {
 		this.add_3 = add_3;
 	}
-	public int getExtra() {
+	public String getExtra() {
 		return extra.get();
 	}
-	public void setExtra(int extra) {
+	public void setExtra(String extra) {
 		this.extra.set(extra);
 	}
-	public void setList1(ObservableList<Cart> cart) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	//treeview
+	public SimpleStringProperty getMenuweekt() {
+	return menuweek;
+}
+	
+public SimpleStringProperty getAddt() {
+	return add;
+}
+public ObjectProperty<Double> getTotalt() {
+	return total.asObject();
+}
+public SimpleStringProperty getDayt() {
+	return Day;
+}
+
+/*public int getOrderid() {
+	return orderid;
+}
+public void setOrderid(int orderid) {
+	this.orderid = orderid;
+}
+*/
+public SimpleStringProperty getMenuitemt() {
+	return menuitem;
+}
+public SimpleStringProperty getExtrat() {
+	return extra;
+}
 }

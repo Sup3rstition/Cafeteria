@@ -45,8 +45,6 @@ public class Orderpagecontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
-	private ObservableList<Cart> cart = Cart.getList();
-	
     @FXML
     private Label parentsname;
 
@@ -66,25 +64,6 @@ public class Orderpagecontroller implements Initializable {
     @FXML
     private ComboBox<Studentinfo> studentcombox;
 
-    @FXML
-    private TableView<Cart> cartable;
-    @FXML
-    private TableColumn<Cart, String> studentcol;
-
-    @FXML
-    private TableColumn<Cart, String> daycol;
-
-    @FXML
-    private TableColumn<Cart, String> menucol;
-
-    @FXML
-    private TableColumn<Cart, String> additionalcol;
-
-    @FXML
-    private TableColumn<Cart, String> extracol;
-
-    @FXML
-    private TableColumn<Cart, String> totalcol;
     @FXML
     private Button menubtn;
 
@@ -140,8 +119,8 @@ public class Orderpagecontroller implements Initializable {
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
-	   		cartable.getItems().clear();
-	   		cartable.refresh();
+	   		//cartable.getItems().clear();
+	   		//cartable.refresh();
 	   		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	        Calendar cal = Calendar.getInstance();
 	        Lastupdate.setText(dateFormat.format(cal.getTime()));
@@ -150,10 +129,10 @@ public class Orderpagecontroller implements Initializable {
     }
     private double totalprice() {
     	double totalprice=0;	
-    	for(int i=0; i < cartable.getItems().size();i++) {
-	    	Cart tableRow = cartable.getItems().get(i);
-	    double price = tableRow.getTotal();
-	    totalprice = totalprice + price;
+    	for(int i=0; i < root.getChildren().size();i++) {
+	    	TreeItem<Cart> tableRow = root.getChildren().get(i);
+	    Cart price = tableRow.getValue();
+	    totalprice = totalprice + price.getTotal();
 		}
 		return totalprice;
     }
@@ -166,23 +145,14 @@ public class Orderpagecontroller implements Initializable {
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		  
+		 
 		conn = Lunchhourdb.get();
-		studentcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("fullname"));
-		daycol.setCellValueFactory(new PropertyValueFactory<Cart, String>("Day"));
-		menucol.setCellValueFactory(new PropertyValueFactory<Cart, String>("menuitem"));
-		additionalcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("add"));
-		extracol.setCellValueFactory(new PropertyValueFactory<Cart, String>("extra"));
-		totalcol.setCellValueFactory(new PropertyValueFactory<Cart, String>("total"));
-		cartable.setItems(cart);
 		try {
 			Setinfo();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-	TreeItem<Cart> root = new TreeItem<>(null);
-	tree.setRoot(root);
 	}
 	
 	
@@ -214,6 +184,7 @@ public class Orderpagecontroller implements Initializable {
 	        addstudent(parentid);
 	        Cart_txt.setText(formatter.format(totalprice()));
 	        balancerem_txt.setText(formatter.format(balancechange()));
+	        maketree();
 	        }
 	        
 	        
@@ -269,24 +240,25 @@ public class Orderpagecontroller implements Initializable {
                return null;
            }
        });
-		 cartable.refresh();
 	}
 
 	@FXML
 	private Button remove;
 	@FXML
 	void removeselected(ActionEvent event) {
-		Cart selectedItem = cartable.getSelectionModel().getSelectedItem();
+		TreeItem<Cart> selectedItem = tree.getSelectionModel().getSelectedItem();
 		if(selectedItem != null) {
-		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + cartable.getSelectionModel().getSelectedItem().getFullname() + " " + cartable.getSelectionModel().getSelectedItem().getMenuitem() 
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + tree.getSelectionModel().getSelectedItem().getValue().getFullname() + " " + tree.getSelectionModel().getSelectedItem().getValue().getMenuitem()
 				+" Order from cart?" , ButtonType.YES, ButtonType.CANCEL);
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
-	        cartable.getItems().remove(selectedItem);
+	   		TreeItem c = (TreeItem)tree.getSelectionModel().getSelectedItem();
+	   		c.getParent().getChildren().remove(c);
 	        
 	   	 }
 		}
+		
 	}
     @FXML
     void menuopen(ActionEvent event) throws IOException {
@@ -299,7 +271,7 @@ public class Orderpagecontroller implements Initializable {
         controller.setinfo(studentid);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Menu);
-        cartable.refresh();
+       // cartable.refresh();
     }
     @FXML
     private Button close;
@@ -329,7 +301,17 @@ public class Orderpagecontroller implements Initializable {
 
     @FXML
     private TreeTableColumn<Cart, Double> totaltree;
-
     
+	private TreeItem<Cart> root = Cart.getTreeRoot();
+	private void maketree () {
+		tree.setRoot(root);
+		tree.setShowRoot(false);
+		nametree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, String> param) -> param.getValue().getValue().getFullnames());
+		daytree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, String> param) -> param.getValue().getValue().getDayt());
+		menutree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, String> param) -> param.getValue().getValue().getMenuitemt());
+		addtree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, String> param) -> param.getValue().getValue().getAddt());
+		extratree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, String> param) -> param.getValue().getValue().getExtrat());
+		totaltree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, Double> param) -> param.getValue().getValue().getTotalt());
+	}
 }
 

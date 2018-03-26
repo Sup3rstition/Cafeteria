@@ -4,8 +4,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.TreeTableView?>
@@ -17,10 +15,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="717.0" prefWidth="976.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
+<AnchorPane prefHeight="717.0" prefWidth="561.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Orderpagecontroller">
    <children>
-      <Separator layoutX="16.0" layoutY="575.0" prefHeight="3.0" prefWidth="456.0" />
-      <ImageView blendMode="MULTIPLY" fitHeight="123.0" fitWidth="200.0" layoutX="357.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+      <Separator layoutX="16.0" layoutY="575.0" prefHeight="3.0" prefWidth="520.0" />
+      <ImageView blendMode="MULTIPLY" fitHeight="123.0" fitWidth="200.0" layoutX="410.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@1Logo.239145929_large.jpg" />
          </image>
@@ -29,8 +27,8 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <Separator layoutX="17.0" layoutY="178.0" prefHeight="3.0" prefWidth="444.0" />
-      <Button fx:id="menubtn" layoutX="314.0" layoutY="185.0" mnemonicParsing="false" onAction="#menuopen" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #AFC6AF;" text="Menu">
+      <Separator layoutX="17.0" layoutY="178.0" prefHeight="3.0" prefWidth="520.0" />
+      <Button fx:id="menubtn" layoutX="370.0" layoutY="187.0" mnemonicParsing="false" onAction="#menuopen" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #AFC6AF;" text="Menu">
          <font>
             <Font name="System Bold" size="11.0" />
          </font></Button>
@@ -42,30 +40,20 @@
          <font>
             <Font name="System Bold" size="11.0" />
          </font></Button>
-      <Label layoutX="224.0" layoutY="216.0" text="Cart">
+      <Label layoutX="264.0" layoutY="215.0" text="Cart">
          <font>
             <Font name="System Bold" size="17.0" />
          </font>
       </Label>
-      <TableView fx:id="cartable" layoutX="7.0" layoutY="242.0" prefHeight="300.0" prefWidth="477.0">
-         <columns>
-            <TableColumn fx:id="studentcol" prefWidth="75.0" text="Student" />
-            <TableColumn fx:id="daycol" prefWidth="75.0" text="Day" />
-            <TableColumn fx:id="menucol" prefWidth="75.0" text="Menu Item" />
-            <TableColumn fx:id="additionalcol" prefWidth="99.0" text="Additional item" />
-            <TableColumn fx:id="extracol" prefWidth="75.0" text="Extra item" />
-            <TableColumn fx:id="totalcol" prefWidth="65.0" text="Total" />
-         </columns>
-      </TableView>
-      <Label layoutX="181.0" layoutY="606.0" text="Cart Total:" />
-      <Label layoutX="142.0" layoutY="639.0" text="Balance Remaining:" />
-      <TextField fx:id="Cart_txt" editable="false" layoutX="266.0" layoutY="602.0" />
-      <TextField fx:id="balancerem_txt" editable="false" layoutX="266.0" layoutY="635.0" />
-      <Button fx:id="clearbtn" layoutX="270.0" layoutY="673.0" mnemonicParsing="false" onAction="#clearcart" style="-fx-background-color: #AFC6AF;" text="Clear Cart">
+      <Label layoutX="300.0" layoutY="603.0" text="Cart Total:" />
+      <Label layoutX="261.0" layoutY="636.0" text="Balance Remaining:" />
+      <TextField fx:id="Cart_txt" editable="false" layoutX="385.0" layoutY="599.0" />
+      <TextField fx:id="balancerem_txt" editable="false" layoutX="385.0" layoutY="632.0" />
+      <Button fx:id="clearbtn" layoutX="389.0" layoutY="670.0" mnemonicParsing="false" onAction="#clearcart" style="-fx-background-color: #AFC6AF;" text="Clear Cart">
          <font>
             <Font name="System Bold" size="11.0" />
          </font></Button>
-      <Button fx:id="orderbtn" layoutX="364.0" layoutY="673.0" mnemonicParsing="false" onAction="#submitorder" style="-fx-background-color: #AFC6AF;" text="Order">
+      <Button fx:id="orderbtn" layoutX="483.0" layoutY="670.0" mnemonicParsing="false" onAction="#submitorder" style="-fx-background-color: #AFC6AF;" text="Order">
          <font>
             <Font name="System Bold" size="11.0" />
          </font></Button>
@@ -122,21 +110,21 @@
          </children>
       </GridPane>
       <ComboBox fx:id="studentcombox" layoutX="74.0" layoutY="190.0" prefWidth="150.0" />
-      <Button fx:id="remove" layoutX="410.0" layoutY="546.0" mnemonicParsing="false" onAction="#removeselected" prefHeight="25.0" prefWidth="67.0" text="Remove" />
+      <Button fx:id="remove" layoutX="475.0" layoutY="547.0" mnemonicParsing="false" onAction="#removeselected" prefHeight="25.0" prefWidth="67.0" text="Remove" />
       <Button fx:id="close" layoutX="52.0" layoutY="656.0" mnemonicParsing="false" onAction="#closewindow" text="Close" />
       <Button fx:id="menubtn1" layoutX="9.0" layoutY="599.0" mnemonicParsing="false" onAction="#menuopen" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #AFC6AF;" text="Next week Menu">
          <font>
             <Font name="System Bold" size="11.0" />
          </font>
       </Button>
-      <TreeTableView fx:id="tree" layoutX="484.0" layoutY="237.0" prefHeight="306.0" prefWidth="456.0">
+      <TreeTableView fx:id="tree" layoutX="17.0" layoutY="242.0" prefHeight="297.0" prefWidth="528.0">
         <columns>
-          <TreeTableColumn fx:id="nametree" prefWidth="75.0" text="Student" />
-          <TreeTableColumn fx:id="daytree" prefWidth="75.0" text="Day" />
-            <TreeTableColumn fx:id="menutree" prefWidth="75.0" text="Menu Item" />
-            <TreeTableColumn fx:id="addtree" prefWidth="75.0" text="Additional Item" />
-            <TreeTableColumn fx:id="extratree" prefWidth="75.0" text="Extra Item" />
-            <TreeTableColumn fx:id="totaltree" prefWidth="75.0" text="Total" />
+          <TreeTableColumn fx:id="nametree" prefWidth="92.0" text="Student" />
+          <TreeTableColumn fx:id="daytree" prefWidth="72.0" text="Day" />
+            <TreeTableColumn fx:id="menutree" prefWidth="89.0" text="Menu Item" />
+            <TreeTableColumn fx:id="addtree" prefWidth="96.0" text="Additional Item" />
+            <TreeTableColumn fx:id="extratree" prefWidth="113.0" text="Extra Item" />
+            <TreeTableColumn fx:id="totaltree" prefWidth="58.0" text="Total" />
         </columns>
       </TreeTableView>
    </children>

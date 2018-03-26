@@ -43,6 +43,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TreeItem;
 import javafx.util.Callback;
 import application.Student.Studentinfo;
 import connection.Lunchhourdb;
@@ -52,6 +53,7 @@ public class Menupagecontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
+
 	final ToggleGroup group = new ToggleGroup();
     @FXML
     private RadioButton Menu1;
@@ -151,6 +153,7 @@ public class Menupagecontroller implements Initializable {
 
     }
     Studentinfo Student;
+    TreeItem<Cart> root = Cart.getTreeRoot();
     @FXML
     void addtocart(ActionEvent event) throws IOException, SQLException {
     	String menuitem = null;
@@ -161,8 +164,29 @@ public class Menupagecontroller implements Initializable {
 		}else {
 			menuitem = Menu3.getText();
 		}
-
-    	cart.add(new Cart(Studentname.getText(), menuitem, menuday.getValue(), totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText()));
+    	
+    	Cart order = new Cart(Studentname.getText(), menuitem, menuday.getValue(), totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText());
+    	TreeItem<Cart> order1 = new TreeItem<Cart>(order);
+    	
+    			if(add1qty.getValue() > 0) {
+    		Cart extra = new Cart(null, null, null,Add1.getText() + " x" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null);
+        	order1.getChildren().add(new TreeItem<Cart> (extra));
+    	} if(add2qty.getValue() > 0) {
+    		Cart extra = new Cart(null, null, null,Add2.getText()+ " x" + add2qty.getValue() , null,  add2qty.getValue() * Double.parseDouble(add2price.getText()),null);
+        	order1.getChildren().add(new TreeItem<Cart> (extra));
+    	} if(add3qty.getValue()>0) {
+    		Cart extra = new Cart(null, null, null,Add3.getText()+ " x" + add3qty.getValue() , null,  add3qty.getValue() * Double.parseDouble(add3price.getText()),null);
+        	order1.getChildren().add(new TreeItem<Cart> (extra));
+    	}
+    	for(int i=0; i < extratable.getItems().size();i++) {
+	    	Extras tableRow = extratable.getItems().get(i);
+	    int qty = tableRow.getItemCount();
+	    if(qty >= 1) {
+	    Cart extra = new Cart(null, null, null,null , tableRow.getExtraName() + " x" + qty , tableRow.getExtraPrice() * qty,null);
+    	order1.getChildren().add(new TreeItem<Cart> (extra));
+	    }
+    	}
+    	root.getChildren().add(order1);
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
     	Parent Orderpage = loader.load();
@@ -184,14 +208,14 @@ public class Menupagecontroller implements Initializable {
     @FXML
     void clearorder(ActionEvent event) {
     	}
-    private int totalextra() {
+    private String totalextra() {
     	int totalextra=0;	
     	for(int i=0; i < extratable.getItems().size();i++) {
 	    	Extras tableRow = extratable.getItems().get(i);
 	    int qty = tableRow.getItemCount();
 	    totalextra = totalextra + qty;
 		}
-		return totalextra;
+		return Integer.toString(totalextra);
     }
     
 
@@ -368,6 +392,9 @@ public class Menupagecontroller implements Initializable {
 	    int qty = tableRow.getItemCount();
 	    double extraprice = tableRow.getExtraPrice();
 	     totalextra = totalextra + (qty * extraprice);
+	     
+	     
+	     
 		}
 		double Totaladd1 = add1qty.getValue() * Double.parseDouble(add1price.getText());
 		double Totaladd2 = add2qty.getValue() * Double.parseDouble(add2price.getText());
