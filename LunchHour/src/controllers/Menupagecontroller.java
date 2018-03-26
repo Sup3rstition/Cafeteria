@@ -170,7 +170,6 @@ public class Menupagecontroller implements Initializable {
     	
     			if(add1qty.getValue() > 0) {
     		Cart extra = new Cart(null, null, null,Add1.getText() + " x" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null);
-    		TreeItem add = new TreeItem<Cart> (extra);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	} if(add2qty.getValue() > 0) {
     		Cart extra = new Cart(null, null, null,Add2.getText()+ " x" + add2qty.getValue() , null,  add2qty.getValue() * Double.parseDouble(add2price.getText()),null);
@@ -188,6 +187,7 @@ public class Menupagecontroller implements Initializable {
 	    }
     	}
     	root.getChildren().add(order1);
+    	
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
     	Parent Orderpage = loader.load();
@@ -208,6 +208,15 @@ public class Menupagecontroller implements Initializable {
 
     @FXML
     void clearorder(ActionEvent event) {
+    	Menu1.setSelected(true);
+    	add1qty.getValueFactory().setValue(0);
+    	add2qty.getValueFactory().setValue(0);
+    	add3qty.getValueFactory().setValue(0);
+    	for(int i=0; i < extratable.getItems().size();i++) {
+	    	Extras tableRow = extratable.getItems().get(i);
+	    tableRow.setItemCount(0);
+		}
+    	Totalchange();
     	}
     private String totalextra() {
     	int totalextra=0;	

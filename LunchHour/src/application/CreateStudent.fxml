@@ -44,9 +44,9 @@
       <Button fx:id="cancel" layoutX="21.0" layoutY="193.0" mnemonicParsing="false" onAction="#backtocreateaccount" text="Cancel" />
       <Button fx:id="addbtn" layoutX="169.0" layoutY="193.0" mnemonicParsing="false" onAction="#addstudent" text="Add" />
       <Separator layoutX="21.0" layoutY="183.0" prefHeight="3.0" prefWidth="200.0" />
-      <Label layoutX="11.0" layoutY="64.0" text="*" textFill="RED" />
-      <Label layoutX="11.0" layoutY="94.0" text="*" textFill="RED" />
-      <Label layoutX="11.0" layoutY="125.0" text="*" textFill="RED" />
-      <Label layoutX="11.0" layoutY="155.0" text="*" textFill="RED" />
+      <Label fx:id="first" layoutX="11.0" layoutY="64.0" text="*" textFill="RED" visible="false" />
+      <Label fx:id="second" layoutX="11.0" layoutY="94.0" text="*" textFill="RED" visible="false" />
+      <Label fx:id="grade" layoutX="11.0" layoutY="125.0" text="*" textFill="RED" visible="false" />
+      <Label fx:id="section" layoutX="11.0" layoutY="155.0" text="*" textFill="RED" visible="false" />
    </children>
 </AnchorPane>

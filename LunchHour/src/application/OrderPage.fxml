@@ -118,6 +118,9 @@
          </font>
       </Button>
       <TreeTableView fx:id="tree" layoutX="17.0" layoutY="242.0" prefHeight="297.0" prefWidth="528.0">
+      <placeholder>
+        <Label text=""/>
+    </placeholder>
         <columns>
           <TreeTableColumn fx:id="nametree" prefWidth="92.0" text="Student" />
           <TreeTableColumn fx:id="daytree" prefWidth="72.0" text="Day" />

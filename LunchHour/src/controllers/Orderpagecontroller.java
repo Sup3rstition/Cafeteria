@@ -97,10 +97,15 @@ public class Orderpagecontroller implements Initializable {
         stage.setScene(Check);
         stage.showAndWait();
     }
-
+private void orderprice() {
+	Cart_txt.setText(formatter.format(totalprice()));
+  	 balancerem_txt.setText(formatter.format(balancechange()));
+}
     @FXML
     void clearcart(ActionEvent event) {
-
+    	root.getChildren().clear();
+    	tree.getSelectionModel().clearSelection();
+    	orderprice();
     }
 
     @FXML
@@ -119,11 +124,12 @@ public class Orderpagecontroller implements Initializable {
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
-	   		//cartable.getItems().clear();
-	   		//cartable.refresh();
+	   		 root.getChildren().clear();
 	   		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	        Calendar cal = Calendar.getInstance();
 	        Lastupdate.setText(dateFormat.format(cal.getTime()));
+	        orderprice();
+	    	tree.getSelectionModel().clearSelection();
 	   		
 	   	 }
     }
@@ -180,8 +186,7 @@ public class Orderpagecontroller implements Initializable {
 	        Lastupdate.setText(dateFormat.format(dBalance.getTime()));
 	        parentid = rs.getInt("Id"); 
 	        addstudent(parentid);
-	        Cart_txt.setText(formatter.format(totalprice()));
-	        balancerem_txt.setText(formatter.format(balancechange()));
+	orderprice();
 	        maketree();
 	        }
 	        
@@ -261,6 +266,7 @@ public class Orderpagecontroller implements Initializable {
 				c = c.getParent();
 	   		}
 	   		c.getParent().getChildren().remove(c);
+	   		orderprice();
 	   	 }
 		}
 		
@@ -276,7 +282,6 @@ public class Orderpagecontroller implements Initializable {
         controller.setinfo(studentid);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Menu);
-       // cartable.refresh();
     }
     @FXML
     private Button close;

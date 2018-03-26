@@ -73,6 +73,9 @@
          </children>
       </GridPane>
       <TableView fx:id="studenttable" layoutX="14.0" layoutY="390.0" prefHeight="125.0" prefWidth="302.0">
+      <placeholder>
+        <Label text=""/>
+    </placeholder>
         <columns>
           <TableColumn fx:id="firstNamecol" editable="false" text="First Name" />
             <TableColumn fx:id="lastnamecol" editable="false" prefWidth="79.0" text="Last Name" />
