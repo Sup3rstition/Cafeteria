@@ -231,6 +231,7 @@ public class Createaccountcontroller implements Initializable {
     @FXML
     void removeselected(ActionEvent event) {
     	//Remove alert to make sure you want to remove the student
+    	
     	Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + studenttable.getSelectionModel().getSelectedItem().getFirstName() +" "+studenttable.getSelectionModel().getSelectedItem().getLastName() +" from Student table?" , ButtonType.YES, ButtonType.CANCEL);
    	 alert.showAndWait();
 

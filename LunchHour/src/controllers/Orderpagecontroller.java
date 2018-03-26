@@ -145,7 +145,6 @@ public class Orderpagecontroller implements Initializable {
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		 
 		conn = Lunchhourdb.get();
 		try {
 			Setinfo();
@@ -154,7 +153,6 @@ public class Orderpagecontroller implements Initializable {
 		}
 		
 	}
-	
 	
 	
 	
@@ -248,14 +246,21 @@ public class Orderpagecontroller implements Initializable {
 	void removeselected(ActionEvent event) {
 		TreeItem<Cart> selectedItem = tree.getSelectionModel().getSelectedItem();
 		if(selectedItem != null) {
-		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + tree.getSelectionModel().getSelectedItem().getValue().getFullname() + " " + tree.getSelectionModel().getSelectedItem().getValue().getMenuitem()
+			if(selectedItem.getParent() != tree.getRoot()) {
+				if (selectedItem.isLeaf()) {
+				selectedItem = selectedItem.getParent();
+			}
+			}
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + selectedItem.getValue().getFullname() + " " + selectedItem.getValue().getMenuitem()
 				+" Order from cart?" , ButtonType.YES, ButtonType.CANCEL);
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
 	   		TreeItem c = (TreeItem)tree.getSelectionModel().getSelectedItem();
+	   		if (c.isLeaf() && c.getParent() !=tree.getRoot()) {
+				c = c.getParent();
+	   		}
 	   		c.getParent().getChildren().remove(c);
-	        
 	   	 }
 		}
 		

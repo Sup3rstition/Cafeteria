@@ -170,6 +170,7 @@ public class Menupagecontroller implements Initializable {
     	
     			if(add1qty.getValue() > 0) {
     		Cart extra = new Cart(null, null, null,Add1.getText() + " x" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null);
+    		TreeItem add = new TreeItem<Cart> (extra);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	} if(add2qty.getValue() > 0) {
     		Cart extra = new Cart(null, null, null,Add2.getText()+ " x" + add2qty.getValue() , null,  add2qty.getValue() * Double.parseDouble(add2price.getText()),null);
