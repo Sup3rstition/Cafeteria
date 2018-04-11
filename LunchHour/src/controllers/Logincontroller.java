@@ -100,6 +100,7 @@ public class Logincontroller implements Initializable{
     	             stage.setScene(new Scene(order));
     	             //This displays the stage and waits for the input
     	             stage.show();
+    	             conn.close();
     	           	((Node)(event.getSource())).getScene().getWindow().hide();
     	       
     	        		

@@ -49,7 +49,6 @@ import application.Student.Studentinfo;
 import connection.Lunchhourdb;
 
 public class Menupagecontroller implements Initializable {
-	ObservableList<Cart> cart = Cart.getList();
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
@@ -165,24 +164,24 @@ public class Menupagecontroller implements Initializable {
 			menuitem = Menu3.getText();
 		}
     	
-    	Cart order = new Cart(Studentname.getText(), menuitem, menuday.getValue(), totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText());
+    	Cart order = new Cart(Studentname.getText(), menuitem, menuday.getValue(), totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText(), studentid_);
     	TreeItem<Cart> order1 = new TreeItem<Cart>(order);
     	
     			if(add1qty.getValue() > 0) {
-    		Cart extra = new Cart(null, null, null,Add1.getText() + " x" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null);
+    		Cart extra = new Cart(null, null, null,Add1.getText() + " x" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null,0);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	} if(add2qty.getValue() > 0) {
-    		Cart extra = new Cart(null, null, null,Add2.getText()+ " x" + add2qty.getValue() , null,  add2qty.getValue() * Double.parseDouble(add2price.getText()),null);
+    		Cart extra = new Cart(null, null, null,Add2.getText()+ " x" + add2qty.getValue() , null,  add2qty.getValue() * Double.parseDouble(add2price.getText()),null,0);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	} if(add3qty.getValue()>0) {
-    		Cart extra = new Cart(null, null, null,Add3.getText()+ " x" + add3qty.getValue() , null,  add3qty.getValue() * Double.parseDouble(add3price.getText()),null);
+    		Cart extra = new Cart(null, null, null,Add3.getText()+ " x" + add3qty.getValue() , null,  add3qty.getValue() * Double.parseDouble(add3price.getText()),null,0);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	}
     	for(int i=0; i < extratable.getItems().size();i++) {
 	    	Extras tableRow = extratable.getItems().get(i);
 	    int qty = tableRow.getItemCount();
 	    if(qty >= 1) {
-	    Cart extra = new Cart(null, null, null,null , tableRow.getExtraName() + " x" + qty , tableRow.getExtraPrice() * qty,null);
+	    Cart extra = new Cart(null, null, null,null , tableRow.getExtraName() + " x" + qty , tableRow.getExtraPrice() * qty,null,0);
     	order1.getChildren().add(new TreeItem<Cart> (extra));
 	    }
     	}
@@ -233,11 +232,12 @@ public class Menupagecontroller implements Initializable {
     void selectday(ActionEvent event) {
 
     }
-
+private int studentid_;
 	public void setinfo(Studentinfo studentinfo) {
 		Studentname.setText(studentinfo.getFirstname() + " " + studentinfo.getLastname());
 		studentgrade.setText(studentinfo.getGrade());
 		studentsection.setText(studentinfo.getSection());
+		studentid_ = studentinfo.getId();
 	}
 	 RadioButton selectedradio;
 		private ObservableList<Extras> extras  = FXCollections.observableArrayList();
@@ -310,6 +310,7 @@ public class Menupagecontroller implements Initializable {
 	}
 	// Builds the extra table
 	private void BuildExtraTable(){
+		conn = Lunchhourdb.get();
 		extracol.setCellValueFactory(new PropertyValueFactory<Extras, String>("ExtraName"));
 		extrapricecol.setCellValueFactory(new PropertyValueFactory<Extras, Double>("ExtraPrice"));
 		extraamountcol.setCellValueFactory(cd -> Bindings.createObjectBinding(() -> cd.getValue()));

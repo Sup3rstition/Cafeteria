@@ -3,6 +3,7 @@ package controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -94,6 +95,8 @@ public class Orderpagecontroller implements Initializable {
     	Parent CheckHistory = loader.load();
         Scene Check = new Scene(CheckHistory);
         Stage stage = new Stage();
+        CheckHistoryController control = loader.<CheckHistoryController>getController();
+        control.setparentid(parentid);
         stage.setScene(Check);
         stage.showAndWait();
     }
@@ -110,7 +113,6 @@ private void orderprice() {
 
     @FXML
     void logout(ActionEvent event) throws IOException, SQLException {
-    	Cart.getList().clear();
     	Parent Loginpage = FXMLLoader.load(getClass().getResource("/application/Login.fxml"));
         Scene Login = new Scene(Loginpage);
         Stage window = (Stage) logutbtn.getScene().getWindow();
@@ -119,18 +121,53 @@ private void orderprice() {
     }
 
     @FXML
-    void submitorder(ActionEvent event) {
+    void submitorder(ActionEvent event) throws SQLException {
+    	
     	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to submit your order?" , ButtonType.YES, ButtonType.CANCEL);
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
+	 		conn = Lunchhourdb.get();
+	   		 Calendar cal = Calendar.getInstance();
+	        java.sql.Date startDate = new java.sql.Date(cal.getTime().getTime());
+	   		 String sql = "Insert into Cafeteria.Order (`Parent Id`, `Student ID`, `Menu Item`, Additional, Extra, Total, `Order Date`, Studentname) Values ( ?, ?, ?, ?, ?, ?, ?, ?);"; 
+			 ps = conn.prepareStatement(sql);
+			 
+			 for(int i=0; i < root.getChildren().size();i++) {
+			    	TreeItem<Cart> tableRow = root.getChildren().get(i);
+			    	ps.setInt(1, parentid);
+			    	ps.setInt(2, tableRow.getValue().getStudentid());
+			    	ps.setString(3, tableRow.getValue().getMenuitem());
+			    	String add = "";
+			    	String extras_ = "";
+			    	for(int j =0; j< tableRow.getChildren().size(); j++) {
+			    		TreeItem<Cart> childRow = tableRow.getChildren().get(j);
+			    		if (childRow.getValue().getAdd() != null){
+			    		add = add + childRow.getValue().getAdd() + "/";
+			    		}
+			    		if(childRow.getValue().getExtra() != null) {
+				    		extras_ = extras_ + childRow.getValue().getExtra() + "/";
+			    		}
+			    	}
+			    	ps.setString(4, add);
+			    	ps.setString(5,extras_);
+			    	ps.setDouble(6,Double.parseDouble(Cart_txt.getText()));
+			    	ps.setDate(7,startDate);
+			    	ps.setString(8, tableRow.getValue().getFullname());
+			    	ps.execute();
+				}
+			 sql = "Update Parents SET Balance = ? , Last_Purchase = ?   Where Id = ?;";
+				    	ps = conn.prepareStatement(sql);
+				    	ps.setDouble(1,Double.parseDouble(balancerem_txt.getText()));
+				    	ps.setDate(2, startDate);
+				    	ps.setInt(3,parentid);
+				    	ps.execute();
+			 
 	   		 root.getChildren().clear();
-	   		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-	        Calendar cal = Calendar.getInstance();
-	        Lastupdate.setText(dateFormat.format(cal.getTime()));
 	        orderprice();
 	    	tree.getSelectionModel().clearSelection();
-	   		
+	    	conn.close();
+	   		Setinfo();
 	   	 }
     }
     private double totalprice() {
@@ -151,7 +188,6 @@ private void orderprice() {
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		conn = Lunchhourdb.get();
 		try {
 			Setinfo();
 		} catch (SQLException e) {
@@ -166,12 +202,15 @@ private void orderprice() {
 	
 	private int parentid;
 	public void Setinfo() throws SQLException {
+		conn = Lunchhourdb.get();
 		String user = Logincontroller.getUsername();
 		 String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?";
 		 ps = conn.prepareStatement(sql);
 	        ps.setString(1, user);
 	        rs = ps.executeQuery();
 	        if(rs.next()) {
+	        parentid = rs.getInt("Id");
+	        System.out.println(parentid);
 	        parentsname.setText( rs.getString("First Name") + " " + rs.getString("Last Name"));
 	        DecimalFormat df = new DecimalFormat("#.00");
 	        Balanceamountlabel.setText(df.format(rs.getDouble("Balance")));
@@ -188,6 +227,7 @@ private void orderprice() {
 	        addstudent(parentid);
 	orderprice();
 	        maketree();
+	        conn.close();
 	        }
 	        
 	        
