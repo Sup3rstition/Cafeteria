@@ -52,8 +52,16 @@ public class Menupagecontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
-
 	final ToggleGroup group = new ToggleGroup();
+	Studentinfo Student;
+	String totaladd;
+	TreeItem<Cart> root = Cart.getTreeRoot();
+	private int studentid_;
+	RadioButton selectedradio;
+	private ObservableList<Extras> extras  = FXCollections.observableArrayList();
+	NumberFormat formatter = new DecimalFormat("#0.00");
+	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	
     @FXML
     private RadioButton Menu1;
 
@@ -142,17 +150,20 @@ public class Menupagecontroller implements Initializable {
 
     @FXML
     private Label usern;
-    
-    
+      
     @FXML
     private Label studentid;
-    String totaladd;
+    
     @FXML
-    void Nextweek(ActionEvent event) {
-
+    void backtoorder(ActionEvent event) throws SQLException, IOException {
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
+    	Parent Orderpage = loader.load();
+        Scene Order = new Scene(Orderpage);
+        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
+        window.setScene(Order);
     }
-    Studentinfo Student;
-    TreeItem<Cart> root = Cart.getTreeRoot();
+    
     @FXML
     void addtocart(ActionEvent event) throws IOException, SQLException {
     	String menuitem = null;
@@ -196,16 +207,6 @@ public class Menupagecontroller implements Initializable {
     }
 
     @FXML
-    void backtoorder(ActionEvent event) throws SQLException, IOException {
-    	FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
-    	Parent Orderpage = loader.load();
-        Scene Order = new Scene(Orderpage);
-        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
-        window.setScene(Order);
-    }
-
-    @FXML
     void clearorder(ActionEvent event) {
     	Menu1.setSelected(true);
     	add1qty.getValueFactory().setValue(0);
@@ -217,31 +218,20 @@ public class Menupagecontroller implements Initializable {
 		}
     	Totalchange();
     	}
-    private String totalextra() {
-    	int totalextra=0;	
-    	for(int i=0; i < extratable.getItems().size();i++) {
-	    	Extras tableRow = extratable.getItems().get(i);
-	    int qty = tableRow.getItemCount();
-	    totalextra = totalextra + qty;
-		}
-		return Integer.toString(totalextra);
-    }
     
 
     @FXML
     void selectday(ActionEvent event) {
 
     }
-private int studentid_;
+    
 	public void setinfo(Studentinfo studentinfo) {
 		Studentname.setText(studentinfo.getFirstname() + " " + studentinfo.getLastname());
 		studentgrade.setText(studentinfo.getGrade());
 		studentsection.setText(studentinfo.getSection());
 		studentid_ = studentinfo.getId();
 	}
-	 RadioButton selectedradio;
-		private ObservableList<Extras> extras  = FXCollections.observableArrayList();
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		//Getting connection
@@ -385,8 +375,16 @@ private int studentid_;
 		
 	}
 	
+	private String totalextra() {
+    	int totalextra=0;	
+    	for(int i=0; i < extratable.getItems().size();i++) {
+	    	Extras tableRow = extratable.getItems().get(i);
+	    int qty = tableRow.getItemCount();
+	    totalextra = totalextra + qty;
+		}
+		return Integer.toString(totalextra);
+    }
 	//Method to change the Total for the menu total price
-	NumberFormat formatter = new DecimalFormat("#0.00");
 	private void Totalchange() {
 		double Menuprice = 0.00;
 		Double Total;

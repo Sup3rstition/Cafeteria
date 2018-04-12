@@ -3,7 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,27 +27,34 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import application.Student.Studentinfo;
 import javafx.util.Callback;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
+import Objects.Parentinfo;
 public class Orderpagecontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
+	ObservableList<Studentinfo> items = FXCollections.observableArrayList();
+	private TreeItem<Cart> root = Cart.getTreeRoot();
+    NumberFormat formatter = new DecimalFormat("#0.00");
+    DecimalFormat df = new DecimalFormat("#.00");
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    private Parentinfo parent;
+    
     @FXML
     private Label parentsname;
 
+    @FXML
+    private Button close;
     
     @FXML
     private Label Balanceamountlabel;
@@ -84,10 +90,33 @@ public class Orderpagecontroller implements Initializable {
     
     @FXML
     private TextField Cart_txt;
-
+    
+    @FXML
+	private Button remove;
+    
     @FXML
     private TextField balancerem_txt;
-    NumberFormat formatter = new DecimalFormat("#0.00");
+    @FXML
+    private TreeTableView<Cart> tree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> nametree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> daytree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> menutree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> addtree;
+
+    @FXML
+    private TreeTableColumn<Cart, String> extratree;
+
+    @FXML
+    private TreeTableColumn<Cart, Double> totaltree;
+    
     @FXML
     void checkhistory(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
@@ -96,14 +125,11 @@ public class Orderpagecontroller implements Initializable {
         Scene Check = new Scene(CheckHistory);
         Stage stage = new Stage();
         CheckHistoryController control = loader.<CheckHistoryController>getController();
-        control.setparentid(parentid);
+        control.setparentid(parent.getParentId());
         stage.setScene(Check);
         stage.showAndWait();
     }
-private void orderprice() {
-	Cart_txt.setText(formatter.format(totalprice()));
-  	 balancerem_txt.setText(formatter.format(balancechange()));
-}
+    
     @FXML
     void clearcart(ActionEvent event) {
     	root.getChildren().clear();
@@ -135,7 +161,7 @@ private void orderprice() {
 			 
 			 for(int i=0; i < root.getChildren().size();i++) {
 			    	TreeItem<Cart> tableRow = root.getChildren().get(i);
-			    	ps.setInt(1, parentid);
+			    	ps.setInt(1, parent.getParentId());
 			    	ps.setInt(2, tableRow.getValue().getStudentid());
 			    	ps.setString(3, tableRow.getValue().getMenuitem());
 			    	String add = "";
@@ -160,7 +186,7 @@ private void orderprice() {
 				    	ps = conn.prepareStatement(sql);
 				    	ps.setDouble(1,Double.parseDouble(balancerem_txt.getText()));
 				    	ps.setDate(2, startDate);
-				    	ps.setInt(3,parentid);
+				    	ps.setInt(3,parent.getParentId());
 				    	ps.execute();
 			 
 	   		 root.getChildren().clear();
@@ -170,23 +196,9 @@ private void orderprice() {
 	   		Setinfo();
 	   	 }
     }
-    private double totalprice() {
-    	double totalprice=0;	
-    	for(int i=0; i < root.getChildren().size();i++) {
-	    	TreeItem<Cart> tableRow = root.getChildren().get(i);
-	    Cart price = tableRow.getValue();
-	    totalprice = totalprice + price.getTotal();
-		}
-		return totalprice;
-    }
-    private double balancechange() {
-		double cartbal = Double.parseDouble(Cart_txt.getText());
-		double curbal = Double.parseDouble(Balanceamountlabel.getText());
-    	double newbalance = curbal-cartbal;
-    	return newbalance;
-    	
-    }
-	@Override
+    
+	
+    @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
 			Setinfo();
@@ -196,12 +208,86 @@ private void orderprice() {
 		
 	}
 	
+	@FXML
+	void removeselected(ActionEvent event) {
+		TreeItem<Cart> selectedItem = tree.getSelectionModel().getSelectedItem();
+		if(selectedItem != null) {
+			if(selectedItem.getParent() != tree.getRoot()) {
+				if (selectedItem.isLeaf()) {
+				selectedItem = selectedItem.getParent();
+			}
+			}
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + selectedItem.getValue().getFullname() + " " + selectedItem.getValue().getMenuitem()
+				+" Order from cart?" , ButtonType.YES, ButtonType.CANCEL);
+	   	 alert.showAndWait();
+
+	   	 if (alert.getResult() == ButtonType.YES) {
+	   		TreeItem<Cart> c = (TreeItem<Cart>)tree.getSelectionModel().getSelectedItem();
+	   		if (c.isLeaf() && c.getParent() !=tree.getRoot()) {
+				c = c.getParent();
+	   		}
+	   		c.getParent().getChildren().remove(c);
+	   		orderprice();
+	   	 }
+		}
+		
+	}
+   
+	@FXML   
+	void menuopen(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/MenuPage.fxml"));
+    	Parent Menupage = loader.load();
+        Scene Menu = new Scene(Menupage);
+        Menupagecontroller controller = loader.getController();
+        Studentinfo studentid = studentcombox.getValue();
+        controller.setinfo(studentid);
+        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
+        window.setScene(Menu);
+    }
+   
+	@FXML
+    void closewindow(ActionEvent event) throws IOException{
+    	((Node)(event.getSource())).getScene().getWindow().hide();
+    
+    }
+
+	private double totalprice() {
+	    	double totalprice=0;	
+	    	for(int i=0; i < root.getChildren().size();i++) {
+		    	TreeItem<Cart> tableRow = root.getChildren().get(i);
+		    Cart price = tableRow.getValue();
+		    totalprice = totalprice + price.getTotal();
+			}
+			return totalprice;
+	    }
 	
+	private double balancechange() {
+			double cartbal = Double.parseDouble(Cart_txt.getText());
+			double curbal = Double.parseDouble(Balanceamountlabel.getText());
+	    	double newbalance = curbal-cartbal;
+	    	return newbalance;
+	    	
+	    }
 	
-	
-	
-	private int parentid;
 	public void Setinfo() throws SQLException {
+		
+		if (parent == null) {
+			parent = setparent();
+		}
+		else {
+			parentsname.setText(parent.getName());
+			Balanceamountlabel.setText(df.format(parent.getBalance()));
+			 java.util.Date Lastpurchase = new java.util.Date(parent.getLastpurchase().getTime());
+		     java.util.Date dBalance = new java.util.Date(parent.getLastupdate().getTime());
+		     Balancelast.setText(dateFormat.format(Lastpurchase.getTime()));
+		     Lastupdate.setText(dateFormat.format(dBalance.getTime()));
+		}
+	        
+	}
+	
+	private Parentinfo setparent() throws SQLException {
+		Parentinfo parent = new Parentinfo();
 		conn = Lunchhourdb.get();
 		String user = Logincontroller.getUsername();
 		 String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?";
@@ -209,30 +295,20 @@ private void orderprice() {
 	        ps.setString(1, user);
 	        rs = ps.executeQuery();
 	        if(rs.next()) {
-	        parentid = rs.getInt("Id");
-	        System.out.println(parentid);
-	        parentsname.setText( rs.getString("First Name") + " " + rs.getString("Last Name"));
-	        DecimalFormat df = new DecimalFormat("#.00");
-	        Balanceamountlabel.setText(df.format(rs.getDouble("Balance")));
-	        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	        parent.setParentId(rs.getInt("Id"));
+	        parent.setName(rs.getString("First Name") + " " + rs.getString("Last Name"));
+	        parent.setBalance(rs.getDouble("Balance"));
 	        Calendar cal = Calendar.getInstance();
 	        currentdatelabel.setText(dateFormat.format(cal.getTime()));
-	        java.sql.Date dbSqlLast = rs.getDate("Last Balance Update");
-	        java.sql.Date dbSqlBalance = rs.getDate("Last_Purchase");
-	        java.util.Date Last = new java.util.Date(dbSqlLast.getTime());
-	        java.util.Date dBalance = new java.util.Date(dbSqlBalance.getTime());
-	        Balancelast.setText(dateFormat.format(Last.getTime()));
-	        Lastupdate.setText(dateFormat.format(dBalance.getTime()));
-	        parentid = rs.getInt("Id"); 
-	        addstudent(parentid);
-	orderprice();
+	        parent.setLastupdate(rs.getDate("Last Balance Update"));
+	        parent.setLastpurchase(rs.getDate("Last_Purchase"));
+	        addstudent(parent.getParentId());
+	        orderprice();
 	        maketree();
 	        conn.close();
 	        }
-	        
-	        
+			return parent;
 	}
-	ObservableList<Studentinfo> items = FXCollections.observableArrayList();
 	private void addstudent(int parentid) throws SQLException {
 		String sql = "SELECT * from Cafeteria.Student WHERE `Parent ID` = ?";
 		 ps = conn.prepareStatement(sql);
@@ -284,76 +360,13 @@ private void orderprice() {
            }
        });
 	}
-
-	@FXML
-	private Button remove;
-	@FXML
-	void removeselected(ActionEvent event) {
-		TreeItem<Cart> selectedItem = tree.getSelectionModel().getSelectedItem();
-		if(selectedItem != null) {
-			if(selectedItem.getParent() != tree.getRoot()) {
-				if (selectedItem.isLeaf()) {
-				selectedItem = selectedItem.getParent();
-			}
-			}
-		Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + selectedItem.getValue().getFullname() + " " + selectedItem.getValue().getMenuitem()
-				+" Order from cart?" , ButtonType.YES, ButtonType.CANCEL);
-	   	 alert.showAndWait();
-
-	   	 if (alert.getResult() == ButtonType.YES) {
-	   		TreeItem c = (TreeItem)tree.getSelectionModel().getSelectedItem();
-	   		if (c.isLeaf() && c.getParent() !=tree.getRoot()) {
-				c = c.getParent();
-	   		}
-	   		c.getParent().getChildren().remove(c);
-	   		orderprice();
-	   	 }
-		}
-		
-	}
-    @FXML
-    void menuopen(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(getClass().getResource("/application/MenuPage.fxml"));
-    	Parent Menupage = loader.load();
-        Scene Menu = new Scene(Menupage);
-        Menupagecontroller controller = loader.getController();
-        Studentinfo studentid = studentcombox.getValue();
-        controller.setinfo(studentid);
-        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
-        window.setScene(Menu);
-    }
-    @FXML
-    private Button close;
-    @FXML
-    void closewindow(ActionEvent event) throws IOException{
-    	((Node)(event.getSource())).getScene().getWindow().hide();
-    
+	
+    private void orderprice() {
+    	Cart_txt.setText(formatter.format(totalprice()));
+      	 balancerem_txt.setText(formatter.format(balancechange()));
     }
 
-    @FXML
-    private TreeTableView<Cart> tree;
-
-    @FXML
-    private TreeTableColumn<Cart, String> nametree;
-
-    @FXML
-    private TreeTableColumn<Cart, String> daytree;
-
-    @FXML
-    private TreeTableColumn<Cart, String> menutree;
-
-    @FXML
-    private TreeTableColumn<Cart, String> addtree;
-
-    @FXML
-    private TreeTableColumn<Cart, String> extratree;
-
-    @FXML
-    private TreeTableColumn<Cart, Double> totaltree;
-    
-	private TreeItem<Cart> root = Cart.getTreeRoot();
-	private void maketree () {
+    private void maketree () {
 		tree.setRoot(root);
 		tree.setShowRoot(false);
 		nametree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, String> param) -> param.getValue().getValue().getFullnames());
@@ -363,5 +376,13 @@ private void orderprice() {
 		extratree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, String> param) -> param.getValue().getValue().getExtrat());
 		totaltree.setCellValueFactory((TreeTableColumn.CellDataFeatures<Cart, Double> param) -> param.getValue().getValue().getTotalt());
 	}
+
+    public Parentinfo getparentinfo() {
+    	return parent;
+    }
+    public void setparent(Parentinfo parentinfo) {
+    	this.parent = parentinfo;
+    }
 }
+
 
