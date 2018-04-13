@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,9 +50,14 @@ public class Logincontroller implements Initializable{
     
     @FXML
     private Label Invalidinfo;
+    private static String userName;
+    public static String getUsername() {
+		return userName;
+	}
+
     @FXML
     void performLoginAction(ActionEvent event) {
-    	 	String userName = Username_txt.getText().trim().toUpperCase();
+    	 	 userName = Username_txt.getText().trim().toUpperCase();
     	    String password = Password_txt.getText().trim();
     	    if(userName.length() >=6 && password.length() >= 3) {
     	    	Invalidinfo.setVisible(false);
@@ -64,14 +70,17 @@ public class Logincontroller implements Initializable{
     	        
     	        if (rs.next()) {
     	        	Wronginfo.setVisible(false);
-    	            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("application/Adminhomepage.fxml"));
-    	            Stage stage = new Stage();
-    	            stage.setScene(new Scene(root));
-    	            stage.setTitle("("+userName+")Elevel Cafeteria");
-    	            stage.show();
-    	            
-    	            Stage login = (Stage) exitBtn.getScene().getWindow();
-    	            login.close();
+    	        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/Adminhomepage.fxml"));
+    	        	loader.load();
+    	        	Parent order = loader.getRoot();
+
+    	             // Display popup
+    	             Stage stage = new Stage();
+    	             stage.setScene(new Scene(order));
+    	             //This displays the stage and waits for the input
+    	             stage.show();
+    	             conn.close();
+    	           	((Node)(event.getSource())).getScene().getWindow().hide();
     	            
     	        } else {
     	            Wronginfo.setVisible(true);

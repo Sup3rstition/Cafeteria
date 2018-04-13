@@ -12,8 +12,9 @@
 
 <AnchorPane prefHeight="445.0" prefWidth="480.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Logincontroller">
    <children>
+      <TextField fx:id="Username_txt" layoutX="310.0" layoutY="177.0" promptText="Username" text="Admin123" />
+      <PasswordField fx:id="Password_txt" layoutX="310.0" layoutY="210.0" promptText="Password" text="Admin123" />
       <Button fx:id="LoginBtn" layoutX="367.0" layoutY="246.0" mnemonicParsing="false" onAction="#performLoginAction" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #AFC6AF;" text="Login" />
-      <TextField fx:id="Username_txt" layoutX="310.0" layoutY="177.0" promptText="Username" />
       <CheckBox fx:id="Remember_Chck" layoutX="238.0" layoutY="250.0" mnemonicParsing="false" text="Remember me" textFill="#1a6c4a" />
       <AnchorPane prefHeight="445.0" prefWidth="229.0" style="-fx-background-color: #AFC6AF;">
          <children>
@@ -32,7 +33,6 @@
       <Label layoutX="238.0" layoutY="214.0" text="Password:" textFill="#1a6c4a" />
       <Label fx:id="Wronginfo" layoutX="272.0" layoutY="311.0" text="Wrong Username/Password" textFill="RED" visible="false" />
       <Button fx:id="exitBtn" layoutX="410.0" layoutY="406.0" mnemonicParsing="false" style="-fx-background-color: AFC6AF;" text="Close" />
-      <PasswordField fx:id="Password_txt" layoutX="310.0" layoutY="210.0" promptText="Password" />
       <ImageView fx:id="LoginLock" fitHeight="72.0" fitWidth="122.0" layoutX="300.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="http://www.darwinpresbyterian.org.au/images/large_lock.jpg" />

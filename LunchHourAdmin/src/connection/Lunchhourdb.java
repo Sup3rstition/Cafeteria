@@ -8,6 +8,7 @@ public class Lunchhourdb {
 
 private static Connection con;
 
+// Pristupa drajveru u JAR fajlu
 private static Connection createConnection() {
 	try {
 	    System.out.println("Loading driver...");
@@ -42,9 +43,14 @@ private static Connection createConnection() {
 }
 
 public static Connection get() {
-    if (con == null) {
-        con = createConnection();
-    }
+    try {
+		if (con == null || con.isClosed()) {
+		    con = createConnection();
+		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     return con;
 }
 }
