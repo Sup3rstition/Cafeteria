@@ -1,4 +1,4 @@
-package Objects;
+package entities;
 
 public class Parentinfo {
 private String Name;
@@ -6,7 +6,7 @@ private String Username;
 private int ParentId;
 private String Email;
 private java.sql.Date Lastupdate;
-private java.sql.Date Lastpurchase;
+private java.sql.Date LastOrder;
 private Double balance;
 public String getName() {
 	return Name;
@@ -38,11 +38,11 @@ public java.sql.Date getLastupdate() {
 public void setLastupdate(java.sql.Date lastupdate) {
 	Lastupdate = lastupdate;
 }
-public java.sql.Date getLastpurchase() {
-	return Lastpurchase;
+public java.sql.Date getLastOrder() {
+	return LastOrder;
 }
-public void setLastpurchase(java.sql.Date lastpurchase) {
-	Lastpurchase = lastpurchase;
+public void setLastOrder(java.sql.Date Order) {
+	LastOrder = Order;
 }
 public Double getBalance() {
 	return balance;

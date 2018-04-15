@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import connection.Lunchhourdb;
+import entities.Parentinfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,7 +39,6 @@ import application.Student.Studentinfo;
 import javafx.util.Callback;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import Objects.Parentinfo;
 public class Orderpagecontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
@@ -46,9 +46,9 @@ public class Orderpagecontroller implements Initializable {
 	ObservableList<Studentinfo> items = FXCollections.observableArrayList();
 	private TreeItem<Cart> root = Cart.getTreeRoot();
     NumberFormat formatter = new DecimalFormat("#0.00");
-    DecimalFormat df = new DecimalFormat("#.00");
+    DecimalFormat df = new DecimalFormat("#0.00");
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    private Parentinfo parent;
+    private Parentinfo parent = null;
     
     @FXML
     private Label parentsname;
@@ -83,7 +83,7 @@ public class Orderpagecontroller implements Initializable {
     private  Label Accountinfo;
 
     @FXML
-    private Label Lastupdate;
+    private Label LastOrder;
 
     @FXML
     private Label Balancelast;
@@ -139,6 +139,9 @@ public class Orderpagecontroller implements Initializable {
 
     @FXML
     void logout(ActionEvent event) throws IOException, SQLException {
+    	parent = null;
+    	root.getChildren().clear();
+    	tree.getSelectionModel().clearSelection();
     	Parent Loginpage = FXMLLoader.load(getClass().getResource("/application/Login.fxml"));
         Scene Login = new Scene(Loginpage);
         Stage window = (Stage) logutbtn.getScene().getWindow();
@@ -153,6 +156,8 @@ public class Orderpagecontroller implements Initializable {
 	   	 alert.showAndWait();
 
 	   	 if (alert.getResult() == ButtonType.YES) {
+	   		 if(!root.getChildren().isEmpty()) {
+	   		 if(Double.parseDouble(balancerem_txt.getText()) > 0) {
 	 		conn = Lunchhourdb.get();
 	   		 Calendar cal = Calendar.getInstance();
 	        java.sql.Date startDate = new java.sql.Date(cal.getTime().getTime());
@@ -190,10 +195,29 @@ public class Orderpagecontroller implements Initializable {
 				    	ps.execute();
 			 
 	   		 root.getChildren().clear();
+	   		updateinfo();
 	        orderprice();
 	    	tree.getSelectionModel().clearSelection();
 	    	conn.close();
-	   		Setinfo();
+	   		Alert Done = new Alert(AlertType.INFORMATION);
+	   		Done.setTitle("Success!");
+	   		Done.setHeaderText("Order(s) have been submitted.");
+	   		Done.setContentText("Please Check email for Confirmation Order number");
+
+	   		Done.showAndWait();
+	   	 }else {
+	   		Alert Error= new Alert(AlertType.ERROR, "Please add funds and try again.");
+	   		Error.setTitle("Error");
+	   		Error.setHeaderText("Error Submitting Order");
+	   		Error.showAndWait();
+	   	 }
+	   	 }
+	   	 else {
+	   		Alert Error2= new Alert(AlertType.ERROR, "Cart is Empty");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Error Submitting Order");
+	   		Error2.showAndWait();
+	   	 }
 	   	 }
     }
     
@@ -235,16 +259,25 @@ public class Orderpagecontroller implements Initializable {
    
 	@FXML   
 	void menuopen(ActionEvent event) throws IOException {
+		if(studentcombox.getValue() !=null) {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/MenuPage.fxml"));
     	Parent Menupage = loader.load();
         Scene Menu = new Scene(Menupage);
         Menupagecontroller controller = loader.getController();
         Studentinfo studentid = studentcombox.getValue();
+        controller.setParent(parent);
         controller.setinfo(studentid);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Menu);
+    }else {
+    	Alert Error= new Alert(AlertType.ERROR, "There was a selecting Student. Please contact the administrators to add children to your account");
+    	Error.setTitle("Error");
+   		Error.setHeaderText("Error on Selecting Student");
+   		Error.showAndWait();
+	   	
     }
+	}
    
 	@FXML
     void closewindow(ActionEvent event) throws IOException{
@@ -269,45 +302,71 @@ public class Orderpagecontroller implements Initializable {
 	    	return newbalance;
 	    	
 	    }
-	
-	public void Setinfo() throws SQLException {
+	public void updateinfo() throws SQLException{
+		conn = Lunchhourdb.get();
+		 String sql = "SELECT Balance,Last_Purchase from Cafeteria.Parents WHERE Id = ?";
+		 ps = conn.prepareStatement(sql);
+	        ps.setInt(1,parent.getParentId());
+	        rs = ps.executeQuery();
+	        if(rs.next()) {
+	    		System.out.println("Ran Updateinfo");
+		        parent.setBalance(rs.getDouble("Balance"));
+		        parent.setLastOrder(rs.getDate("Last_Purchase"));
+		        System.out.println(parent.getLastOrder());
+		        java.util.Date Lastorder = new java.util.Date(parent.getLastOrder().getTime());
+				 LastOrder.setText(dateFormat.format(Lastorder.getTime()));
+				 Balanceamountlabel.setText(df.format(parent.getBalance()));
+		        
+		        
+		}
+	        conn.close(); 
+	        
+	}
+	@FXML
+	void nextweek(ActionEvent event) {
 		
+	}
+	public void Setinfo() throws SQLException {
 		if (parent == null) {
-			parent = setparent();
+			System.out.println(0);
+			 parent = new Parentinfo();
+			conn = Lunchhourdb.get();
+			parent.setUsername(Logincontroller.getUsername());
+			 String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?";
+			 ps = conn.prepareStatement(sql);
+		        ps.setString(1, parent.getUsername());
+		        rs = ps.executeQuery();
+		        if(rs.next()) {
+		        parent.setParentId(rs.getInt("Id"));
+		        parent.setName(rs.getString("First Name") + " " + rs.getString("Last Name"));
+		        parent.setBalance(rs.getDouble("Balance"));
+		        Calendar cal = Calendar.getInstance();
+		        currentdatelabel.setText(dateFormat.format(cal.getTime()));
+		        parent.setLastupdate(rs.getDate("Last Balance Update"));
+		        parent.setLastOrder(rs.getDate("Last_Purchase"));
+		        addstudent(parent.getParentId());
+		        parent = parent;
+		        conn.close();
+		        Setinfo();
+		}
 		}
 		else {
 			parentsname.setText(parent.getName());
 			Balanceamountlabel.setText(df.format(parent.getBalance()));
-			 java.util.Date Lastpurchase = new java.util.Date(parent.getLastpurchase().getTime());
-		     java.util.Date dBalance = new java.util.Date(parent.getLastupdate().getTime());
-		     Balancelast.setText(dateFormat.format(Lastpurchase.getTime()));
-		     Lastupdate.setText(dateFormat.format(dBalance.getTime()));
+		
+			if(parent.getLastOrder() != null ) {
+			 java.util.Date Lastorder = new java.util.Date(parent.getLastOrder().getTime());
+			 LastOrder.setText(dateFormat.format(Lastorder.getTime()));
+			}
+			
+			if(parent.getLastupdate() != null) {
+				 java.util.Date dBalance = new java.util.Date(parent.getLastupdate().getTime());
+				 Balancelast.setText(dateFormat.format(dBalance.getTime()));
+			}
+		     orderprice();
+		     maketree();
 		}
 	        
-	}
-	
-	private Parentinfo setparent() throws SQLException {
-		Parentinfo parent = new Parentinfo();
-		conn = Lunchhourdb.get();
-		String user = Logincontroller.getUsername();
-		 String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?";
-		 ps = conn.prepareStatement(sql);
-	        ps.setString(1, user);
-	        rs = ps.executeQuery();
-	        if(rs.next()) {
-	        parent.setParentId(rs.getInt("Id"));
-	        parent.setName(rs.getString("First Name") + " " + rs.getString("Last Name"));
-	        parent.setBalance(rs.getDouble("Balance"));
-	        Calendar cal = Calendar.getInstance();
-	        currentdatelabel.setText(dateFormat.format(cal.getTime()));
-	        parent.setLastupdate(rs.getDate("Last Balance Update"));
-	        parent.setLastpurchase(rs.getDate("Last_Purchase"));
-	        addstudent(parent.getParentId());
-	        orderprice();
-	        maketree();
-	        conn.close();
-	        }
-			return parent;
 	}
 	private void addstudent(int parentid) throws SQLException {
 		String sql = "SELECT * from Cafeteria.Student WHERE `Parent ID` = ?";
