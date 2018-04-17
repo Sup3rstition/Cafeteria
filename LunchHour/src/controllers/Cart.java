@@ -1,49 +1,82 @@
 package controllers;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 
 public class Cart {
 	private String Grade;
 	private String Section;
-	private int orderid;
-	private int add_1;
-	private int add_2;
-	private int add_3;
+	private SimpleIntegerProperty orderid;
+	private int studentid;
 	private SimpleStringProperty fullname;
 	private SimpleStringProperty menuitem;
 	private SimpleStringProperty add;
-	private SimpleIntegerProperty extra;
+	private SimpleStringProperty extra;
 	private SimpleDoubleProperty total;
 	private SimpleStringProperty Day;
 	private SimpleStringProperty menuweek;
+	private java.sql.Date Menuorderdate;
+	 public java.sql.Date getMenuorderdate() {
+		return Menuorderdate;
+	}
+	public void setMenuorderdate(java.sql.Date menuorderdate) {
+		Menuorderdate = menuorderdate;
+	}
+	public ObjectProperty<LocalDate> menudate = new SimpleObjectProperty<>();
 
-		public Cart(String name, String menu, String day, String add1, int extra, double total ,String menuweek ) {
+	public Cart() {
+		this.fullname = new SimpleStringProperty();
+		this.menuitem = new SimpleStringProperty();
+		this.add = new SimpleStringProperty();
+		this.extra = new SimpleStringProperty();
+		this.total = new SimpleDoubleProperty();
+		this.menudate = new SimpleObjectProperty();
+		this.orderid = new SimpleIntegerProperty();
+	}
+	public Cart(String extra) {
+		this.extra = new SimpleStringProperty(extra);
+	}
+		public Cart(String name, String menu, String day, String add1, String extra, double total ,String menuweek, int studentid) {
 			this.fullname = new SimpleStringProperty(name);
 			this.Day = new SimpleStringProperty(day);
 			this.menuitem = new SimpleStringProperty(menu);
 			this.add = new SimpleStringProperty(add1);
-			this.extra = new SimpleIntegerProperty(extra);
+			this.extra = new SimpleStringProperty(extra);
 			this.total = new SimpleDoubleProperty(total);
 			this.menuweek = new SimpleStringProperty(menuweek);
+			this.studentid = new Integer(studentid);
+		}
+		public Cart(String name, String menu, String add1, String extra, double total ,LocalDate menuweek, int orderid) {
+			this.fullname = new SimpleStringProperty(name);
+			this.menuitem = new SimpleStringProperty(menu);
+			this.add = new SimpleStringProperty(add1);
+			this.extra = new SimpleStringProperty(extra);
+			this.total = new SimpleDoubleProperty(total);
+			this.menudate = new SimpleObjectProperty(menuweek);
+			this.orderid = new SimpleIntegerProperty(orderid);
 		}
 		public String getMenuweek() {
 		return menuweek.get();
 	}
-		private static ObservableList<Cart> list= FXCollections.observableArrayList();
-
-		public static ObservableList<Cart> getList() {
-			return list;
-		}
 		
 	public void setMenuweek(String menuweek) {
 		this.menuweek.set(menuweek);
 	}
 	public String getFullname() {
 		return fullname.get();
+	}
+	public SimpleStringProperty getFullnames() {
+		return fullname;
 	}
 	public void setFullname(String first, String second) {
 		this.fullname.set(first + second);
@@ -79,10 +112,10 @@ public class Cart {
 		Section=section;
 	}
 	public int getOrderid() {
-		return orderid;
+		return orderid.get();
 	}
 	public void setOrderid(int orderid) {
-		this.orderid = orderid;
+		this.orderid.set(orderid);
 	}
 	public String getMenuitem() {
 		return menuitem.get();
@@ -90,32 +123,52 @@ public class Cart {
 	public void setMenuitem(String menuitem) {
 		this.menuitem.set(menuitem);
 	}
-	public int getAdd_1() {
-		return add_1;
-	}
-	public void setAdd_1(int add_1) {
-		this.add_1 = add_1;
-	}
-	public int getAdd_2() {
-		return add_2;
-	}
-	public void setAdd_2(int add_2) {
-		this.add_2 = add_2;
-	}
-	public int getAdd_3() {
-		return add_3;
-	}
-	public void setAdd_3(int add_3) {
-		this.add_3 = add_3;
-	}
-	public int getExtra() {
+	public String getExtra() {
 		return extra.get();
 	}
-	public void setExtra(int extra) {
+	public void setExtra(String extra) {
 		this.extra.set(extra);
 	}
-	public void setList1(ObservableList<Cart> cart) {
-		// TODO Auto-generated method stub
-		
+	public int getStudentid() {
+		return studentid;
 	}
+	public void setStudentid(int studentid) {
+		this.studentid = studentid;
+	}
+	//treeview
+	public SimpleStringProperty getMenuweekt() {
+	return menuweek;
+}
+	
+public SimpleStringProperty getAddt() {
+	return add;
+}
+public ObjectProperty<Double> getTotalt() {
+	return total.asObject();
+}
+public SimpleStringProperty getDayt() {
+	return Day;
+}
+public SimpleStringProperty getMenuitemt() {
+	return menuitem;
+}
+public SimpleStringProperty getExtrat() {
+	return extra;
+}
+public Object getMenudate() {
+    return menudate.get();
+}
+
+public void setMenudate(LocalDate dateofbirth) {
+    this.menudate.set(dateofbirth);
+}
+
+public ObjectProperty<LocalDate> dateOfBirthProperty() {
+    return menudate;
+}
+public void setFullname(String string) {
+	this.fullname.set(string);
+	
+}
+
 }

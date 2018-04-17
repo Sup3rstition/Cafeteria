@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import connection.Lunchhourdb;
@@ -12,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,11 +51,17 @@ public class Logincontroller implements Initializable{
     
     @FXML
     private Label Invalidinfo;
+    private String userName;
+    public String getUsername() {
+		return userName;
+	}
+
     @FXML
-    void performLoginAction(ActionEvent event) {
-    	 	String userName = Username_txt.getText().trim().toUpperCase();
+    void performLoginAction(ActionEvent event) throws SQLException {
+    	 	 userName = Username_txt.getText().trim().toUpperCase();
     	    String password = Password_txt.getText().trim();
     	    if(userName.length() >=6 && password.length() >= 3) {
+    			conn = Lunchhourdb.get();
     	    	Invalidinfo.setVisible(false);
     	    String sql = "SELECT * from Cafeteria.Administrators WHERE Username = ? AND Password = ?;";
     	    try {
@@ -64,14 +72,22 @@ public class Logincontroller implements Initializable{
     	        
     	        if (rs.next()) {
     	        	Wronginfo.setVisible(false);
-    	            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("application/Adminhomepage.fxml"));
-    	            Stage stage = new Stage();
-    	            stage.setScene(new Scene(root));
-    	            stage.setTitle("("+userName+")Elevel Cafeteria");
-    	            stage.show();
-    	            
-    	            Stage login = (Stage) exitBtn.getScene().getWindow();
-    	            login.close();
+    	        	FXMLLoader loader = new FXMLLoader();
+    	        	loader.setLocation(getClass().getResource("/application/Adminhomepage.fxml"));
+
+    	        	loader.load();
+    	        	Adminhomepagecontroller controller = loader.getController();
+   	             controller.setAdminuser(userName);
+   	             controller.start();
+    	        	Parent order = loader.getRoot();
+
+    	             // Display popup
+    	             Stage stage = new Stage();
+
+    	             stage.setScene(new Scene(order));
+    	             stage.show();
+    	             conn.close();
+    	           	((Node)(event.getSource())).getScene().getWindow().hide();
     	            
     	        } else {
     	            Wronginfo.setVisible(true);
@@ -79,6 +95,7 @@ public class Logincontroller implements Initializable{
     	    } catch (Exception e) {
     	        e.printStackTrace();
     	    }
+    	    conn.close();
     	    }else {
     	    	Invalidinfo.setVisible(true);
     	    }
@@ -91,7 +108,6 @@ public class Logincontroller implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		conn = Lunchhourdb.get();
 		
 	}
 }

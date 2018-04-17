@@ -5,6 +5,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import connection.Lunchhourdb;
@@ -20,6 +23,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import helpers.BCrypt;
@@ -28,7 +32,6 @@ public class Logincontroller implements Initializable{
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
-	
     @FXML
     private Button LoginBtn;
 
@@ -37,9 +40,6 @@ public class Logincontroller implements Initializable{
 
 	@FXML
     private PasswordField Password_txt;
-
-    @FXML
-    private CheckBox Remember_Chck;
 
     @FXML
     private Label Createaccount;
@@ -81,27 +81,40 @@ public class Logincontroller implements Initializable{
     	    	/*
     	    	 * creates a sql command to search the parents for the username and password.
     	    	 */
-    	    String sql = "SELECT * from Cafeteria.Parents WHERE userName = ? AND password = ?;";
+    	    String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?;";
     	    try {
+    	    	conn = Lunchhourdb.get();
     	    	// Creates the prepared statement to search the database with.
     	        ps = conn.prepareStatement(sql);
     	        ps.setString(1, username);
-    	        ps.setString(2, password);
     	        rs = ps.executeQuery();		// this is the result from the query and will be check to see if any result came back.
     	        
     	        if (rs.next()) {		// if there is a result from the serach in the database this changes the stage to the order page.
+    	        	if(BCrypt.checkpw(password, rs.getString("password"))){
+    	        	sql = "Update Cafeteria.Parents Set Last_Sign_in = ? Where username = ? ";
+    	        	ps = conn.prepareStatement(sql);
+    	        	java.util.Date javaDate = new java.util.Date();
+    	        	java.sql.Date now = new java.sql.Date(javaDate.getTime());
+    	        	
+    	        	ps.setDate(1, now );
+    	        	ps.setString(2, username);
+    	        	ps.execute();
     	        	Wronginfo.setVisible(false); 
     	        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/OrderPage.fxml"));
     	        	loader.load();
     	        	Parent order = loader.getRoot();
-
+    	        	Orderpagecontroller controller = loader.getController();
+    	        	controller.Setinfo();
     	             // Display popup
     	             Stage stage = new Stage();
     	             stage.setScene(new Scene(order));
     	             //This displays the stage and waits for the input
     	             stage.show();
+    	             conn.close();
     	           	((Node)(event.getSource())).getScene().getWindow().hide();
-    	       
+    	        	}else {
+    	        		Wronginfo.setVisible(true);
+    	        	}
     	        		
     	        } else {
     	            Wronginfo.setVisible(true);		// if the search fails it sets the wrong info label to visible and once it becomes true
@@ -114,7 +127,10 @@ public class Logincontroller implements Initializable{
     	    	Invalidinfo.setVisible(true);
     	    }
     }
-   
+   @FXML
+   void close(ActionEvent event) {
+	   ((Node)(event.getSource())).getScene().getWindow().hide();
+   }
     /*
      * (non-Javadoc)
      * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
@@ -124,6 +140,5 @@ public class Logincontroller implements Initializable{
      */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		conn = Lunchhourdb.get();
 	}
 }

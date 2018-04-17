@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="499.0" prefWidth="714.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Editusercontroller">
+<AnchorPane prefHeight="533.0" prefWidth="714.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Editusercontroller">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Edit Parent Account">
          <font>
@@ -37,11 +37,11 @@
                </columns></TreeTableColumn>
         </columns>
       </TreeTableView>
-      <Button layoutX="583.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Edit Information" />
-      <Button layoutX="468.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Add Account" />
-      <Button layoutX="391.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Delete" />
+      <Button layoutX="595.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Edit Information" />
+      <Button layoutX="492.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Add Account" />
+      <Button layoutX="421.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Delete" />
       <Button layoutX="136.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Add Funds" />
-      <Button layoutX="13.0" layoutY="496.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Back" />
+      <Button layoutX="13.0" layoutY="496.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="58.0" style="-fx-background-color: #AFC6AF;" text="Back" />
       <Separator layoutX="12.0" layoutY="485.0" prefHeight="4.0" prefWidth="685.0" />
       <Label layoutX="17.0" layoutY="58.0" text="Parent Search:">
          <font>

@@ -43,9 +43,14 @@ private static Connection createConnection() {
 }
 
 public static Connection get() {
-    if (con == null) {
-        con = createConnection();
-    }
+    try {
+		if (con == null || con.isClosed()) {
+		    con = createConnection();
+		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     return con;
 }
 }

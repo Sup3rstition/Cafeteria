@@ -6,27 +6,46 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="388.0" prefWidth="501.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Adminhomepagecontroller">
+<AnchorPane prefHeight="388.0" prefWidth="501.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Adminhomepagecontroller">
    <children>
-      <Label layoutX="20.0" layoutY="14.0" text="Welcome, (Administrator Name)">
+      <Label fx:id="Adminname" layoutX="20.0" layoutY="14.0" text="Welcome, (Administrator Name)">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
       <Separator layoutX="13.0" layoutY="40.0" prefHeight="4.0" prefWidth="471.0" />
-      <Button fx:id="Parentbtn" layoutX="47.0" layoutY="73.0" mnemonicParsing="false" onAction="#openparent" text="Parent Account Editor" />
-      <Button fx:id="Deliverybtn" layoutX="45.0" layoutY="119.0" mnemonicParsing="false" onAction="#opendelivery" text="Get Delivery Report" />
-      <Button fx:id="Orderbtn" layoutX="45.0" layoutY="162.0" mnemonicParsing="false" onAction="#openorder" text="Get Order Report" />
-      <Button fx:id="Menubtn" layoutX="47.0" layoutY="205.0" mnemonicParsing="false" onAction="#openmenu" text="Menu Editor" />
-      <Button fx:id="Fdfbtn" layoutX="47.0" layoutY="247.0" mnemonicParsing="false" onAction="#openfdf" text="Get FDF" />
-      <Button fx:id="Logoutbtn" layoutX="45.0" layoutY="291.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
       <Separator layoutX="13.0" layoutY="352.0" prefHeight="4.0" prefWidth="471.0" />
-      <ImageView blendMode="MULTIPLY" fitHeight="206.0" fitWidth="186.0" layoutX="272.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView blendMode="MULTIPLY" fitHeight="206.0" fitWidth="157.0" layoutX="282.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../LunchHour/src/application/1Logo.239145929_large.jpg" />
          </image>
       </ImageView>
+      <GridPane layoutX="28.0" layoutY="49.0" prefHeight="278.0" prefWidth="320.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="249.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="164.0" minWidth="10.0" prefWidth="89.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="Parentbtn" mnemonicParsing="false" onAction="#openparent" text="Parent Account Editor" />
+            <Button fx:id="Deliverybtn" mnemonicParsing="false" onAction="#opendelivery" text="Get Delivery Report" GridPane.rowIndex="1" />
+            <Button fx:id="Orderbtn" mnemonicParsing="false" onAction="#openorder" text="Get Order Report" GridPane.rowIndex="2" />
+            <Button fx:id="Menubtn" mnemonicParsing="false" onAction="#openmenu" text="Menu Editor" GridPane.rowIndex="3" />
+            <Button fx:id="Fdrbtn" mnemonicParsing="false" onAction="#openfdr" text="Get FDR" GridPane.rowIndex="4" />
+            <Button fx:id="Logoutbtn" mnemonicParsing="false" onAction="#logout" text="Logout" GridPane.rowIndex="5" />
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
