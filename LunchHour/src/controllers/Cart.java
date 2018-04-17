@@ -25,12 +25,15 @@ public class Cart {
 	private SimpleDoubleProperty total;
 	private SimpleStringProperty Day;
 	private SimpleStringProperty menuweek;
-	 public ObjectProperty<LocalDate> menudate = new SimpleObjectProperty<>();
-	
-	private static TreeItem<Cart>treeroot = new TreeItem<>(new Cart("Name","Menu","Day","add1","extra",0.0,"week", 0));
-	public static TreeItem<Cart> getTreeRoot() {
-		return treeroot;
+	private java.sql.Date Menuorderdate;
+	 public java.sql.Date getMenuorderdate() {
+		return Menuorderdate;
 	}
+	public void setMenuorderdate(java.sql.Date menuorderdate) {
+		Menuorderdate = menuorderdate;
+	}
+	public ObjectProperty<LocalDate> menudate = new SimpleObjectProperty<>();
+
 	public Cart() {
 		this.fullname = new SimpleStringProperty();
 		this.menuitem = new SimpleStringProperty();
@@ -167,4 +170,5 @@ public void setFullname(String string) {
 	this.fullname.set(string);
 	
 }
+
 }

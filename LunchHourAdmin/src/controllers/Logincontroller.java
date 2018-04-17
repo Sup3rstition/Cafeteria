@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import connection.Lunchhourdb;
@@ -50,16 +51,17 @@ public class Logincontroller implements Initializable{
     
     @FXML
     private Label Invalidinfo;
-    private static String userName;
-    public static String getUsername() {
+    private String userName;
+    public String getUsername() {
 		return userName;
 	}
 
     @FXML
-    void performLoginAction(ActionEvent event) {
+    void performLoginAction(ActionEvent event) throws SQLException {
     	 	 userName = Username_txt.getText().trim().toUpperCase();
     	    String password = Password_txt.getText().trim();
     	    if(userName.length() >=6 && password.length() >= 3) {
+    			conn = Lunchhourdb.get();
     	    	Invalidinfo.setVisible(false);
     	    String sql = "SELECT * from Cafeteria.Administrators WHERE Username = ? AND Password = ?;";
     	    try {
@@ -70,14 +72,19 @@ public class Logincontroller implements Initializable{
     	        
     	        if (rs.next()) {
     	        	Wronginfo.setVisible(false);
-    	        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/Adminhomepage.fxml"));
+    	        	FXMLLoader loader = new FXMLLoader();
+    	        	loader.setLocation(getClass().getResource("/application/Adminhomepage.fxml"));
+
     	        	loader.load();
+    	        	Adminhomepagecontroller controller = loader.getController();
+   	             controller.setAdminuser(userName);
+   	             controller.start();
     	        	Parent order = loader.getRoot();
 
     	             // Display popup
     	             Stage stage = new Stage();
+
     	             stage.setScene(new Scene(order));
-    	             //This displays the stage and waits for the input
     	             stage.show();
     	             conn.close();
     	           	((Node)(event.getSource())).getScene().getWindow().hide();
@@ -88,6 +95,7 @@ public class Logincontroller implements Initializable{
     	    } catch (Exception e) {
     	        e.printStackTrace();
     	    }
+    	    conn.close();
     	    }else {
     	    	Invalidinfo.setVisible(true);
     	    }
@@ -100,7 +108,6 @@ public class Logincontroller implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		conn = Lunchhourdb.get();
 		
 	}
 }

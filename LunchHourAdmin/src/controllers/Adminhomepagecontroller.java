@@ -17,7 +17,16 @@ import javafx.stage.Stage;
 
 public class Adminhomepagecontroller implements Initializable{
 
-    @FXML
+	private String adminuser;
+    public String getAdminuser() {
+		return adminuser;
+	}
+
+	public void setAdminuser(String adminuser) {
+		this.adminuser = adminuser;
+	}
+
+	@FXML
     private Button Parentbtn;
 
     @FXML
@@ -52,6 +61,8 @@ public class Adminhomepagecontroller implements Initializable{
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/GetDelivery.fxml"));
     	Parent delivery = loader.load();
+    	Deliverycontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
         Scene Delivery = new Scene(delivery);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Delivery);
@@ -99,8 +110,10 @@ public class Adminhomepagecontroller implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		Adminname.setText("Welcome, " + Logincontroller.getUsername());
 		
+	}
+	public void start() {
+		Adminname.setText("Welcome, " + adminuser);
 	}
 
 }

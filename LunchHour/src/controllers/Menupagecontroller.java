@@ -74,6 +74,7 @@ import application.Student.Studentinfo;
 import connection.Lunchhourdb;
 import entities.Menu;
 import entities.Parentinfo;
+import entities.Extras;
 
 public class Menupagecontroller implements Initializable {
 	private Connection conn = null;
@@ -82,7 +83,18 @@ public class Menupagecontroller implements Initializable {
 	final ToggleGroup group = new ToggleGroup();
 	Studentinfo Student;
 	String totaladd;
-	TreeItem<Cart> root = Cart.getTreeRoot();
+	TreeItem<Cart> root;
+	ObservableList<Studentinfo> items = FXCollections.observableArrayList();
+	public void setItems(ObservableList<Studentinfo> items) {
+		this.items = items;
+	}
+	public TreeItem<Cart> getRoot() {
+		return root;
+	}
+
+	public void setRoot(TreeItem<Cart> root) {
+		this.root = root;
+	}
 	private int studentid_;
 	RadioButton selectedradio;
 	private ObservableList<Extras> extras  = FXCollections.observableArrayList();
@@ -190,7 +202,10 @@ public class Menupagecontroller implements Initializable {
     	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
     	Parent Orderpage = loader.load();
     	 Orderpagecontroller controller = loader.getController();
-         controller.setparent(parent);
+    	 controller.setparent(parent);
+    	 controller.setItems(items);
+    	 controller.setRoot(root);
+    	 controller.setInfo();
         Scene Order = new Scene(Orderpage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Order);
@@ -209,6 +224,7 @@ public class Menupagecontroller implements Initializable {
     	
     	Cart order = new Cart(Studentname.getText(), menuitem, menudaylabel.getText(), totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText(), studentid_);
     	TreeItem<Cart> order1 = new TreeItem<Cart>(order);
+    	order.setMenuorderdate(java.sql.Date.valueOf(orderdate.getValue()));
     	
     			if(add1qty.getValue() > 0) {
     		Cart extra = new Cart(null, null, null,Add1.getText() + " x" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null,0);
@@ -233,6 +249,11 @@ public class Menupagecontroller implements Initializable {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
     	Parent Orderpage = loader.load();
+    	 Orderpagecontroller controller = loader.getController();
+    	 controller.setRoot(root);
+    	 controller.setItems(items);
+    	 controller.setparent(parent);
+    	 controller.setInfo();
         Scene Order = new Scene(Orderpage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Order);
@@ -267,30 +288,31 @@ public class Menupagecontroller implements Initializable {
 	public void setParent(Parentinfo parent) {
 		this.parent = parent;
 	}
-
+	public void start() {
+		try {
+			BuildExtraTable();
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//Menu building method
+BuildMenu();
+//Sets the price for the text box
+Totalchange();
+orderdate();
+	}
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//extras table Method
-				try {
-					BuildExtraTable();
-				} catch (JsonParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		//Menu building method
-		BuildMenu();
-		//Sets the price for the text box
-		Totalchange();
-		orderdate();
+		
 	}
 	private void orderdate() {
         final Callback<DatePicker, DateCell> dayCellFactory = 
@@ -537,7 +559,6 @@ void changeday(ActionEvent event) {
 		 }
 		
 	}
-	private List<Extras> Extraslist;
 	private String totalextra() {
     	int totalextra=0;	
     	for(int i=0; i < extratable.getItems().size();i++) {
@@ -577,41 +598,4 @@ void changeday(ActionEvent event) {
 	}
 
 	//Extra class
-	public static class Extras {
-	private String ExtraName;
-	private Double ExtraPrice;
-	private final SimpleIntegerProperty itemMaxCount = new SimpleIntegerProperty(99);
-	 private final SimpleIntegerProperty itemCount = new SimpleIntegerProperty(0);
-	 public String getExtraName() {
-			return ExtraName;
-		}
-		public void setExtraName(String extraName) {
-			ExtraName = extraName;
-		}
-
-		 public void setExtraPrice(Double extraPrice) {
-			ExtraPrice = extraPrice;
-		}
-
-		public Double getExtraPrice() {
-			return ExtraPrice;
-		}
-	    @Override
-	    public String toString() {
-	        return Integer.toString(getItemCount());
-	    }
-
-	    public final int getItemCount() {
-	        return this.itemCount.get();
-	    }
-
-	    public final void setItemCount(int value) {
-	        this.itemCount.set(value);
-	    }
-
-	    public final IntegerProperty itemCountProperty() {
-	        return this.itemCount;
-	    }
-
-}
 }

@@ -103,7 +103,8 @@ public class Logincontroller implements Initializable{
     	        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/OrderPage.fxml"));
     	        	loader.load();
     	        	Parent order = loader.getRoot();
-
+    	        	Orderpagecontroller controller = loader.getController();
+    	        	controller.Setinfo();
     	             // Display popup
     	             Stage stage = new Stage();
     	             stage.setScene(new Scene(order));
