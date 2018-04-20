@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 
-import application.Student.Student;
 import connection.Lunchhourdb;
+import entities.Student;
 import helpers.BCrypt;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

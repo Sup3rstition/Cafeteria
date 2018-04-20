@@ -33,6 +33,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
@@ -45,6 +46,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -409,10 +411,10 @@ public class Deliverycontroller implements Initializable{
 	}
 	private Menu menu;
 	private void fillmenu() {
-		conn = Lunchhourdb.get();
 		String SQL = "SELECT * from Menu";
 		
 			try {
+				conn = Lunchhourdb.get();
 				ps = conn.prepareStatement(SQL);
 				rs = ps.executeQuery();
 				if(rs.next()) {
@@ -433,8 +435,10 @@ public class Deliverycontroller implements Initializable{
 					
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
 			}
 			
 		

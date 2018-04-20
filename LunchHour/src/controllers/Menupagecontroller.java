@@ -51,6 +51,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
@@ -70,10 +72,10 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.util.Callback;
-import application.Student.Studentinfo;
 import connection.Lunchhourdb;
 import entities.Menu;
 import entities.Parentinfo;
+import entities.Studentinfo;
 import entities.Extras;
 
 public class Menupagecontroller implements Initializable {
@@ -411,10 +413,10 @@ void changeday(ActionEvent event) {
 			    });
 			    
 		}catch(FileNotFoundException f) {
-			conn = Lunchhourdb.get();
 		ObjectMapper mapper = new ObjectMapper();
 		String SQL = "SELECT * from Menu";
 		try {
+			conn = Lunchhourdb.get();
 			ps = conn.prepareStatement(SQL);
 			rs = ps.executeQuery();
 			if(rs.next()) {
@@ -449,7 +451,10 @@ void changeday(ActionEvent event) {
 			conn.close();
 			BuildMenu();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Connection Error!");
+	   		Error2.showAndWait();
 		}
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block

@@ -162,21 +162,22 @@ public class Editusercontroller implements Initializable {
 
 	   	 if (alert.getResult() == ButtonType.YES) {
 	   	 
-    	conn = Lunchhourdb.get();
     	double intbal = accounttable.getSelectionModel().getSelectedItem().getValue().getBalancet();
     	double finbal = intbal + Double.parseDouble(addfundstxt.getText());
-    	System.out.println(finbal);
     	
     	 String sql = "Update Parents SET Balance = ? , `Last Balance Update` = ?   Where Id = ?;";
 	    	try {
+	    		conn = Lunchhourdb.get();
 				ps = conn.prepareStatement(sql);
 				ps.setDouble(1, finbal );
 		    	ps.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
 		    	ps.setInt(3, id);
 		    	ps.execute();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
 			}
 	    	
 	    	root.getChildren().clear();

@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 import connection.Lunchhourdb;
 import entities.Parentinfo;
+import entities.Studentinfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,7 +37,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import application.Student.Studentinfo;
 import javafx.util.Callback;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -169,7 +169,7 @@ public class Orderpagecontroller implements Initializable {
     }
 
     @FXML
-    void submitorder(ActionEvent event) throws SQLException {
+    void submitorder(ActionEvent event) {
     	
     	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to submit your order?" , ButtonType.YES, ButtonType.CANCEL);
 	   	 alert.showAndWait();
@@ -177,60 +177,70 @@ public class Orderpagecontroller implements Initializable {
 	   	 if (alert.getResult() == ButtonType.YES) {
 	   		 if(!root.getChildren().isEmpty()) {
 	   		 if(Double.parseDouble(balancerem_txt.getText()) > 0) {
-	 		conn = Lunchhourdb.get();
-	   		 Calendar cal = Calendar.getInstance();
-	        java.sql.Date startDate = new java.sql.Date(cal.getTime().getTime());
-	   		 String sql = "Insert into Cafeteria.Order (`Parent Id`, `Student ID`, `Menu Item`, Additional, Extra, Total, `Order Date`, Studentname, Order_Date) Values ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"; 
-			 ps = conn.prepareStatement(sql);
-			 
-			 for(int i=0; i < root.getChildren().size();i++) {
-			    	TreeItem<Cart> tableRow = root.getChildren().get(i);
-			    	ps.setInt(1, parent.getParentId());
-			    	ps.setInt(2, tableRow.getValue().getStudentid());
-			    	ps.setString(3, tableRow.getValue().getMenuitem());
-			    	String add = "";
-			    	String extras_ = "";
-			    	for(int j =0; j< tableRow.getChildren().size(); j++) {
-			    		TreeItem<Cart> childRow = tableRow.getChildren().get(j);
-			    		if (childRow.getValue().getAdd() != null){
-			    		add = add + childRow.getValue().getAdd() + "/";
-			    		}
-			    		if(childRow.getValue().getExtra() != null) {
-				    		extras_ = extras_ + childRow.getValue().getExtra() + "/";
-			    		}
-			    	}
-			    	if(add == "") {
-			    		add = null;
-			    	}
-			    	if (extras_ == ""){
-			    			extras_ = null;
-			    	}
-			    	ps.setString(4, add);
-			    	ps.setString(5,extras_);
-			    	ps.setDouble(6,Double.parseDouble(Cart_txt.getText()));
-			    	ps.setDate(7,startDate);
-			    	ps.setString(8, tableRow.getValue().getFullname());
-			    	ps.setDate(9, tableRow.getValue().getMenuorderdate());
-			    	ps.execute();
-				}
-			 sql = "Update Parents SET Balance = ? , Last_Purchase = ?   Where Id = ?;";
-				    	ps = conn.prepareStatement(sql);
-				    	ps.setDouble(1,Double.parseDouble(balancerem_txt.getText()));
-				    	ps.setDate(2, startDate);
-				    	ps.setInt(3,parent.getParentId());
+	   			 
+	 		try {
+				conn = Lunchhourdb.get();
+				Calendar cal = Calendar.getInstance();
+		        java.sql.Date startDate = new java.sql.Date(cal.getTime().getTime());
+		   		 String sql = "Insert into Cafeteria.Order (`Parent Id`, `Student ID`, `Menu Item`, Additional, Extra, Total, `Order Date`, Studentname, Order_Date) Values ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"; 
+				 ps = conn.prepareStatement(sql);
+				 
+				 for(int i=0; i < root.getChildren().size();i++) {
+				    	TreeItem<Cart> tableRow = root.getChildren().get(i);
+				    	ps.setInt(1, parent.getParentId());
+				    	ps.setInt(2, tableRow.getValue().getStudentid());
+				    	ps.setString(3, tableRow.getValue().getMenuitem());
+				    	String add = "";
+				    	String extras_ = "";
+				    	for(int j =0; j< tableRow.getChildren().size(); j++) {
+				    		TreeItem<Cart> childRow = tableRow.getChildren().get(j);
+				    		if (childRow.getValue().getAdd() != null){
+				    		add = add + childRow.getValue().getAdd() + "/";
+				    		}
+				    		if(childRow.getValue().getExtra() != null) {
+					    		extras_ = extras_ + childRow.getValue().getExtra() + "/";
+				    		}
+				    	}
+				    	if(add == "") {
+				    		add = null;
+				    	}
+				    	if (extras_ == ""){
+				    			extras_ = null;
+				    	}
+				    	ps.setString(4, add);
+				    	ps.setString(5,extras_);
+				    	ps.setDouble(6,Double.parseDouble(Cart_txt.getText()));
+				    	ps.setDate(7,startDate);
+				    	ps.setString(8, tableRow.getValue().getFullname());
+				    	ps.setDate(9, tableRow.getValue().getMenuorderdate());
 				    	ps.execute();
-			 
-	   		 root.getChildren().clear();
-	   		updateinfo();
-	        orderprice();
-	    	tree.getSelectionModel().clearSelection();
-	    	conn.close();
-	   		Alert Done = new Alert(AlertType.INFORMATION);
-	   		Done.setTitle("Success!");
-	   		Done.setHeaderText("Order(s) have been submitted.");
-	   		Done.setContentText("Please Check email for Confirmation Order number");
+					}
+				 sql = "Update Parents SET Balance = ? , Last_Purchase = ?   Where Id = ?;";
+					    	ps = conn.prepareStatement(sql);
+					    	ps.setDouble(1,Double.parseDouble(balancerem_txt.getText()));
+					    	ps.setDate(2, startDate);
+					    	ps.setInt(3,parent.getParentId());
+					    	ps.execute();
+				 
+		   		 root.getChildren().clear();
+		   		updateinfo();
+		        orderprice();
+		    	tree.getSelectionModel().clearSelection();
+		    	conn.close();
+		   		Alert Done = new Alert(AlertType.INFORMATION);
+		   		Done.setTitle("Success!");
+		   		Done.setHeaderText("Order(s) have been submitted.");
+		   		Done.setContentText("Please Check email for Confirmation Order number");
 
-	   		Done.showAndWait();
+		   		Done.showAndWait();
+				
+			} catch (SQLException e) {
+				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+		   		Error2.setTitle("Error");
+		   		Error2.setHeaderText("Connection Error!");
+		   		Error2.showAndWait();
+			}
+	   		 
 	   	 }else {
 	   		Alert Error= new Alert(AlertType.ERROR, "Please add funds and try again.");
 	   		Error.setTitle("Error");
@@ -325,23 +335,31 @@ public class Orderpagecontroller implements Initializable {
 	    	return newbalance;
 	    	
 	    }
-	public void updateinfo() throws SQLException{
-		conn = Lunchhourdb.get();
-		 String sql = "SELECT Balance,Last_Purchase from Cafeteria.Parents WHERE Id = ?";
-		 ps = conn.prepareStatement(sql);
-	        ps.setInt(1,parent.getParentId());
-	        rs = ps.executeQuery();
-	        if(rs.next()) {
-		        parent.setBalance(rs.getDouble("Balance"));
-		        parent.setLastOrder(rs.getDate("Last_Purchase"));
-		        java.util.Date Lastorder = new java.util.Date(parent.getLastOrder().getTime());
-				 LastOrder.setText(dateFormat.format(Lastorder.getTime()));
-				 Balanceamountlabel.setText(df.format(parent.getBalance()));
+	public void updateinfo() {
+		try {
+			conn = Lunchhourdb.get();
+			String sql = "SELECT Balance,Last_Purchase from Cafeteria.Parents WHERE Id = ?";
+			 ps = conn.prepareStatement(sql);
+		        ps.setInt(1,parent.getParentId());
+		        rs = ps.executeQuery();
+		        if(rs.next()) {
+			        parent.setBalance(rs.getDouble("Balance"));
+			        parent.setLastOrder(rs.getDate("Last_Purchase"));
+			        java.util.Date Lastorder = new java.util.Date(parent.getLastOrder().getTime());
+					 LastOrder.setText(dateFormat.format(Lastorder.getTime()));
+					 Balanceamountlabel.setText(df.format(parent.getBalance()));
+			        
+			        
+			}
+		        conn.close(); 
 		        
-		        
+		} catch (SQLException e) {
+			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Connection Error!");
+	   		Error2.showAndWait();
 		}
-	        conn.close(); 
-	        
+		 
 	}
 	@FXML
 	void nextweek(ActionEvent event) {
@@ -367,38 +385,46 @@ public class Orderpagecontroller implements Initializable {
 	     orderprice();
 	}
 	
-	public void Setinfo() throws SQLException {
+	public void Setinfo() {
 			 parent = new Parentinfo();
-			conn = Lunchhourdb.get();
-			parent.setUsername(Logincontroller.getUsername());
-			 String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?";
-			 ps = conn.prepareStatement(sql);
-		        ps.setString(1, parent.getUsername());
-		        rs = ps.executeQuery();
-		        if(rs.next()) {
-		        parent.setParentId(rs.getInt("Id"));
-		        parent.setName(rs.getString("First Name") + " " + rs.getString("Last Name"));
-		        parent.setBalance(rs.getDouble("Balance"));
-		        Calendar cal = Calendar.getInstance();
-		        currentdatelabel.setText(dateFormat.format(cal.getTime()));
-		        parent.setLastupdate(rs.getDate("Last Balance Update"));
-		        parent.setLastOrder(rs.getDate("Last_Purchase"));
-		        sql = "SELECT * from Cafeteria.Student WHERE `Parent ID` = ?";
+			try {
+				conn = Lunchhourdb.get();
+				parent.setUsername(Logincontroller.getUsername());
+				 String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?";
 				 ps = conn.prepareStatement(sql);
-			        ps.setInt(1, parent.getParentId());
+			        ps.setString(1, parent.getUsername());
 			        rs = ps.executeQuery();
-			        	while(rs.next()) {
-			        		Studentinfo Student = new Studentinfo();
-			        		Student.setId(rs.getInt("id"));
-			        		Student.setFirstname(rs.getString("First Name"));
-			        		Student.setLastname(rs.getString("Last Name"));
-			        		Student.setGrade(rs.getString("grade"));
-			        		Student.setSection(rs.getString("section"));
-			        		items.add(Student);
+			        if(rs.next()) {
+			        parent.setParentId(rs.getInt("Id"));
+			        parent.setName(rs.getString("First Name") + " " + rs.getString("Last Name"));
+			        parent.setBalance(rs.getDouble("Balance"));
+			        Calendar cal = Calendar.getInstance();
+			        currentdatelabel.setText(dateFormat.format(cal.getTime()));
+			        parent.setLastupdate(rs.getDate("Last Balance Update"));
+			        parent.setLastOrder(rs.getDate("Last_Purchase"));
+			        sql = "SELECT * from Cafeteria.Student WHERE `Parent ID` = ?";
+					 ps = conn.prepareStatement(sql);
+				        ps.setInt(1, parent.getParentId());
+				        rs = ps.executeQuery();
+				        	while(rs.next()) {
+				        		Studentinfo Student = new Studentinfo();
+				        		Student.setId(rs.getInt("id"));
+				        		Student.setFirstname(rs.getString("First Name"));
+				        		Student.setLastname(rs.getString("Last Name"));
+				        		Student.setGrade(rs.getString("grade"));
+				        		Student.setSection(rs.getString("section"));
+				        		items.add(Student);
+				        }
+			        conn.close();
+			        setInfo();
 			        }
-		        conn.close();
-		        setInfo();
-		        }
+			} catch (SQLException e) {
+				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
+			}
+			
 		}
 	        
 	private void addstudent() {

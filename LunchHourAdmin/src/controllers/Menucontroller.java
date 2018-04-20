@@ -297,9 +297,10 @@ public class Menucontroller implements Initializable {
 			@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		if(menu == null) {
-		conn = Lunchhourdb.get();
+		
 		String SQL = "SELECT * from Menu";
 			try {
+				conn = Lunchhourdb.get();
 				ps = conn.prepareStatement(SQL);
 				rs = ps.executeQuery();
 				if(rs.next()) {
@@ -321,8 +322,10 @@ public class Menucontroller implements Initializable {
 					setitems();
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
 			}
 		}else {
 			setitems();

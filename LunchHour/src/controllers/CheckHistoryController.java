@@ -15,8 +15,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import application.Student.Studentinfo;
 import connection.Lunchhourdb;
+import entities.Studentinfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

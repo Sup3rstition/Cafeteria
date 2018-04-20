@@ -42,15 +42,11 @@ private static Connection createConnection() {
     return null;
 }
 
-public static Connection get() {
-    try {
+public static Connection get() throws SQLException {
+
 		if (con == null || con.isClosed()) {
 		    con = createConnection();
 		}
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
     return con;
 }
 }

@@ -3,7 +3,7 @@ package controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import application.Student.Student;
+import entities.Student;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

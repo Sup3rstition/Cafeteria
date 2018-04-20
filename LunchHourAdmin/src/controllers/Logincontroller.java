@@ -16,11 +16,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -36,9 +38,6 @@ public class Logincontroller implements Initializable{
 
     @FXML
     private PasswordField Password_txt;
-
-    @FXML
-    private CheckBox Remember_Chck;
 
     @FXML
     private Label Createaccount;
@@ -57,14 +56,16 @@ public class Logincontroller implements Initializable{
 	}
 
     @FXML
-    void performLoginAction(ActionEvent event) throws SQLException {
+    void performLoginAction(ActionEvent event)  {
     	 	 userName = Username_txt.getText().trim().toUpperCase();
     	    String password = Password_txt.getText().trim();
     	    if(userName.length() >=6 && password.length() >= 3) {
-    			conn = Lunchhourdb.get();
+    		
+					
     	    	Invalidinfo.setVisible(false);
     	    String sql = "SELECT * from Cafeteria.Administrators WHERE Username = ? AND Password = ?;";
     	    try {
+    	    	conn = Lunchhourdb.get();
     	        ps = conn.prepareStatement(sql);
     	        ps.setString(1, userName);
     	        ps.setString(2, password);
@@ -92,10 +93,13 @@ public class Logincontroller implements Initializable{
     	        } else {
     	            Wronginfo.setVisible(true);
     	        }
+    	        conn.close();
     	    } catch (Exception e) {
-    	        e.printStackTrace();
+    	    	Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
     	    }
-    	    conn.close();
     	    }else {
     	    	Invalidinfo.setVisible(true);
     	    }

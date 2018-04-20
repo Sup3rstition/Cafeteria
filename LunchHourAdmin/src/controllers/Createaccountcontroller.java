@@ -17,11 +17,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class Createaccountcontroller implements Initializable {
@@ -92,7 +94,7 @@ public class Createaccountcontroller implements Initializable {
     private Label Uservalid;
 
     @FXML
-    void createanaccount(ActionEvent event) throws SQLException {
+    void createanaccount(ActionEvent event) {
     	String userName = Username_txt.getText().toUpperCase();
 	    String password = Password_txt1.getText().trim();
 	    String Firstname = Firstnametxt.getText().trim();
@@ -103,50 +105,60 @@ public class Createaccountcontroller implements Initializable {
 	    	Uservalid.setVisible(false);
 	    	Userlength.setVisible(false);
 	    String usernamesql = "SELECT * from Cafeteria.Parents WHERE userName = ?;";
-	        ps = conn.prepareStatement(usernamesql);
-	        ps.setString(1, userName);
-	        rs = ps.executeQuery();
-	        if(!rs.next()) {
-	        	System.out.println("username passed");
-	        		Usernamelabel.setVisible(false);
-	        		if(!Email.contains(" ") && Email.contains("@")) {
-	    	        	emailvalid.setVisible(false);
-	        	 String emailsql = "SELECT * from Cafeteria.Parents WHERE EmailAddress = ?;";
-	        	 ps = conn.prepareStatement(emailsql);
-	 	         ps.setString(1, Email);
-	 	         rs = ps.executeQuery();
+	        try {
+	        	conn = Lunchhourdb.get();
+				ps = conn.prepareStatement(usernamesql);
+				ps.setString(1, userName);
+		        rs = ps.executeQuery();
 		        if(!rs.next()) {
-		        	System.out.println("email passed");{
-		        		Emaillabel.setVisible(false);
-		        	if(password.length() >= 8 && password.equals(Password_txt2.getText())) {
-		        		Passlength.setVisible(false);
-		        		Passwordlabel.setVisible(false);
-		        	 Calendar calendar = Calendar.getInstance();
-		             java.sql.Date startDate = new java.sql.Date(calendar.getTime().getTime());
-		             String Insertaccount = "Insert INTO Cafeteria.Parents(Username,EmailAddress,Password,`First Name`,`Last Name`,Balance) "
-		             		+ "VAlUES('"+userName+"','"+Email+"','"+password+"','"+Firstname+"','"+Lastname+"',0);";
-		             ps = conn.prepareStatement(Insertaccount);
-		        	 ps.execute();
-		        	 conn.close();
-		        	 System.out.println("account inserted");
-		        	}else if(password.length()< 8){
-		        		Passlength.setVisible(true);
-		        	}else if(!password.equals(Password_txt2.getText())) {
-		        		Passwordlabel.setVisible(true);
-		        	}
-		        	else {
-		        		System.out.println("Accountfailed");
-		        	}
-		        	}
+		        	System.out.println("username passed");
+		        		Usernamelabel.setVisible(false);
+		        		if(!Email.contains(" ") && Email.contains("@")) {
+		    	        	emailvalid.setVisible(false);
+		        	 String emailsql = "SELECT * from Cafeteria.Parents WHERE EmailAddress = ?;";
+		        	 ps = conn.prepareStatement(emailsql);
+		 	         ps.setString(1, Email);
+		 	         rs = ps.executeQuery();
+			        if(!rs.next()) {
+			        	System.out.println("email passed");{
+			        		Emaillabel.setVisible(false);
+			        	if(password.length() >= 8 && password.equals(Password_txt2.getText())) {
+			        		Passlength.setVisible(false);
+			        		Passwordlabel.setVisible(false);
+			        	 Calendar calendar = Calendar.getInstance();
+			             java.sql.Date startDate = new java.sql.Date(calendar.getTime().getTime());
+			             String Insertaccount = "Insert INTO Cafeteria.Parents(Username,EmailAddress,Password,`First Name`,`Last Name`,Balance) "
+			             		+ "VAlUES('"+userName+"','"+Email+"','"+password+"','"+Firstname+"','"+Lastname+"',0);";
+			             ps = conn.prepareStatement(Insertaccount);
+			        	 ps.execute();
+			        	 conn.close();
+			        	 System.out.println("account inserted");
+			        	}else if(password.length()< 8){
+			        		Passlength.setVisible(true);
+			        	}else if(!password.equals(Password_txt2.getText())) {
+			        		Passwordlabel.setVisible(true);
+			        	}
+			        	else {
+			        		System.out.println("Accountfailed");
+			        	}
+			        	}
+			        }else {
+			        	Emaillabel.setVisible(true);
+			        }
+		        		}else {
+		    	        	emailvalid.setVisible(true);
+		    	        }
 		        }else {
-		        	Emaillabel.setVisible(true);
+		        	Usernamelabel.setVisible(true);
 		        }
-	        		}else {
-	    	        	emailvalid.setVisible(true);
-	    	        }
-	        }else {
-	        	Usernamelabel.setVisible(true);
-	        }
+				
+			} catch (SQLException e) {
+				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
+			}
+	        
     }else {
     	if(userName.contains(" ")) {
     		Uservalid.setVisible(true);
@@ -165,7 +177,6 @@ public class Createaccountcontroller implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		conn = Lunchhourdb.get();
 		
 	}
 
