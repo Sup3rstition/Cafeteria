@@ -204,8 +204,8 @@ public class CheckHistoryController implements Initializable {
     @FXML
     void Clearboxes(ActionEvent event) {
     	Selectedstudent.getSelectionModel().selectFirst();
-    	StartingDate.getEditor().clear();
-    	EndingDate.getEditor().clear();
+    	StartingDate.setValue(null);
+    	EndingDate.setValue(null);
     	searchid.clear();
     	list.clear();
     }
@@ -246,6 +246,7 @@ public class CheckHistoryController implements Initializable {
 		LocalDate today = LocalDate.now();
 		incorrectlabel.setVisible(false);
 		String searchorderid = searchid.getText();
+		//Search id Search
 		//checks to see if the searchid is blank
     	if(!VALID_WORD.matcher(searchorderid).matches() && !searchorderid.equals("") && !searchorderid.contains(" ")){
     		//checks if the dates are filled in
@@ -285,7 +286,10 @@ public class CheckHistoryController implements Initializable {
     					e.printStackTrace();
     				}
     	    		//checks to see if only starting date is filled
-    	    	}else if(StartingDate.getValue() != null) {
+    	    	}else if(EndingDate.getValue() != null && StartingDate.getValue() == null) { //checks to see if only the ending date is filled in
+       			 incorrectlabel.setVisible(true);											// sets incorrect day error.
+    	    	}
+    		 else if(StartingDate.getValue() != null) {
     	    		try {    		
     	    			conn = Lunchhourdb.get();
     	    			System.out.println(parentid);
@@ -357,115 +361,91 @@ public class CheckHistoryController implements Initializable {
     				}
     	    	}
     	}
+    	
+    	// next type of search dates
     	//checks to see if only the starting date is filled in
-    	else if(StartingDate.getValue() != null && EndingDate.getValue() !=null) {
-    		try {    		
-    			conn = Lunchhourdb.get();
-    			System.out.println(parentid);
-    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
-				ps = conn.prepareStatement(sql);
-				ps.setInt(1, parentid);
-	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
-	    		ps.setDate(3, Date.valueOf(EndingDate.getValue()));
-	    		rs = ps.executeQuery();
-	    		while(rs.next()) {
-	    			Cart history = new Cart();
-	    			history.setFullname(rs.getString("Studentname"));
-					history.setMenuitem(rs.getString("Menu Item"));
-					if(rs.getString("Additional") != null) {
-						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
-						}else {
-							history.setAdd("0");
-						}
-						if(rs.getString("Extra") != null) {
-						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
-						}else {
-							history.setExtra("0");
-						}
-					history.setTotal(rs.getDouble("Total"));
-					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
-					history.setOrderid(rs.getInt("ID"));
-	    			list.add(history);
-	    		}
-	    		orderhistory.setItems(list);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    	else if(StartingDate.getValue() != null && EndingDate.getValue() != null) {
-    		if(!StartingDate.getValue().isAfter(today) && !StartingDate.getValue().isAfter(EndingDate.getValue())){
-    			try {    		
-        			conn = Lunchhourdb.get();
-        			System.out.println(parentid);
-        			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
-    				ps = conn.prepareStatement(sql);
-    				ps.setInt(1, parentid);
-    	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
-    	    		ps.setDate(3, Date.valueOf(EndingDate.getValue()));
-    	    		rs = ps.executeQuery();
-    	    		while(rs.next()) {
-    	    			Cart history = new Cart();
-    	    			history.setFullname(rs.getString("Studentname"));
-    					history.setMenuitem(rs.getString("Menu Item"));
-    					if(rs.getString("Additional") != null) {
-    						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
-    						}else {
-    							history.setAdd("0");
-    						}
-    						if(rs.getString("Extra") != null) {
-    						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
-    						}else {
-    							history.setExtra("0");
-    						}
-    					history.setTotal(rs.getDouble("Total"));
-    					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
-    					history.setOrderid(rs.getInt("ID"));
-    	    			list.add(history);
-    	    		}
-    	    		orderhistory.setItems(list);
-    			} catch (SQLException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-    		}else {
-    			incorrectlabel.setVisible(true);
+    	else if(StartingDate.getValue() != null || EndingDate.getValue() !=null) {
+    		if(StartingDate.getValue() != null && EndingDate.getValue() != null) {
+    			if(!StartingDate.getValue().isAfter(EndingDate.getValue())){
+        			try {    		
+            			conn = Lunchhourdb.get();
+            			System.out.println(parentid);
+            			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
+        				ps = conn.prepareStatement(sql);
+        				ps.setInt(1, parentid);
+        	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
+        	    		ps.setDate(3, Date.valueOf(EndingDate.getValue()));
+        	    		rs = ps.executeQuery();
+        	    		while(rs.next()) {
+        	    			Cart history = new Cart();
+        	    			history.setFullname(rs.getString("Studentname"));
+        					history.setMenuitem(rs.getString("Menu Item"));
+        					if(rs.getString("Additional") != null) {
+        						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+        						}else {
+        							history.setAdd("0");
+        						}
+        						if(rs.getString("Extra") != null) {
+        						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+        						}else {
+        							history.setExtra("0");
+        						}
+        					history.setTotal(rs.getDouble("Total"));
+        					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+        					history.setOrderid(rs.getInt("ID"));
+        	    			list.add(history);
+        	    		}
+        	    		orderhistory.setItems(list);
+        			} catch (SQLException e) {
+        				// TODO Auto-generated catch block
+        				e.printStackTrace();
+        			}
+        		}else {
+        			incorrectlabel.setVisible(true);
+        		}
+        	}
+    		else if(EndingDate.getValue() != null && StartingDate.getValue() == null) { //checks to see if only the ending date is filled in
+        			 incorrectlabel.setVisible(true);											// sets incorrect day error.
     		}
-    	}else if(StartingDate.getValue() !=null) {
-    		try {
-    			conn = Lunchhourdb.get();
-    			System.out.println(parentid);
-    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
-				ps = conn.prepareStatement(sql);
-				ps.setInt(1, parentid);
-	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
-	    		ps.setDate(3, Date.valueOf(today.plusDays(7)));
-	    		rs = ps.executeQuery();
-	    		while(rs.next()) {
-	    			Cart history = new Cart();
-	    			history.setFullname(rs.getString("Studentname"));
-					history.setMenuitem(rs.getString("Menu Item"));
-					if(rs.getString("Additional") != null) {
-						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
-						}else {
-							history.setAdd("0");
-						}
-						if(rs.getString("Extra") != null) {
-						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
-						}else {
-							history.setExtra("0");
-						}
-					history.setTotal(rs.getDouble("Total"));
-					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
-					history.setOrderid(rs.getInt("ID"));
-	    			list.add(history);
-	    		}
-	    		orderhistory.setItems(list);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	} else {
+    	//runs search for starting date up till today plus 7 days
+    		
+    		else if(StartingDate.getValue() !=null) {
+    	    		try {
+    	    			conn = Lunchhourdb.get();
+    	    			System.out.println(parentid);
+    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
+    					ps = conn.prepareStatement(sql);
+    					ps.setInt(1, parentid);
+    		    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
+    		    		ps.setDate(3, Date.valueOf(today.plusDays(7)));
+    		    		rs = ps.executeQuery();
+    		    		while(rs.next()) {
+    		    			Cart history = new Cart();
+    		    			history.setFullname(rs.getString("Studentname"));
+    						history.setMenuitem(rs.getString("Menu Item"));
+    						if(rs.getString("Additional") != null) {
+    							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+    							}else {
+    								history.setAdd("0");
+    							}
+    							if(rs.getString("Extra") != null) {
+    							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+    							}else {
+    								history.setExtra("0");
+    							}
+    						history.setTotal(rs.getDouble("Total"));
+    						history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+    						history.setOrderid(rs.getInt("ID"));
+    		    			list.add(history);
+    		    		}
+    		    		orderhistory.setItems(list);
+    				} catch (SQLException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    	    	} 
+    	
+    }else {
     		try {
     			conn = Lunchhourdb.get();
     			System.out.println(parentid);
