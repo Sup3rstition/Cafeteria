@@ -15,6 +15,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import application.Student.Studentinfo;
 import connection.Lunchhourdb;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -66,7 +67,7 @@ public class CheckHistoryController implements Initializable {
     private TextField searchid;
 
     @FXML
-    private ComboBox<?> Selectedstudent;
+    private ComboBox<Studentinfo> Selectedstudent;
     
     @FXML
     void backtoorder(ActionEvent event) throws IOException, SQLException {
@@ -86,8 +87,14 @@ public class CheckHistoryController implements Initializable {
     	list.clear();
      	((Node)(event.getSource())).getScene().getWindow().hide();
     }
+    ObservableList<Studentinfo> items;
+    void setList(ObservableList<Studentinfo> item) {
+    	this.items = item;
+    }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		orderdate(StartingDate);
+		Selectedstudent.setItems(items);
 		order.setCellValueFactory(new PropertyValueFactory<>("menudate"));
 		order.setCellFactory(new CheckHistoryController.ColumnFormatter<>(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 		orderIdcol.setCellValueFactory(new PropertyValueFactory<Cart, Integer>("orderid"));
@@ -196,14 +203,8 @@ public class CheckHistoryController implements Initializable {
                                     setDisable(true);
                                     setStyle("-fx-background-color: #ffc0cb;");
                             }
-                            if(date1.isAfter(date2) && item.isBefore(now.plusDays(1)) || item.isBefore(now)) {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #ffc0cb;");
-                            }
-                            if(now.getDayOfWeek() == DayOfWeek.FRIDAY && item.isAfter(now.plusDays(1))) {
-                            	setDisable(true);
-                                setStyle("-fx-background-color: #ffc0cb;");
-                            }
+                            
+                            
                     }
                 };
             }
@@ -227,8 +228,8 @@ public class CheckHistoryController implements Initializable {
     	list.clear();
 		LocalDate today = LocalDate.now();
 		incorrectlabel.setVisible(false);
-    	if(!VALID_WORD.matcher(searchid.getText()).matches() && !searchid.getText().contains(" ")
-    			&& searchid.getText() != null && searchid.getText() != ("")
+		String searchorderid = searchid.getText();
+    	if(!VALID_WORD.matcher(searchorderid).matches() && !searchorderid.equals("")
     			&& StartingDate.getValue() != null && EndingDate.getValue() !=null) {
     		try {    		
     			conn = Lunchhourdb.get();
@@ -245,7 +246,8 @@ public class CheckHistoryController implements Initializable {
 	    			history.setFullname(rs.getString("Studentname"));
 					history.setMenuitem(rs.getString("Menu Item"));
 					history.setAdd(rs.getString("Additional"));
-					history.setExtra(rs.getString("Extra"));
+					String extrahis = rs.getString("Extra");
+					history.setExtra(extrahis.replaceAll("/", ","));
 					history.setTotal(rs.getDouble("Total"));
 					history.setMenudate((rs.getDate("Order Date").toLocalDate()));
 					history.setOrderid(rs.getInt("ID"));
@@ -257,7 +259,7 @@ public class CheckHistoryController implements Initializable {
 				e.printStackTrace();
 			}
     	}
-    	else if(!VALID_WORD.matcher(searchid.getText()).matches() && !searchid.getText().contains(" ") && searchid.getText() != null && searchid.getText() != "") {
+    	else if(!VALID_WORD.matcher(searchid.getText()).matches() && !searchid.getText().equals("")) {
     		try {    		
     			conn = Lunchhourdb.get();
     			System.out.println(parentid);
@@ -271,7 +273,8 @@ public class CheckHistoryController implements Initializable {
 	    			history.setFullname(rs.getString("Studentname"));
 					history.setMenuitem(rs.getString("Menu Item"));
 					history.setAdd(rs.getString("Additional"));
-					history.setExtra(rs.getString("Extra"));
+					String extrahis = rs.getString("Extra");
+					history.setExtra(extrahis.replaceAll("/", ","));
 					history.setTotal(rs.getDouble("Total"));
 					history.setMenudate((rs.getDate("Order Date").toLocalDate()));
 					history.setOrderid(rs.getInt("ID"));
@@ -299,7 +302,8 @@ public class CheckHistoryController implements Initializable {
     	    			history.setFullname(rs.getString("Studentname"));
     					history.setMenuitem(rs.getString("Menu Item"));
     					history.setAdd(rs.getString("Additional"));
-    					history.setExtra(rs.getString("Extra"));
+    					String extrahis = rs.getString("Extra");
+    					history.setExtra(extrahis.replaceAll("/", ","));
     					history.setTotal(rs.getDouble("Total"));
     					history.setMenudate((rs.getDate("Order Date").toLocalDate()));
     					history.setOrderid(rs.getInt("ID"));
@@ -321,14 +325,15 @@ public class CheckHistoryController implements Initializable {
 				ps = conn.prepareStatement(sql);
 				ps.setInt(1, parentid);
 	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
-	    		ps.setDate(3, Date.valueOf(today));
+	    		ps.setDate(3, Date.valueOf(today.plusDays(7)));
 	    		rs = ps.executeQuery();
 	    		while(rs.next()) {
 	    			Cart history = new Cart();
 	    			history.setFullname(rs.getString("Studentname"));
 					history.setMenuitem(rs.getString("Menu Item"));
 					history.setAdd(rs.getString("Additional"));
-					history.setExtra(rs.getString("Extra"));
+					String extrahis = rs.getString("Extra");
+					history.setExtra(extrahis.replaceAll("/", ","));
 					history.setTotal(rs.getDouble("Total"));
 					history.setMenudate((rs.getDate("Order Date").toLocalDate()));
 					history.setOrderid(rs.getInt("ID"));

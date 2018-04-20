@@ -33,6 +33,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import application.Student.Studentinfo;
@@ -133,7 +134,9 @@ public class Orderpagecontroller implements Initializable {
         Stage stage = new Stage();
         CheckHistoryController control = loader.<CheckHistoryController>getController();
         control.setparentid(parent.getParentId());
+        control.setList(items);
         stage.setScene(Check);
+        stage.getIcons().add(new Image(("file:icon.png")));
         stage.showAndWait();
     }
     
@@ -160,6 +163,7 @@ public class Orderpagecontroller implements Initializable {
     	Parent Loginpage = FXMLLoader.load(getClass().getResource("/application/Login.fxml"));
         Scene Login = new Scene(Loginpage);
         Stage window = (Stage) logutbtn.getScene().getWindow();
+        window.getIcons().add(new Image(("file:icon.png")));
         window.setScene(Login);
         window.show();
     }
@@ -246,8 +250,6 @@ public class Orderpagecontroller implements Initializable {
 	
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		
 	}
 	
 	@FXML
@@ -356,10 +358,10 @@ public class Orderpagecontroller implements Initializable {
 		 LastOrder.setText(dateFormat.format(Lastorder.getTime()));
 		}
 		
-		if(parent.getLastupdate() != null) {
-			 java.util.Date dBalance = new java.util.Date(parent.getLastupdate().getTime());
-			 Balancelast.setText(dateFormat.format(dBalance.getTime()));
-		}
+	//	if(parent.getLastupdate() != null) {
+		//	 java.util.Date dBalance = new java.util.Date(parent.getLastupdate().getTime());
+		//	 Balancelast.setText(dateFormat.format(dBalance.getTime()));
+	//	}
 		addstudent();
 		   maketree();
 	     orderprice();

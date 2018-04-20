@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import helpers.BCrypt;
@@ -108,6 +109,7 @@ public class Logincontroller implements Initializable{
     	             // Display popup
     	             Stage stage = new Stage();
     	             stage.setScene(new Scene(order));
+    	             stage.getIcons().add(new Image(("file:icon.png")));
     	             //This displays the stage and waits for the input
     	             stage.show();
     	             conn.close();

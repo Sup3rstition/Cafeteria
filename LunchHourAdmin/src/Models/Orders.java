@@ -6,6 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 public class Orders {
 	private SimpleStringProperty orderday = new SimpleStringProperty();
 	private SimpleStringProperty menuitem = new SimpleStringProperty();
+	public String getOrderdaystring() {
+		return orderday.get();
+	}
 	public SimpleStringProperty getOrderday() {
 		return orderday;
 	}
@@ -21,9 +24,13 @@ public class Orders {
 	public SimpleIntegerProperty getMenuqty() {
 		return menuqty;
 	}
-	public void setMenuqty(SimpleIntegerProperty menuqty) {
-		this.menuqty = menuqty;
+	public Integer getMenuqtyi() {
+		return menuqty.get();
 	}
+	public void setMenuqty(Integer menuqty) {
+		this.menuqty.set(menuqty);
+	}
+	
 	public SimpleStringProperty getAdditem() {
 		return additem;
 	}
@@ -53,48 +60,6 @@ public class Orders {
 	private SimpleIntegerProperty addqty= new SimpleIntegerProperty();
 	private SimpleStringProperty extraitem= new SimpleStringProperty();
 	private SimpleIntegerProperty extraqty= new SimpleIntegerProperty();
-	private int menu1qty = new Integer(0);
-	private int menu2qty= new Integer(0);
-	private int menu3qty= new Integer(0);
-	private int add1qty= new Integer(0);
-	private int add2qty= new Integer(0);
-	private int add3qty= new Integer(0);
-	public int getMenu1qty() {
-		return menu1qty;
-	}
-	public void setMenu1qty(int menu1qty) {
-		this.menu1qty = menu1qty;
-	}
-	public int getMenu2qty() {
-		return menu2qty;
-	}
-	public void setMenu2qty(int menu2qty) {
-		this.menu2qty = menu2qty;
-	}
-	public int getMenu3qty() {
-		return menu3qty;
-	}
-	public void setMenu3qty(int menu3qty) {
-		this.menu3qty = menu3qty;
-	}
-	public int getAdd1qty() {
-		return add1qty;
-	}
-	public void setAdd1qty(int add1qty) {
-		this.add1qty = add1qty;
-	}
-	public int getAdd2qty() {
-		return add2qty;
-	}
-	public void setAdd2qty(int add2qty) {
-		this.add2qty = add2qty;
-	}
-	public int getAdd3qty() {
-		return add3qty;
-	}
-	public void setAdd3qty(int add3qty) {
-		this.add3qty = add3qty;
-	}
 	public void setOrderday(SimpleStringProperty orderday) {
 		this.orderday = orderday;
 	}

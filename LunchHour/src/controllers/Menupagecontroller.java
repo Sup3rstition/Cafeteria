@@ -227,20 +227,20 @@ public class Menupagecontroller implements Initializable {
     	order.setMenuorderdate(java.sql.Date.valueOf(orderdate.getValue()));
     	
     			if(add1qty.getValue() > 0) {
-    		Cart extra = new Cart(null, null, null,Add1.getText() + " x" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null,0);
+    		Cart extra = new Cart(null, null, null,Add1.getText() + " -" + add1qty.getValue() , null,  add1qty.getValue() * Double.parseDouble(add1price.getText()),null,0);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	} if(add2qty.getValue() > 0) {
-    		Cart extra = new Cart(null, null, null,Add2.getText()+ " x" + add2qty.getValue() , null,  add2qty.getValue() * Double.parseDouble(add2price.getText()),null,0);
+    		Cart extra = new Cart(null, null, null,Add2.getText()+ " -" + add2qty.getValue() , null,  add2qty.getValue() * Double.parseDouble(add2price.getText()),null,0);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	} if(add3qty.getValue()>0) {
-    		Cart extra = new Cart(null, null, null,Add3.getText()+ " x" + add3qty.getValue() , null,  add3qty.getValue() * Double.parseDouble(add3price.getText()),null,0);
+    		Cart extra = new Cart(null, null, null,Add3.getText()+ " -" + add3qty.getValue() , null,  add3qty.getValue() * Double.parseDouble(add3price.getText()),null,0);
         	order1.getChildren().add(new TreeItem<Cart> (extra));
     	}
     	for(int i=0; i < extratable.getItems().size();i++) {
 	    	Extras tableRow = extratable.getItems().get(i);
 	    int qty = tableRow.getItemCount();
 	    if(qty >= 1) {
-	    Cart extra = new Cart(null, null, null,null , tableRow.getExtraName() + " x" + qty , tableRow.getExtraPrice() * qty,null,0);
+	    Cart extra = new Cart(null, null, null,null , tableRow.getExtraName() + " -" + qty , tableRow.getExtraPrice() * qty,null,0);
     	order1.getChildren().add(new TreeItem<Cart> (extra));
 	    }
     	}

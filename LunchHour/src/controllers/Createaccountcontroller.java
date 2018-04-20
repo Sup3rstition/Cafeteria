@@ -35,6 +35,11 @@ public class Createaccountcontroller implements Initializable {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;	
+	 private String adminuser;
+	    public void setAdminuser(String user) {
+			this.adminuser = user;
+			
+		}
     @FXML
     private TextField Username_txt;
 
@@ -143,7 +148,7 @@ public class Createaccountcontroller implements Initializable {
 	    if(userName.length() >= 6 && !userName.contains(" ")) {
 	    	Uservalid.setVisible(false);
 	    	Userlength.setVisible(false);
-	    String sql = "SELECT * from Cafeteria.Parents WHERE userName = ?;";
+	    String sql = "SELECT * from Cafeteria.Parents WHERE username = ?;";
 	    //creates statement for the sql query
 	        ps = conn.prepareStatement(sql);
 	        ps.setString(1, userName);
