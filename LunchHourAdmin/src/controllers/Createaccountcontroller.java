@@ -169,5 +169,11 @@ public class Createaccountcontroller implements Initializable {
 		
 	}
 
+	private String adminuser;
+    public void setAdminuser(String user) {
+		this.adminuser = user;
+		
+	}
+
 }
 
