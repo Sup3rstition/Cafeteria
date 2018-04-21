@@ -333,8 +333,10 @@ public class Menupagecontroller implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Connection Error!");
+	   		Error2.showAndWait();
 		}
 
 	}
@@ -501,8 +503,10 @@ void changeday(ActionEvent event) {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Connection Error!");
+	   		Error2.showAndWait();
 		}
 		
 		
