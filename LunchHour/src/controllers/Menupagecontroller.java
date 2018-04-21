@@ -402,58 +402,69 @@ void changeday(ActionEvent event) {
 			if(!menu.getMenu1().equals("No Item")) {
 				Menu1.setText(menu.getMenu1());
 				menu1price.setText(menu.getMenu1price());
+				menu1des.setText(menu.getMenu1des());
 			}else {
 				Menu1.setText("No Item");
 				menu1price.setText("0");
 				Menu1.setDisable(true);
+				menu1des.setText("No Item");
 			}
+			
 			if(!menu.getMenu2().equals("No Item")) {
 				Menu2.setText(menu.getMenu2());
 				menu2price.setText(menu.getMenu2price());
+				menu2des.setText(menu.getMenu2des());
 			}else {
 				Menu2.setText("No Item");
 				menu2price.setText("0");
 				Menu2.setDisable(true);
+				menu3des.setText("No Item");
 			}
+			
 			if(!menu.getMenu3().equals("No Item")) {
 				Menu3.setText(menu.getMenu3());
 				menu3price.setText(menu.getMenu3price());
+				menu3des.setText(menu.getMenu3des());
 			}else {
 				Menu3.setText("No Item");
 				menu3price.setText("0");
 				Menu3.setDisable(true);
+				menu3des.setText("No Item");
 			}
 			
 			if(!menu.getAdd1().equals("No Item")) {
 				Add1.setText(menu.getAdd1());
 				add1price.setText(menu.getAdd1price());
+				add1des.setText(menu.getAdd1des());
+				
 			}else {
 				Add1.setText("No Item");
 				add1price.setText("0");
 				add1qty.setDisable(true);
+				add1des.setText("No Item");
 			}
+			
 			if(!menu.getAdd2().equals("No Item")) {
 				Add2.setText(menu.getAdd2());
 				add2price.setText(menu.getAdd2price());
+				add2des.setText(menu.getAdd2des());
 			}else {
 				Add2.setText("No Item");
 				add2price.setText("0");
 				add2qty.setDisable(true);
+				add3des.setText("No Item");
 			}
+			
 			if(!menu.getAdd3().equals("No Item")) {
 				Add3.setText(menu.getAdd3());
 				add3price.setText(menu.getAdd3price());
+				add3des.setText(menu.getAdd3des());
 			}else {
 				Add3.setText("No Item");
 				add3price.setText("0");
 				add3qty.setDisable(true);
+				add3des.setText("No Item");
 			}
-			menu1des.setText(menu.getMenu1des());
-			menu2des.setText(menu.getMenu2des());
-			menu3des.setText(menu.getMenu3des());
-			add1des.setText(menu.getAdd1des());
-			add2des.setText(menu.getAdd2des());
-			add3des.setText(menu.getAdd3des());
 			
 			
 			menudate.setText(dateFormat.format(menu.getStart().getTime()));

@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -76,20 +78,21 @@ public class CheckHistoryController implements Initializable {
 
     @FXML
     private ComboBox<Studentinfo> Selectedstudent;
-    
+    private ArrayList<Studentinfo> stdlist = new ArrayList<Studentinfo>();
+
     @FXML
     void backtoorder(ActionEvent event) throws IOException {
     	list.clear();
      	((Node)(event.getSource())).getScene().getWindow().hide();
     }
-    ObservableList<Studentinfo> items;
     void setList(ObservableList<Studentinfo> item) {
-    	this.items = item;
     	Studentinfo all = new Studentinfo();
     	all.setFirstname("All");
     	all.setLastname("Students");
-    	items.add(0, all);
-    	Selectedstudent.setItems(items);
+    	all.setSection("all");
+  		stdlist.add(all);
+    	stdlist.addAll(item);
+    	Selectedstudent.setItems(FXCollections.observableArrayList(stdlist));
     	Selectedstudent.getSelectionModel().selectFirst();
     	Selectedstudent.setCellFactory(new Callback<ListView<Studentinfo>,ListCell<Studentinfo>>(){
     	 public ListCell<Studentinfo> call(ListView<Studentinfo> l) {
@@ -128,7 +131,7 @@ public class CheckHistoryController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		orderdate(StartingDate);
-		Selectedstudent.setItems(items);
+		Selectedstudent.setItems(FXCollections.observableList(stdlist));
 	        searchid.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
 		
 		order.setCellValueFactory(new PropertyValueFactory<>("menudate"));
@@ -741,7 +744,7 @@ public class CheckHistoryController implements Initializable {
 		incorrectlabel.setVisible(false);
 		String searchorderid = searchid.getText();
 		//if specific student is selected it will search by them first.
-		if(!Selectedstudent.getValue().getFirstname().equals("All") && !Selectedstudent.getValue().getLastname().equals("Students")) {
+		if(!Selectedstudent.getValue().getSection().equals("all")) {
 			searchbystudent(searchorderid);
 		}
 		//Search id Search
