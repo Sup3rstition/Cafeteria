@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="610.0" prefWidth="219.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Createaccountcontroller">
+<AnchorPane prefHeight="610.0" prefWidth="219.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Createaccountcontroller">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Create An Account">
          <font>
@@ -42,12 +42,18 @@
             <Label text="Username:" />
             <Label text="Password:" GridPane.rowIndex="2" />
             <Label text="Confirm Password:" GridPane.rowIndex="3" />
-            <TextField fx:id="Emailaddress_txt" promptText="Email Address" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="Emailaddress_txt" promptText="Email Address" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <tooltip>
+                  <Tooltip text="Symbols besides @ are not accept. No spaces." />
+               </tooltip></TextField>
             <PasswordField fx:id="Password_txt1" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <tooltip>
-                  <Tooltip text="Password Requires atleast 6 characters" />
+                  <Tooltip text="Password Requires atleast 8 characters" />
                </tooltip></PasswordField>
-            <PasswordField fx:id="Password_txt2" prefWidth="160.0" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <PasswordField fx:id="Password_txt2" prefWidth="160.0" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <tooltip>
+                  <Tooltip text="Password requires atleast 2 characters" />
+               </tooltip></PasswordField>
          </children>
       </GridPane>
       <Separator layoutX="14.0" layoutY="254.0" prefWidth="200.0" />
@@ -74,7 +80,7 @@
       </GridPane>
       <TableView fx:id="studenttable" layoutX="14.0" layoutY="390.0" prefHeight="125.0" prefWidth="302.0">
       <placeholder>
-        <Label text=""/>
+        <Label text="" />
     </placeholder>
         <columns>
           <TableColumn fx:id="firstNamecol" editable="false" text="First Name" />

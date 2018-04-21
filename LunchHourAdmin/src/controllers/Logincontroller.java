@@ -56,7 +56,7 @@ public class Logincontroller implements Initializable{
 	}
 
     @FXML
-    void performLoginAction(ActionEvent event)  {
+    void performLoginAction(ActionEvent event) throws IOException  {
     	 	 userName = Username_txt.getText().trim().toUpperCase();
     	    String password = Password_txt.getText().trim();
     	    if(userName.length() >=6 && password.length() >= 3) {
@@ -94,7 +94,7 @@ public class Logincontroller implements Initializable{
     	            Wronginfo.setVisible(true);
     	        }
     	        conn.close();
-    	    } catch (Exception e) {
+    	    } catch (SQLException e) {
     	    	Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
     	   		Error2.setTitle("Error");
     	   		Error2.setHeaderText("Connection Error!");

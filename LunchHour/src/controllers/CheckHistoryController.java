@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+
+import javax.swing.text.NumberFormatter;
 
 import connection.Lunchhourdb;
 import entities.Studentinfo;
@@ -39,10 +42,12 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 public class CheckHistoryController implements Initializable {
 	private Connection conn = null;
@@ -73,7 +78,7 @@ public class CheckHistoryController implements Initializable {
     private ComboBox<Studentinfo> Selectedstudent;
     
     @FXML
-    void backtoorder(ActionEvent event) throws IOException, SQLException {
+    void backtoorder(ActionEvent event) throws IOException {
     	list.clear();
      	((Node)(event.getSource())).getScene().getWindow().hide();
     }
@@ -124,6 +129,8 @@ public class CheckHistoryController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		orderdate(StartingDate);
 		Selectedstudent.setItems(items);
+	        searchid.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+		
 		order.setCellValueFactory(new PropertyValueFactory<>("menudate"));
 		order.setCellFactory(new CheckHistoryController.ColumnFormatter<>(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 		orderIdcol.setCellValueFactory(new PropertyValueFactory<Cart, Integer>("orderid"));
@@ -239,27 +246,227 @@ public class CheckHistoryController implements Initializable {
             }
 	};
 	 date.setDayCellFactory(dayCellFactory);
+	 
 	}
-    @FXML
-    void search(ActionEvent event) {
-    	list.clear();
-		LocalDate today = LocalDate.now();
-		incorrectlabel.setVisible(false);
-		String searchorderid = searchid.getText();
-		//Search id Search
-		//checks to see if the searchid is blank
-    	if(!VALID_WORD.matcher(searchorderid).matches() && !searchorderid.equals("") && !searchorderid.contains(" ")){
+	void searchbydates() {
+		if(StartingDate.getValue() != null && EndingDate.getValue() != null) {
+			if(!StartingDate.getValue().isAfter(EndingDate.getValue())){
+    			try {    		
+        			conn = Lunchhourdb.get();
+        			System.out.println(parentid);
+        			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
+    				ps = conn.prepareStatement(sql);
+    				ps.setInt(1, parentid);
+    	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
+    	    		ps.setDate(3, Date.valueOf(EndingDate.getValue()));
+    	    		rs = ps.executeQuery();
+    	    		while(rs.next()) {
+    	    			Cart history = new Cart();
+    	    			history.setFullname(rs.getString("Studentname"));
+    					history.setMenuitem(rs.getString("Menu Item"));
+    					if(rs.getString("Additional") != null) {
+    						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+    						}else {
+    							history.setAdd("0");
+    						}
+    						if(rs.getString("Extra") != null) {
+    						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+    						}else {
+    							history.setExtra("0");
+    						}
+    					history.setTotal(rs.getDouble("Total"));
+    					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+    					history.setOrderid(rs.getInt("ID"));
+    	    			list.add(history);
+    	    		}
+    	    		orderhistory.setItems(list);
+    			} catch (SQLException e) {
+    				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+        	   		Error2.setTitle("Error");
+        	   		Error2.setHeaderText("Connection Error!");
+        	   		Error2.showAndWait();
+    			}
+    		}else {
+    			incorrectlabel.setVisible(true);
+    		}
+    	}
+		else if(EndingDate.getValue() != null && StartingDate.getValue() == null) { //checks to see if only the ending date is filled in
+    			 incorrectlabel.setVisible(true);											// sets incorrect day error.
+		}
+	//runs search for starting date up till today plus 7 days
+		
+		else if(StartingDate.getValue() !=null) {
+	    		try {
+	    			conn = Lunchhourdb.get();
+	    			System.out.println(parentid);
+	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, parentid);
+		    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
+		    		ps.setDate(3, Date.valueOf(today.plusDays(7)));
+		    		rs = ps.executeQuery();
+		    		while(rs.next()) {
+		    			Cart history = new Cart();
+		    			history.setFullname(rs.getString("Studentname"));
+						history.setMenuitem(rs.getString("Menu Item"));
+						if(rs.getString("Additional") != null) {
+							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+							}else {
+								history.setAdd("0");
+							}
+							if(rs.getString("Extra") != null) {
+							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+							}else {
+								history.setExtra("0");
+							}
+						history.setTotal(rs.getDouble("Total"));
+						history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+						history.setOrderid(rs.getInt("ID"));
+		    			list.add(history);
+		    		}
+		    		orderhistory.setItems(list);
+				} catch (SQLException e) {
+					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	    	   		Error2.setTitle("Error");
+	    	   		Error2.setHeaderText("Connection Error!");
+	    	   		Error2.showAndWait();
+				}
+	    	} 
+	}
+	void searchbyid() {
+		//checks if the dates are filled in
+		 if(StartingDate.getValue() != null && EndingDate.getValue() !=null) {
+	    		try {    		
+	    			conn = Lunchhourdb.get();
+	    			System.out.println(parentid);
+	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND ID = ? AND `Order_Date` BETWEEN ?  AND ? ";
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, parentid);
+					ps.setInt(2, Integer.parseInt(searchid.getText().trim()));
+		    		ps.setDate(3,Date.valueOf(StartingDate.getValue()));
+		    		ps.setDate(4, Date.valueOf(EndingDate.getValue()));
+		    		rs = ps.executeQuery();
+		    		while(rs.next()) {
+		    			Cart history = new Cart();
+		    			history.setFullname(rs.getString("Studentname"));
+						history.setMenuitem(rs.getString("Menu Item"));
+						if(rs.getString("Additional") != null) {
+							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+							}else {
+								history.setAdd("0");
+							}
+							if(rs.getString("Extra") != null) {
+							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+							}else {
+								history.setExtra("0");
+							}
+						history.setTotal(rs.getDouble("Total"));
+						history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+						history.setOrderid(rs.getInt("ID"));
+		    			list.add(history);
+		    		}
+		    		orderhistory.setItems(list);
+				} catch (SQLException e) {
+					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	    	   		Error2.setTitle("Error");
+	    	   		Error2.setHeaderText("Connection Error!");
+	    	   		Error2.showAndWait();
+				}
+	    		//checks to see if only starting date is filled
+	    	}else if(EndingDate.getValue() != null && StartingDate.getValue() == null) { //checks to see if only the ending date is filled in
+  			 incorrectlabel.setVisible(true);											// sets incorrect day error.
+	    	}
+		 else if(StartingDate.getValue() != null) {
+	    		try {    		
+	    			conn = Lunchhourdb.get();
+	    			System.out.println(parentid);
+	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND ID = ? AND `Order_Date` BETWEEN ?  AND ? ";
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, parentid);
+					ps.setInt(2, Integer.parseInt(searchid.getText().trim()));
+		    		ps.setDate(3,Date.valueOf(StartingDate.getValue()));
+		    		ps.setDate(4, Date.valueOf(today.plusDays(7)));
+		    		rs = ps.executeQuery();
+		    		while(rs.next()) {
+		    			Cart history = new Cart();
+		    			history.setFullname(rs.getString("Studentname"));
+						history.setMenuitem(rs.getString("Menu Item"));
+						if(rs.getString("Additional") != null) {
+							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+							}else {
+								history.setAdd("0");
+							}
+							if(rs.getString("Extra") != null) {
+							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+							}else {
+								history.setExtra("0");
+							}
+						history.setTotal(rs.getDouble("Total"));
+						history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+						history.setOrderid(rs.getInt("ID"));
+		    			list.add(history);
+		    		}
+		    		orderhistory.setItems(list);
+				} catch (SQLException e) {
+					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	    	   		Error2.setTitle("Error");
+	    	   		Error2.setHeaderText("Connection Error!");
+	    	   		Error2.showAndWait();
+				}
+	    	}
+		 //if only orderid is filled in
+	    	else {
+	    		try {    		
+	    			conn = Lunchhourdb.get();
+	    			System.out.println(parentid);
+	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `ID` = ? ";
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, parentid);
+					ps.setInt(2, Integer.parseInt(searchid.getText()));
+		    		rs = ps.executeQuery();
+		    		while(rs.next()) {
+		    			Cart history = new Cart();
+		    			history.setFullname(rs.getString("Studentname"));
+						history.setMenuitem(rs.getString("Menu Item"));
+						if(rs.getString("Additional") != null) {
+							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+							}else {
+								history.setAdd("0");
+							}
+							if(rs.getString("Extra") != null) {
+							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+							}else {
+								history.setExtra("0");
+							}
+						history.setTotal(rs.getDouble("Total"));
+						history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+						history.setOrderid(rs.getInt("ID"));
+		    			list.add(history);
+		    		}
+		    		orderhistory.setItems(list);
+				} catch (SQLException e) {
+					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	    	   		Error2.setTitle("Error");
+	    	   		Error2.setHeaderText("Connection Error!");
+	    	   		Error2.showAndWait();
+				}
+	    	}
+	}
+	void searchbystudent(String searchorderid) {
+		//checks if search is filled then searchs if the starting dates are filled in or just the search id.
+		if(!VALID_WORD.matcher(searchorderid).matches() && !searchorderid.equals("") && !searchorderid.contains(" ")){
     		//checks if the dates are filled in
     		 if(StartingDate.getValue() != null && EndingDate.getValue() !=null) {
     	    		try {    		
     	    			conn = Lunchhourdb.get();
     	    			System.out.println(parentid);
-    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND ID = ? AND `Order_Date` BETWEEN ?  AND ? ";
+    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND ID = ? AND `Student ID` = ?  AND `Order_Date` BETWEEN ?  AND ? ";
     					ps = conn.prepareStatement(sql);
     					ps.setInt(1, parentid);
     					ps.setInt(2, Integer.parseInt(searchid.getText().trim()));
-    		    		ps.setDate(3,Date.valueOf(StartingDate.getValue()));
-    		    		ps.setDate(4, Date.valueOf(EndingDate.getValue()));
+    					ps.setInt(3, Selectedstudent.getValue().getId());
+    		    		ps.setDate(4,Date.valueOf(StartingDate.getValue()));
+    		    		ps.setDate(5, Date.valueOf(EndingDate.getValue()));
     		    		rs = ps.executeQuery();
     		    		while(rs.next()) {
     		    			Cart history = new Cart();
@@ -282,8 +489,10 @@ public class CheckHistoryController implements Initializable {
     		    		}
     		    		orderhistory.setItems(list);
     				} catch (SQLException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
+    					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	    	   		Error2.setTitle("Error");
+    	    	   		Error2.setHeaderText("Connection Error!");
+    	    	   		Error2.showAndWait();
     				}
     	    		//checks to see if only starting date is filled
     	    	}else if(EndingDate.getValue() != null && StartingDate.getValue() == null) { //checks to see if only the ending date is filled in
@@ -293,12 +502,13 @@ public class CheckHistoryController implements Initializable {
     	    		try {    		
     	    			conn = Lunchhourdb.get();
     	    			System.out.println(parentid);
-    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND ID = ? AND `Order_Date` BETWEEN ?  AND ? ";
+    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND ID = ? AND `Order_Date` BETWEEN ?  AND ?  AND `Student ID` = ? ";
     					ps = conn.prepareStatement(sql);
     					ps.setInt(1, parentid);
     					ps.setInt(2, Integer.parseInt(searchid.getText().trim()));
     		    		ps.setDate(3,Date.valueOf(StartingDate.getValue()));
     		    		ps.setDate(4, Date.valueOf(today.plusDays(7)));
+    		    		ps.setInt(5, Selectedstudent.getValue().getId());
     		    		rs = ps.executeQuery();
     		    		while(rs.next()) {
     		    			Cart history = new Cart();
@@ -321,8 +531,10 @@ public class CheckHistoryController implements Initializable {
     		    		}
     		    		orderhistory.setItems(list);
     				} catch (SQLException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
+    					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	    	   		Error2.setTitle("Error");
+    	    	   		Error2.setHeaderText("Connection Error!");
+    	    	   		Error2.showAndWait();
     				}
     	    	}
     		 //if only orderid is filled in
@@ -330,10 +542,11 @@ public class CheckHistoryController implements Initializable {
     	    		try {    		
     	    			conn = Lunchhourdb.get();
     	    			System.out.println(parentid);
-    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `ID` = ? ";
+    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `ID` = ?  AND `Student ID` = ? ";
     					ps = conn.prepareStatement(sql);
     					ps.setInt(1, parentid);
     					ps.setInt(2, Integer.parseInt(searchid.getText()));
+    					ps.setInt(3, Selectedstudent.getValue().getId());
     		    		rs = ps.executeQuery();
     		    		while(rs.next()) {
     		    			Cart history = new Cart();
@@ -356,127 +569,194 @@ public class CheckHistoryController implements Initializable {
     		    		}
     		    		orderhistory.setItems(list);
     				} catch (SQLException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
+    					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	    	   		Error2.setTitle("Error");
+    	    	   		Error2.setHeaderText("Connection Error!");
+    	    	   		Error2.showAndWait();
     				}
     	    	}
+	}else if(StartingDate.getValue() != null || EndingDate.getValue() !=null) {
+		if(StartingDate.getValue() != null && EndingDate.getValue() != null) {
+			if(!StartingDate.getValue().isAfter(EndingDate.getValue())){
+    			try {    		
+        			conn = Lunchhourdb.get();
+        			System.out.println(parentid);
+        			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ?  AND `Student ID` = ?  ";
+    				ps = conn.prepareStatement(sql);
+    				ps.setInt(1, parentid);
+    	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
+    	    		ps.setDate(3, Date.valueOf(EndingDate.getValue()));
+    	    		ps.setInt(4, Selectedstudent.getValue().getId());
+    	    		rs = ps.executeQuery();
+    	    		while(rs.next()) {
+    	    			Cart history = new Cart();
+    	    			history.setFullname(rs.getString("Studentname"));
+    					history.setMenuitem(rs.getString("Menu Item"));
+    					if(rs.getString("Additional") != null) {
+    						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+    						}else {
+    							history.setAdd("0");
+    						}
+    						if(rs.getString("Extra") != null) {
+    						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+    						}else {
+    							history.setExtra("0");
+    						}
+    					history.setTotal(rs.getDouble("Total"));
+    					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+    					history.setOrderid(rs.getInt("ID"));
+    	    			list.add(history);
+    	    		}
+    	    		orderhistory.setItems(list);
+    			} catch (SQLException e) {
+    				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+        	   		Error2.setTitle("Error");
+        	   		Error2.setHeaderText("Connection Error!");
+        	   		Error2.showAndWait();
+    			}
+    		}else {
+    			incorrectlabel.setVisible(true);
+    		}
+    	}
+		else if(EndingDate.getValue() != null && StartingDate.getValue() == null) { //checks to see if only the ending date is filled in
+    			 incorrectlabel.setVisible(true);											// sets incorrect day error.
+		}
+	//runs search for starting date up till today plus 7 days
+		
+		else if(StartingDate.getValue() !=null) {
+	    		try {
+	    			conn = Lunchhourdb.get();
+	    			System.out.println(parentid);
+	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ?  AND `Student ID` = ?  ";
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, parentid);
+		    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
+		    		ps.setDate(3, Date.valueOf(today.plusDays(7)));
+		    		ps.setInt(4, Selectedstudent.getValue().getId());
+		    		rs = ps.executeQuery();
+		    		while(rs.next()) {
+		    			Cart history = new Cart();
+		    			history.setFullname(rs.getString("Studentname"));
+						history.setMenuitem(rs.getString("Menu Item"));
+						if(rs.getString("Additional") != null) {
+							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+							}else {
+								history.setAdd("0");
+							}
+							if(rs.getString("Extra") != null) {
+							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+							}else {
+								history.setExtra("0");
+							}
+						history.setTotal(rs.getDouble("Total"));
+						history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+						history.setOrderid(rs.getInt("ID"));
+		    			list.add(history);
+		    		}
+		    		orderhistory.setItems(list);
+				} catch (SQLException e) {
+					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	    	   		Error2.setTitle("Error");
+	    	   		Error2.setHeaderText("Connection Error!");
+	    	   		Error2.showAndWait();
+				}
+	    	} 
+	} else {
+		try {
+			conn = Lunchhourdb.get();
+			System.out.println(parentid);
+			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ?  AND `Student ID` = ? ";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, parentid);
+			ps.setInt(2, Selectedstudent.getValue().getId());
+    		rs = ps.executeQuery();
+    		while(rs.next()) {
+    			Cart history = new Cart();
+    			history.setFullname(rs.getString("Studentname"));
+				history.setMenuitem(rs.getString("Menu Item"));
+				if(rs.getString("Additional") != null) {
+				history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+				}else {
+					history.setAdd("0");
+				}
+				if(rs.getString("Extra") != null) {
+				history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+				}else {
+					history.setExtra("0");
+				}
+				history.setTotal(rs.getDouble("Total"));
+				history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+				history.setOrderid(rs.getInt("ID"));
+    			list.add(history);
+    		}
+    		orderhistory.setItems(list);
+		} catch (SQLException e) {
+			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Connection Error!");
+	   		Error2.showAndWait();
+		}
+	}
+		
+	}
+	void searchall() {
+		try {
+			conn = Lunchhourdb.get();
+			System.out.println(parentid);
+			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, parentid);
+    		rs = ps.executeQuery();
+    		while(rs.next()) {
+    			Cart history = new Cart();
+    			history.setFullname(rs.getString("Studentname"));
+				history.setMenuitem(rs.getString("Menu Item"));
+				if(rs.getString("Additional") != null) {
+				history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+				}else {
+					history.setAdd("0");
+				}
+				if(rs.getString("Extra") != null) {
+				history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+				}else {
+					history.setExtra("0");
+				}
+				history.setTotal(rs.getDouble("Total"));
+				history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
+				history.setOrderid(rs.getInt("ID"));
+    			list.add(history);
+    		}
+    		orderhistory.setItems(list);
+		} catch (SQLException e) {
+			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Connection Error!");
+	   		Error2.showAndWait();
+		}
+	}
+	LocalDate today = LocalDate.now();
+	@FXML
+    void search(ActionEvent event) {
+    	list.clear();
+		incorrectlabel.setVisible(false);
+		String searchorderid = searchid.getText();
+		//if specific student is selected it will search by them first.
+		if(!Selectedstudent.getValue().getFirstname().equals("All") && !Selectedstudent.getValue().getLastname().equals("Students")) {
+			searchbystudent(searchorderid);
+		}
+		//Search id Search
+		//checks to see if the searchid is blank
+		else if(!VALID_WORD.matcher(searchorderid).matches() && !searchorderid.equals("") && !searchorderid.contains(" ")){
+			searchbyid();
     	}
     	
     	// next type of search dates
     	//checks to see if only the starting date is filled in
     	else if(StartingDate.getValue() != null || EndingDate.getValue() !=null) {
-    		if(StartingDate.getValue() != null && EndingDate.getValue() != null) {
-    			if(!StartingDate.getValue().isAfter(EndingDate.getValue())){
-        			try {    		
-            			conn = Lunchhourdb.get();
-            			System.out.println(parentid);
-            			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
-        				ps = conn.prepareStatement(sql);
-        				ps.setInt(1, parentid);
-        	    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
-        	    		ps.setDate(3, Date.valueOf(EndingDate.getValue()));
-        	    		rs = ps.executeQuery();
-        	    		while(rs.next()) {
-        	    			Cart history = new Cart();
-        	    			history.setFullname(rs.getString("Studentname"));
-        					history.setMenuitem(rs.getString("Menu Item"));
-        					if(rs.getString("Additional") != null) {
-        						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
-        						}else {
-        							history.setAdd("0");
-        						}
-        						if(rs.getString("Extra") != null) {
-        						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
-        						}else {
-        							history.setExtra("0");
-        						}
-        					history.setTotal(rs.getDouble("Total"));
-        					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
-        					history.setOrderid(rs.getInt("ID"));
-        	    			list.add(history);
-        	    		}
-        	    		orderhistory.setItems(list);
-        			} catch (SQLException e) {
-        				// TODO Auto-generated catch block
-        				e.printStackTrace();
-        			}
-        		}else {
-        			incorrectlabel.setVisible(true);
-        		}
-        	}
-    		else if(EndingDate.getValue() != null && StartingDate.getValue() == null) { //checks to see if only the ending date is filled in
-        			 incorrectlabel.setVisible(true);											// sets incorrect day error.
-    		}
-    	//runs search for starting date up till today plus 7 days
-    		
-    		else if(StartingDate.getValue() !=null) {
-    	    		try {
-    	    			conn = Lunchhourdb.get();
-    	    			System.out.println(parentid);
-    	    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ? AND `Order_Date` BETWEEN ?  AND ? ";
-    					ps = conn.prepareStatement(sql);
-    					ps.setInt(1, parentid);
-    		    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
-    		    		ps.setDate(3, Date.valueOf(today.plusDays(7)));
-    		    		rs = ps.executeQuery();
-    		    		while(rs.next()) {
-    		    			Cart history = new Cart();
-    		    			history.setFullname(rs.getString("Studentname"));
-    						history.setMenuitem(rs.getString("Menu Item"));
-    						if(rs.getString("Additional") != null) {
-    							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
-    							}else {
-    								history.setAdd("0");
-    							}
-    							if(rs.getString("Extra") != null) {
-    							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
-    							}else {
-    								history.setExtra("0");
-    							}
-    						history.setTotal(rs.getDouble("Total"));
-    						history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
-    						history.setOrderid(rs.getInt("ID"));
-    		    			list.add(history);
-    		    		}
-    		    		orderhistory.setItems(list);
-    				} catch (SQLException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
-    				}
-    	    	} 
+    		searchbydates();
     	
     }else {
-    		try {
-    			conn = Lunchhourdb.get();
-    			System.out.println(parentid);
-    			String sql = "Select * from Cafeteria.Order Where `Parent ID` = ?";
-				ps = conn.prepareStatement(sql);
-				ps.setInt(1, parentid);
-	    		rs = ps.executeQuery();
-	    		while(rs.next()) {
-	    			Cart history = new Cart();
-	    			history.setFullname(rs.getString("Studentname"));
-					history.setMenuitem(rs.getString("Menu Item"));
-					if(rs.getString("Additional") != null) {
-					history.setAdd(rs.getString("Additional").replaceAll("/", ","));
-					}else {
-						history.setAdd("0");
-					}
-					if(rs.getString("Extra") != null) {
-					history.setExtra(rs.getString("Extra").replaceAll("/", ","));
-					}else {
-						history.setExtra("0");
-					}
-					history.setTotal(rs.getDouble("Total"));
-					history.setMenudate((rs.getDate("Order_Date").toLocalDate()));
-					history.setOrderid(rs.getInt("ID"));
-	    			list.add(history);
-	    		}
-	    		orderhistory.setItems(list);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		searchall();
     	}
     }
 

@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -110,7 +111,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <DatePicker fx:id="orderdate" onAction="#changeday" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <DatePicker fx:id="orderdate" editable="false" onAction="#changeday" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Menu Day" GridPane.rowIndex="5">
                <font>
                   <Font size="15.0" />
@@ -149,16 +150,25 @@
                <font>
                   <Font size="15.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="menu1des" text="Empty Tooltip" />
+               </tooltip>
             </RadioButton>
             <RadioButton fx:id="Menu2" mnemonicParsing="false" text="Menu2" GridPane.rowIndex="2">
                <font>
                   <Font size="15.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="menu2des" text="Empty Tooltip" />
+               </tooltip>
             </RadioButton>
             <RadioButton fx:id="Menu3" mnemonicParsing="false" text="Menu3" GridPane.rowIndex="3">
                <font>
                   <Font size="15.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="menu3des" text="Empty Tooltip" />
+               </tooltip>
             </RadioButton>
             <Label fx:id="menu1price" alignment="CENTER" text="Price" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <Label fx:id="menu2price" alignment="CENTER" text="Price" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
@@ -187,16 +197,25 @@
                <font>
                   <Font size="15.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="add1des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="Add2" text="Add2" GridPane.rowIndex="2">
                <font>
                   <Font size="15.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="add2des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="Add3" text="Add3" GridPane.rowIndex="3">
                <font>
                   <Font size="15.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="add3des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="add1price" alignment="CENTER" text="Price" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <Label fx:id="add2price" alignment="CENTER" text="Price" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
@@ -224,6 +243,11 @@
                </font>
             </Label>
             <Spinner fx:id="add1qty" prefHeight="31.0" prefWidth="65.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label text="QTY" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
    </children>

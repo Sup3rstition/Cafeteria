@@ -136,7 +136,7 @@ public class Deliverycontroller implements Initializable{
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
     @FXML
-    void search(ActionEvent event) throws SQLException { 
+    void search(ActionEvent event) { 
 	
     	orderroot.getChildren().clear();
     	LocalDate today = LocalDate.now();
@@ -306,6 +306,11 @@ public class Deliverycontroller implements Initializable{
     			}
   
     			
+    		}catch(SQLException e) {
+    			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
     		}
     		
 	    		/*
@@ -372,7 +377,14 @@ public class Deliverycontroller implements Initializable{
 	    			}
 	    		} */
     		finally{
-    			conn.close();
+    			try {
+					conn.close();
+				} catch (SQLException e) {
+					 Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	    	   		Error2.setTitle("Error");
+	    	   		Error2.setHeaderText("Connection Error!");
+	    	   		Error2.showAndWait();
+				}
     		}
     	}
     		}

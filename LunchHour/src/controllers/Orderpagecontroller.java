@@ -94,7 +94,7 @@ public class Orderpagecontroller implements Initializable {
     private Label LastOrder;
 
     @FXML
-    private Label Balancelast;
+    private Label LastUpdate;
     
     @FXML
     private TextField Cart_txt;
@@ -156,7 +156,7 @@ public class Orderpagecontroller implements Initializable {
 	}
 
 	@FXML
-    void logout(ActionEvent event) throws IOException, SQLException {
+    void logout(ActionEvent event) throws IOException {
     	parent = null;
     	root.getChildren().clear();
     	tree.getSelectionModel().clearSelection();
@@ -376,10 +376,11 @@ public class Orderpagecontroller implements Initializable {
 		 LastOrder.setText(dateFormat.format(Lastorder.getTime()));
 		}
 		
-	//	if(parent.getLastupdate() != null) {
-		//	 java.util.Date dBalance = new java.util.Date(parent.getLastupdate().getTime());
-		//	 Balancelast.setText(dateFormat.format(dBalance.getTime()));
-	//	}
+		if(parent.getLastupdate() != null) {
+
+			 java.util.Date dBalance = new java.util.Date(parent.getLastupdate().getTime());
+				LastUpdate.setText(dateFormat.format(dBalance.getTime()));
+		}
 		addstudent();
 		   maketree();
 	     orderprice();

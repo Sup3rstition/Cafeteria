@@ -70,6 +70,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.util.Callback;
 import connection.Lunchhourdb;
@@ -102,7 +103,18 @@ public class Menupagecontroller implements Initializable {
 	private ObservableList<Extras> extras  = FXCollections.observableArrayList();
 	NumberFormat formatter = new DecimalFormat("#0.00");
 	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-	
+	@FXML
+    private Tooltip menu1des;
+	@FXML
+    private Tooltip menu2des;
+	 @FXML
+	    private Tooltip menu3des;
+	 @FXML
+	    private Tooltip add1des;
+	 @FXML
+	    private Tooltip add2des;
+	 @FXML
+	    private Tooltip add3des;
     @FXML
     private RadioButton Menu1;
 
@@ -199,7 +211,7 @@ public class Menupagecontroller implements Initializable {
     private Label menudaylabel;
     
     @FXML
-    void backtoorder(ActionEvent event) throws SQLException, IOException {
+    void backtoorder(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/OrderPage.fxml"));
     	Parent Orderpage = loader.load();
@@ -214,7 +226,7 @@ public class Menupagecontroller implements Initializable {
     }
     
     @FXML
-    void addtocart(ActionEvent event) throws IOException, SQLException {
+    void addtocart(ActionEvent event) throws IOException {
     	String menuitem = null;
     	if(Menu1.isSelected()) {
 			menuitem = Menu1.getText();
@@ -263,7 +275,17 @@ public class Menupagecontroller implements Initializable {
 
     @FXML
     void clearorder(ActionEvent event) {
-    	Menu1.setSelected(true);
+    	if(Menu1.getText().equals("No Item")) {
+    		Menu1.setSelected(false);
+    		Menu2.setSelected(true);
+    	}if(Menu2.getText().equals("No Item") && Menu1.getText().equals("No Item")) {
+    		Menu2.setSelected(false);
+    		Menu3.setSelected(true);
+    	}else {
+    		Menu2.setSelected(false);
+    		Menu3.setSelected(false);
+    		Menu1.setSelected(true);
+    	}
     	add1qty.getValueFactory().setValue(0);
     	add2qty.getValueFactory().setValue(0);
     	add3qty.getValueFactory().setValue(0);
@@ -293,6 +315,11 @@ public class Menupagecontroller implements Initializable {
 	public void start() {
 		try {
 			BuildExtraTable();
+			//Menu building method
+			BuildMenu();
+			//Sets the price for the text box
+			Totalchange();
+			orderdate();
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -305,12 +332,11 @@ public class Menupagecontroller implements Initializable {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-//Menu building method
-BuildMenu();
-//Sets the price for the text box
-Totalchange();
-orderdate();
+
 	}
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -366,22 +392,67 @@ void changeday(ActionEvent event) {
 	menudaylabel.setText(orderdate.getValue().getDayOfWeek().toString());
 }
 	//Menu building method
-	private void BuildMenu() {
+	private void BuildMenu() throws SQLException, JsonParseException, JsonMappingException, IOException {
 		try {
 			ObjectMapper mapper = new ObjectMapper(); 
 			Menu menu = mapper.readValue(new File("Menu.json"), Menu.class);
-			Menu1.setText(menu.getMenu1());
-			Menu2.setText(menu.getMenu2());
-			Menu3.setText(menu.getMenu3());
-			menu1price.setText(menu.getMenu1price());
-			menu2price.setText(menu.getMenu2price());
-			menu3price.setText(menu.getMenu3price());
-			Add1.setText(menu.getAdd1());
-			Add2.setText(menu.getAdd2());
-			Add3.setText(menu.getAdd3());
-			add1price.setText(menu.getAdd1price());
-			add2price.setText(menu.getAdd2price());
-			add3price.setText(menu.getAdd3price());
+			checkdate(menu);
+			if(!menu.getMenu1().equals("No Item")) {
+				Menu1.setText(menu.getMenu1());
+				menu1price.setText(menu.getMenu1price());
+			}else {
+				Menu1.setText("No Item");
+				menu1price.setText("0");
+				Menu1.setDisable(true);
+			}
+			if(!menu.getMenu2().equals("No Item")) {
+				Menu2.setText(menu.getMenu2());
+				menu2price.setText(menu.getMenu2price());
+			}else {
+				Menu2.setText("No Item");
+				menu2price.setText("0");
+				Menu2.setDisable(true);
+			}
+			if(!menu.getMenu3().equals("No Item")) {
+				Menu3.setText(menu.getMenu3());
+				menu3price.setText(menu.getMenu3price());
+			}else {
+				Menu3.setText("No Item");
+				menu3price.setText("0");
+				Menu3.setDisable(true);
+			}
+			
+			if(!menu.getAdd1().equals("No Item")) {
+				Add1.setText(menu.getAdd1());
+				add1price.setText(menu.getAdd1price());
+			}else {
+				Add1.setText("No Item");
+				add1price.setText("0");
+				add1qty.setDisable(true);
+			}
+			if(!menu.getAdd2().equals("No Item")) {
+				Add2.setText(menu.getAdd2());
+				add2price.setText(menu.getAdd2price());
+			}else {
+				Add2.setText("No Item");
+				add2price.setText("0");
+				add2qty.setDisable(true);
+			}
+			if(!menu.getAdd3().equals("No Item")) {
+				Add3.setText(menu.getAdd3());
+				add3price.setText(menu.getAdd3price());
+			}else {
+				Add3.setText("No Item");
+				add3price.setText("0");
+				add3qty.setDisable(true);
+			}
+			menu1des.setText(menu.getMenu1des());
+			menu2des.setText(menu.getMenu2des());
+			menu3des.setText(menu.getMenu3des());
+			add1des.setText(menu.getAdd1des());
+			add2des.setText(menu.getAdd2des());
+			add3des.setText(menu.getAdd3des());
+			
 			
 			menudate.setText(dateFormat.format(menu.getStart().getTime()));
 			
@@ -413,59 +484,28 @@ void changeday(ActionEvent event) {
 			    });
 			    
 		}catch(FileNotFoundException f) {
-		ObjectMapper mapper = new ObjectMapper();
-		String SQL = "SELECT * from Menu";
+		makenewfile();
+		BuildMenu();
+		}
+	}
+	private void checkdate(Menu menu) throws JsonParseException, JsonMappingException, IOException {
+		String SQL = "SELECT menuid from Menu INNER JOIN Menutool ON Menu.menuid=Menutool.menuidtool ORDER By menuid DESC Limit 1;";
 		try {
 			conn = Lunchhourdb.get();
 			ps = conn.prepareStatement(SQL);
 			rs = ps.executeQuery();
 			if(rs.next()) {
-				Menu menu = new Menu();
-				menu.setMenu1(rs.getString("Menu 1 item"));
-				menu.setMenu2(rs.getString("Menu 2 item"));
-				menu.setMenu3(rs.getString("Menu 3 item"));
-				menu.setMenu1price(rs.getString("Menu 1 Price"));
-				menu.setMenu2price(rs.getString("Menu 2 Price"));
-				menu.setMenu3price(rs.getString("Menu 3 Price"));
-				menu.setStart(rs.getDate("Menu_Start"));
-				menu.setAdd1(rs.getString("Additional 1"));
-				menu.setAdd2(rs.getString("Additional 2"));
-				menu.setAdd3(rs.getString("Additional 3"));
-				menu.setAdd1price(rs.getString("Add 1 Price"));
-				menu.setAdd2price(rs.getString("Add 2 Price"));
-				menu.setAdd3price(rs.getString("Add 3 Price"));
-				
-				try {
-					mapper.writeValue(new File("Menu.json"), menu);
-				} catch (JsonGenerationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(menu.getMenuid() < rs.getInt("menuid")) {
+					makenewfile();
+					BuildMenu();
 				}
 			}
-			conn.close();
-			BuildMenu();
 		} catch (SQLException e) {
-			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
-	   		Error2.setTitle("Error");
-	   		Error2.setHeaderText("Connection Error!");
-	   		Error2.showAndWait();
-		}
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 	}
 	// Builds the extra table
 	private void BuildExtraTable() throws JsonParseException, JsonMappingException, IOException, ParseException{
@@ -590,10 +630,7 @@ void changeday(ActionEvent event) {
 	    int qty = tableRow.getItemCount();
 	    double extraprice = tableRow.getExtraPrice();
 	     totalextra = totalextra + (qty * extraprice);
-	     
-	     
-	     
-		}
+    	}
 		double Totaladd1 = add1qty.getValue() * Double.parseDouble(add1price.getText());
 		double Totaladd2 = add2qty.getValue() * Double.parseDouble(add2price.getText());
 		double Totaladd3 = add3qty.getValue() * Double.parseDouble(add3price.getText());
@@ -602,5 +639,55 @@ void changeday(ActionEvent event) {
 		total_txt.setText(formatter.format(Total));
 	}
 
-	//Extra class
+void makenewfile() {
+	String SQL = "SELECT * from Menu INNER JOIN Menutool ON Menu.menuid=Menutool.menuidtool ORDER By menuid DESC Limit 1;";
+	try {
+		conn = Lunchhourdb.get();
+		ps = conn.prepareStatement(SQL);
+		rs = ps.executeQuery();
+		if(rs.next()) {
+			Menu menu = new Menu();
+			menu.setMenuid(rs.getInt("menuid"));
+			menu.setMenu1(rs.getString("Menu 1 item"));
+			menu.setMenu2(rs.getString("Menu 2 item"));
+			menu.setMenu3(rs.getString("Menu 3 item"));
+			menu.setMenu1price(rs.getString("Menu 1 Price"));
+			menu.setMenu2price(rs.getString("Menu 2 Price"));
+			menu.setMenu3price(rs.getString("Menu 3 Price"));
+			menu.setStart(rs.getDate("Menu_Start"));
+			menu.setAdd1(rs.getString("Additional 1"));
+			menu.setAdd2(rs.getString("Additional 2"));
+			menu.setAdd3(rs.getString("Additional 3"));
+			menu.setAdd1price(rs.getString("Add 1 Price"));
+			menu.setAdd2price(rs.getString("Add 2 Price"));
+			menu.setAdd3price(rs.getString("Add 3 Price"));
+			menu.setMenu1des(rs.getString("Menu1des"));
+			menu.setMenu2des(rs.getString("Menu2des"));
+			menu.setMenu3des(rs.getString("Menu3des"));
+			menu.setAdd1des(rs.getString("add1des"));
+			menu.setAdd2des(rs.getString("add2des"));
+			menu.setAdd3des(rs.getString("add3des"));
+
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValue(new File("Menu.json"), menu);
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		conn.close();
+	} catch (SQLException e) {
+		Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+   		Error2.setTitle("Error");
+   		Error2.setHeaderText("Connection Error!");
+   		Error2.showAndWait();
+	}
+}
 }

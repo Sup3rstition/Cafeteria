@@ -49,8 +49,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <DatePicker fx:id="StartingDate" GridPane.columnIndex="1" />
-            <DatePicker fx:id="EndingDate" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <DatePicker fx:id="StartingDate" editable="false" GridPane.columnIndex="1" />
+            <DatePicker fx:id="EndingDate" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Starting Date:">
                <font>
                   <Font size="14.0" />
