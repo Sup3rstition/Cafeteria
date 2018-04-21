@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 
 import Models.Order;
 import Models.Orders;
-import Models.treeroot;
 import connection.Lunchhourdb;
 import Models.Extras;
 import Models.Menu;
@@ -34,6 +33,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
@@ -46,6 +46,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -130,41 +131,16 @@ public class Deliverycontroller implements Initializable{
     void save(ActionEvent event) {
 
     }
+	List<Order> orderlist = new ArrayList<Order>();
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
     @FXML
-    void search(ActionEvent event) throws SQLException { 
+    void search(ActionEvent event) { 
 	
-    	list.clear();
+    	orderroot.getChildren().clear();
     	LocalDate today = LocalDate.now();
-    	/*
-    	if(startingdate.getValue() != null && endingdate.getValue() != null) {
-    		if(!startingdate.getValue().isAfter(today) && !startingdate.getValue().isAfter(endingdate.getValue())){
-    			try {    		
-        			conn = Lunchhourdb.get();
-        			String sql = "Select * from Cafeteria.Order Where `Order Date` BETWEEN ?  AND ? ";
-    				ps = conn.prepareStatement(sql);
-    	    		ps.setDate(2,Date.valueOf(startingdate.getValue()));
-    	    		ps.setDate(3, Date.valueOf(endingdate.getValue()));
-    	    		rs = ps.executeQuery();
-    	    		while(rs.next()) {
-    	    			
-    	    			Order order = new Order();
-    	    			order.setMenuitem(rs.getString("Menu Item"));
-    	    			order.setAdditem(rs.getString("Additional"));
-    	    			order.setExtraitem(rs.getString("Extra"));
-    	    			order.setOrderday(rs.getDate("Order_Date"));
-    	    			list.add(order);
-    	    		}
-    	    		
-    	    		
-    			} catch (SQLException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-    		}
-    	}else*/ if(startingdate.getValue() !=null) {
+    	 if(startingdate.getValue() !=null) {
     		try {
     			conn = Lunchhourdb.get();
     			String sql = "Select * from Cafeteria.Order Where `Order Date` BETWEEN ?  AND ? ";
@@ -172,9 +148,6 @@ public class Deliverycontroller implements Initializable{
 	    		ps.setDate(1,Date.valueOf(startingdate.getValue()));
 	    		ps.setDate(2, Date.valueOf(today));
 	    		rs = ps.executeQuery();
-	    		Orders orders = new Orders();
-	    		int qty;
-	    		List<Order> orderlist = new ArrayList<Order>();
 	    		while(rs.next()) {
 	    			List<Extras> orderextralist = new ArrayList<Extras>();
 	    			Order order = new Order();
@@ -185,65 +158,161 @@ public class Deliverycontroller implements Initializable{
 	    				adds = adds.substring(0, adds.length() - 1);
 	    				String add[] = adds.split("/");
 	    				for(int i = 0; i <add.length;i++) {
-	    					String addspilt[] = add[i].split("x");
+	    					String addspilt[] = add[i].split("-");
 	    					if(addspilt[0].trim().equals(menu.getAdd1())) {
-	    					order.setAdd1qty(addspilt[1]);
+	    					order.setAdd1qty(Integer.parseInt(addspilt[1]));
 	    					}else if(addspilt[0].trim().equals(menu.getAdd2())) {
-		    					order.setAdd2qty(addspilt[1]);
+		    					order.setAdd2qty(Integer.parseInt(addspilt[1]));
 	    					}else {
-		    					order.setAdd3qty(addspilt[1]);
+		    					order.setAdd3qty(Integer.parseInt(addspilt[1]));
 	    					}
 	    				}
-	    			}else {
-	    				order.setAdd1qty("0");
-	    				order.setAdd2qty("0");
-	    				order.setAdd3qty("0");
 	    			}
 	    			String extra_ = rs.getString("Extra");
 	    			if(extra_ != null) {
 	    				extra_ = extra_.substring(0, extra_.length() - 1);
 	    				String extra[] = extra_.split("/");
 	    				for(int i = 0; i <extra.length;i++) {
-	    					String extrasplit[] = extra[i].split("x");
+	    					String extrasplit[] = extra[i].split("-");
 	    					Extras newextra = new Extras();
 	    					newextra.setExtraName(extrasplit[0].trim());
 	    					newextra.setItemCount(Integer.parseInt(extrasplit[1].trim()));
+	    					
 	    					orderextralist.add(newextra);
 	    			}
 	    			order.setExtraitems(orderextralist);
+	    		
+	    			
+	    		}
 	    			orderlist.add(order);
-	    			
-	    			
 	    		}
-	    			
-	    			int days=0;
-	    			LocalDate startpoint = startingdate.getValue();
-	    			while(startpoint.isBefore(today)){
-	    				Order mainorder = new Order();
-	    				mainorder.setOrderday(java.sql.Date.valueOf(startpoint));
-	    				for(Order order1 : orderlist) {
-	    					if(order1.getOrderday() == mainorder.getOrderday()) {
-	    	    			if(order1.getMenuitem().equals(menu.getMenu1())) {
-	    	    				qty = mainorder.getMenu1qty() + 1;
-	    	    				mainorder.setMenu1qty(qty);
-	    	    			}else if(order1.getMenuitem().equals(menu.getMenu2())) {
-	    	    				qty = mainorder.getMenu2qty() + 1;
-	    	    				mainorder.setMenu2qty(qty);
-	    	    			}else {
-	    	    				qty = mainorder.getMenu3qty() + 1;
-	    	    				mainorder.setMenu3qty(qty);
-	    	    			}
-	    	    			mainorder.setAdd1qty(order1.getAdd1qty() + mainorder.getAdd1qty());
-	    	    			mainorder.setAdd1qty(order1.getAdd2qty() + mainorder.getAdd2qty());
-	    	    			mainorder.setAdd1qty(order1.getAdd3qty() + mainorder.getAdd3qty());
-	    					}	
-	    	    		}
-	    				
-	    			days++;
-	    			startpoint = startpoint.plusDays(days);
-	    			}
-	    		}
-    		}//
+    			for (LocalDate date = startingdate.getValue(); date.isBefore(today.plusDays(7)); date = date.plusDays(1)) {
+    				System.out.println(0);
+    				Orders dateorder = new Orders();
+    				String sdate = date.toString();
+					dateorder.setOrderday(sdate);
+					List<Extras> list2 = new ArrayList<Extras>();
+    				int mqty1 = 0,mqty2 =0,mqty3=0,aqty1=0,aqty2=0,aqty3 = 0, mtotal=0, atotal =0;
+    				for(Order order1 : orderlist) {
+    					System.out.println(1);
+    					if(order1.getOrderday().toString().equals(dateorder.getOrderdaystring())) {
+    						System.out.println(2);
+    	    			if(order1.getMenuitem().equals(menu.getMenu1())) {
+    	    				mqty1++;
+    	    				System.out.println(mqty1);
+    	    			}else if(order1.getMenuitem().equals(menu.getMenu2())) {
+    	    				mqty2++;
+    	    			}else {
+    	    				mqty3++;
+    	    			}
+    	    			aqty1 =+ order1.getAdd1qty();
+    	    			aqty2 =+ order1.getAdd2qty();
+    	    			aqty3 =+ order1.getAdd3qty();
+    	    			mtotal = mqty1 + mqty2 +mqty3;
+    	    			atotal = aqty1+aqty2+aqty3;
+    	    			
+    	    			for(int i=0; i < order1.getExtraitems().size();i++) {
+    				    	Extras item = order1.getExtraitems().get(i);
+    				    	if(!list2.isEmpty()) {
+    				    	for (Extras extra : list2) {
+    				            if (extra.getExtraName() == item.getExtraName()) {
+    				            	int intqty = extra.getItemCount();
+    				            	 extra.setItemCount(intqty+ item.getItemCount());
+    				            }else {
+    				            	list2.add(item);
+    				            	break;
+    				            }
+    				            }
+    				        
+    				    	}else {
+    				    		list2.add(item);
+    				    	}
+    				    	
+    				    	
+    					}
+    				    }
+    					
+    			}
+    				if(mtotal != 0)
+    				dateorder.setMenuqty(mtotal);
+    				if(atotal != 0)
+    				dateorder.setAddqty(atotal);
+    				if(mtotal != 0) {
+    				TreeItem<Orders> datetree = new TreeItem<Orders>(dateorder);
+    				orderroot.getChildren().add(datetree);
+    				boolean menuempty = false;
+    				boolean extraempty = false;
+    				for(int i = 0; ; i++) {
+        				Orders mainorder = new Orders();
+        				if(i<3) {
+        					if (i == 0) {
+        						
+        						if(mqty1 !=0) {
+        				mainorder.setMenuitem(menu.getMenu1());
+        				mainorder.setMenuqty(mqty1);
+        						}
+        						if(aqty1 !=0) {
+        				mainorder.setAdditem(menu.getAdd1());
+        				mainorder.setAddqty(aqty1);
+        						}
+        						
+        					}else if (i == 1) {
+        						if(mqty2 !=0) {
+        						mainorder.setMenuitem(menu.getMenu2());
+        	    				mainorder.setMenuqty(mqty2);
+        						}
+        						if(aqty1 !=0) {
+        	    				mainorder.setAdditem(menu.getAdd2());
+        	    				mainorder.setAddqty(aqty2);
+        						}
+        	    					
+        						}else {
+        						if(mqty3 !=0) {
+        						mainorder.setMenuitem(menu.getMenu3());
+        	    				mainorder.setMenuqty(mqty3);
+        						}
+        						if(aqty1 !=0) {
+        	    				mainorder.setAdditem(menu.getAdd3());
+        	    				mainorder.setAddqty(aqty3);
+        						}
+            					menuempty = true;
+        	    					}
+        				} 
+        				try {
+        					System.out.println(3);
+        				if(extraempty == false) {
+        					System.out.print(list2.get(i).getExtraName());
+        					if(list2.get(i).getItemCount() != 0) {
+							mainorder.setExtraitem(list2.get(i).getExtraName());
+	        				mainorder.setExtraqty(list2.get(i).getItemCount());
+        					}
+						}
+        				}catch(IndexOutOfBoundsException e) {
+        					System.out.println("catch");
+        					extraempty = true;
+        				}
+        					System.out.println(mainorder.getMenuitem());
+    	    				datetree.getChildren().add(new TreeItem<Orders>(mainorder));
+    	    				if(extraempty && menuempty)
+    	    				{
+    	    					break;
+    	    				}
+        				}
+    				}
+    				
+    			
+    				
+    				
+    			}
+  
+    			
+    		}catch(SQLException e) {
+    			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
+    		}
+    		
 	    		/*
 	    			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 	    			Orders order = new Orders();
@@ -308,7 +377,14 @@ public class Deliverycontroller implements Initializable{
 	    			}
 	    		} */
     		finally{
-    			conn.close();
+    			try {
+					conn.close();
+				} catch (SQLException e) {
+					 Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	    	   		Error2.setTitle("Error");
+	    	   		Error2.setHeaderText("Connection Error!");
+	    	   		Error2.showAndWait();
+				}
     		}
     	}
     		}
@@ -347,10 +423,10 @@ public class Deliverycontroller implements Initializable{
 	}
 	private Menu menu;
 	private void fillmenu() {
-		conn = Lunchhourdb.get();
 		String SQL = "SELECT * from Menu";
 		
 			try {
+				conn = Lunchhourdb.get();
 				ps = conn.prepareStatement(SQL);
 				rs = ps.executeQuery();
 				if(rs.next()) {
@@ -371,8 +447,10 @@ public class Deliverycontroller implements Initializable{
 					
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
 			}
 			
 		
@@ -430,9 +508,12 @@ public class Deliverycontroller implements Initializable{
 		ordertree.setShowRoot(false);
 		orderday.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, String> param) -> param.getValue().getValue().getOrderday());
 		menuitem.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, String> param) -> param.getValue().getValue().getMenuitem());
-		add.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, String> param) -> param.getValue().getValue().getAdditem());
+		menuqty.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, Integer> param) -> param.getValue().getValue().getMenuqty().asObject());
+		addqty.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, Integer> param) -> param.getValue().getValue().getAddqty().asObject());
 		add.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, String> param) -> param.getValue().getValue().getAdditem());
 		extra.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, String> param) -> param.getValue().getValue().getExtraitem());
+		extraqty.setCellValueFactory((TreeTableColumn.CellDataFeatures<Orders, Integer> param) -> param.getValue().getValue().getExtraqty().asObject());
+		
 
 	}
 public void start() {

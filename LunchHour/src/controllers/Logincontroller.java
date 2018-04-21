@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -18,12 +19,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import helpers.BCrypt;
@@ -73,7 +77,7 @@ public class Logincontroller implements Initializable{
 	}
 
 	@FXML
-    void performLoginAction(ActionEvent event) {
+    void performLoginAction(ActionEvent event) throws IOException {
     	 	 username = Username_txt.getText().trim().toUpperCase(); // removes any space after the username and capitlize it to make a make sure username isn't case-sensitive.
     	    String password = Password_txt.getText().trim();
     	    if(username.length() >=6 && password.length() >= 3) {
@@ -108,6 +112,7 @@ public class Logincontroller implements Initializable{
     	             // Display popup
     	             Stage stage = new Stage();
     	             stage.setScene(new Scene(order));
+    	             stage.getIcons().add(new Image(("file:icon.png")));
     	             //This displays the stage and waits for the input
     	             stage.show();
     	             conn.close();
@@ -120,8 +125,11 @@ public class Logincontroller implements Initializable{
     	            Wronginfo.setVisible(true);		// if the search fails it sets the wrong info label to visible and once it becomes true
     	            									// it'll set the wronginfo to false.
     	        }
-    	    } catch (Exception e) {
-    	        e.printStackTrace();
+    	    } catch (SQLException e) {
+    	    	Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+    	   		Error2.setTitle("Error");
+    	   		Error2.setHeaderText("Connection Error!");
+    	   		Error2.showAndWait();
     	    }
     	    }else {
     	    	Invalidinfo.setVisible(true);

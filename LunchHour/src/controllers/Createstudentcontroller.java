@@ -3,7 +3,7 @@ package controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import application.Student.Student;
+import entities.Student;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -84,6 +84,7 @@ public class Createstudentcontroller implements Initializable{
 		setStage(stage);
 		Grade.getItems().addAll("Pre-K","K","1","2","3","4","5","6","7","8","9","10","11");
 		Section.getItems().addAll("A","B","C");
+		
 	}
 	public void setStage(Stage stage){
 	    this.stage = stage;

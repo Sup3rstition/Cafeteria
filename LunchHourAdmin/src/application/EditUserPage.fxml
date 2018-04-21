@@ -9,53 +9,54 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="533.0" prefWidth="714.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Editusercontroller">
+<AnchorPane prefHeight="533.0" prefWidth="817.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Editusercontroller">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Edit Parent Account">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Separator layoutX="14.0" layoutY="45.0" prefHeight="4.0" prefWidth="685.0" />
-      <TreeTableView layoutX="10.0" layoutY="127.0" prefHeight="317.0" prefWidth="694.0">
-        <columns>
-          <TreeTableColumn editable="false" prefWidth="75.0" text="Username" />
-          <TreeTableColumn editable="false" prefWidth="101.0" text="Email Address" />
-            <TreeTableColumn editable="false" prefWidth="129.0" text="Full Name">
-               <columns>
-                  <TreeTableColumn editable="false" prefWidth="75.0" text="First Name" />
-                  <TreeTableColumn editable="false" prefWidth="75.0" text="Last Name" />
-               </columns>
-            </TreeTableColumn>
-            <TreeTableColumn editable="false" prefWidth="58.0" text="Balance" />
-            <TreeTableColumn editable="false" prefWidth="257.0" text="Children(s)">
-               <columns>
-                  <TreeTableColumn prefWidth="75.0" text="First name" />
-                  <TreeTableColumn prefWidth="75.0" text="Last Name" />
-                  <TreeTableColumn prefWidth="75.0" text="Section" />
-                  <TreeTableColumn prefWidth="75.0" text="Grade" />
-               </columns></TreeTableColumn>
-        </columns>
-      </TreeTableView>
-      <Button layoutX="595.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Edit Information" />
-      <Button layoutX="492.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Add Account" />
-      <Button layoutX="421.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Delete" />
-      <Button layoutX="136.0" layoutY="450.0" mnemonicParsing="false" style="-fx-background-color: #AFC6AF;" text="Add Funds" />
-      <Button layoutX="13.0" layoutY="496.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="58.0" style="-fx-background-color: #AFC6AF;" text="Back" />
-      <Separator layoutX="12.0" layoutY="485.0" prefHeight="4.0" prefWidth="685.0" />
+      <Separator layoutX="14.0" layoutY="45.0" prefHeight="4.0" prefWidth="514.0" />
+      <Button fx:id="editbtn" layoutX="699.0" layoutY="450.0" mnemonicParsing="false" onAction="#edit" style="-fx-background-color: #AFC6AF;" text="Edit Information" />
+      <Button fx:id="addaccbtn" layoutX="596.0" layoutY="450.0" mnemonicParsing="false" onAction="#addacc" style="-fx-background-color: #AFC6AF;" text="Add Account" />
+      <Button fx:id="delacc" layoutX="525.0" layoutY="450.0" mnemonicParsing="false" onAction="#del" style="-fx-background-color: #AFC6AF;" text="Delete" />
+      <Button fx:id="addfundbtn" layoutX="136.0" layoutY="450.0" mnemonicParsing="false" onAction="#addfund" style="-fx-background-color: #AFC6AF;" text="Add Funds" />
+      <Button fx:id="backbtn" layoutX="13.0" layoutY="496.0" mnemonicParsing="false" onAction="#back" prefHeight="27.0" prefWidth="58.0" style="-fx-background-color: #AFC6AF;" text="Back" />
+      <Separator layoutX="12.0" layoutY="485.0" prefHeight="4.0" prefWidth="786.0" />
       <Label layoutX="17.0" layoutY="58.0" text="Parent Search:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField layoutX="123.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="First Name" />
-      <TextField layoutX="221.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="Last Name" />
-      <TextField layoutX="320.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="Username" />
-      <TextField layoutX="16.0" layoutY="450.0" prefHeight="27.0" prefWidth="115.0" promptText="Add to Balance" />
+      <TextField fx:id="pfirst" layoutX="123.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="First Name" />
+      <TextField fx:id="plast" layoutX="221.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="Last Name" />
+      <TextField fx:id="user" layoutX="317.0" layoutY="56.0" prefHeight="25.0" prefWidth="88.0" promptText="Username" />
+      <TextField fx:id="addfundstxt" layoutX="16.0" layoutY="450.0" prefHeight="27.0" prefWidth="115.0" promptText="Add to Balance" />
       <Label layoutX="21.0" layoutY="96.0" text="Child Search:" />
-      <TextField layoutX="123.0" layoutY="91.0" prefHeight="25.0" prefWidth="88.0" promptText="First Name" />
-      <Button layoutX="577.0" layoutY="91.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="88.0" style="-fx-background-color: #AFC6AF;" text="Search" />
-      <TextField layoutX="221.0" layoutY="91.0" prefHeight="25.0" prefWidth="88.0" promptText="Last Name" />
-      <TextField layoutX="414.0" layoutY="56.0" prefHeight="27.0" prefWidth="115.0" promptText="Email Address" />
+      <TextField fx:id="cfirst" layoutX="123.0" layoutY="91.0" prefHeight="25.0" prefWidth="88.0" promptText="First Name" />
+      <Button fx:id="search" layoutX="706.0" layoutY="90.0" mnemonicParsing="false" onAction="#search" prefHeight="28.0" prefWidth="88.0" style="-fx-background-color: #AFC6AF;" text="Search" />
+      <TextField fx:id="clast" layoutX="221.0" layoutY="91.0" prefHeight="25.0" prefWidth="88.0" promptText="Last Name" />
+      <TextField fx:id="email" layoutX="414.0" layoutY="56.0" prefHeight="27.0" prefWidth="115.0" promptText="Email Address" />
+      <TreeTableView fx:id="accounttable" layoutX="16.0" layoutY="132.0" prefHeight="310.0" prefWidth="786.0">
+        <columns>
+            <TreeTableColumn prefWidth="75.0" text="Parent">
+               <columns>
+                <TreeTableColumn fx:id="usercol" prefWidth="68.0" text="Username" />
+                <TreeTableColumn fx:id="emailcol" prefWidth="111.0" text="Email" />
+                  <TreeTableColumn fx:id="pfirstcol" prefWidth="99.0" text="First Name" />
+                  <TreeTableColumn fx:id="plastcol" prefWidth="99.0" text="Last Name" />
+                  <TreeTableColumn fx:id="balcol" prefWidth="51.0" text="Balance" />
+               </columns>
+            </TreeTableColumn>
+            <TreeTableColumn prefWidth="390.0" text="Children(s)">
+               <columns>
+                  <TreeTableColumn fx:id="cfirstcol" prefWidth="105.0" text="First Name" />
+                  <TreeTableColumn fx:id="clastcol" prefWidth="105.0" text="Last Name" />
+                  <TreeTableColumn fx:id="seccol" minWidth="0.0" prefWidth="58.0" text="Section" />
+                  <TreeTableColumn fx:id="gradecol" prefWidth="82.0" text="Grade" />
+               </columns>
+            </TreeTableColumn>
+        </columns>
+      </TreeTableView>
    </children>
 </AnchorPane>

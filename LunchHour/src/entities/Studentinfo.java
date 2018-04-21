@@ -1,4 +1,4 @@
-package application.Student;
+package entities;
 
 public class Studentinfo {
 private int id;

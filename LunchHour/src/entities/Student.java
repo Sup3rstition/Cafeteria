@@ -1,4 +1,4 @@
-package application.Student;
+package entities;
 
 import javafx.beans.property.SimpleStringProperty;
 

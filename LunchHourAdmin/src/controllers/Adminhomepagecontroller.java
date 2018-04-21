@@ -83,6 +83,8 @@ public class Adminhomepagecontroller implements Initializable{
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/MenuEditor.fxml"));
     	Parent Menupage = loader.load();
+    	Menucontroller control = loader.getController();
+    	control.setAdminuser(adminuser);
         Scene Menu = new Scene(Menupage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Menu);
@@ -103,6 +105,8 @@ public class Adminhomepagecontroller implements Initializable{
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/EditUserPage.fxml"));
     	Parent parentpage = loader.load();
+    	Editusercontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
         Scene Parent = new Scene(parentpage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Parent);
