@@ -50,5 +50,15 @@
   		<artifactId>hibernate-core</artifactId>
   		<version>5.2.16.Final</version>
   	</dependency>
+  	<dependency>
+  		<groupId>com.github.dhorions</groupId>
+  		<artifactId>boxable</artifactId>
+  		<version>1.5</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.sun.mail</groupId>
+  		<artifactId>javax.mail</artifactId>
+  		<version>1.6.1</version>
+  	</dependency>
   </dependencies>
 </project>

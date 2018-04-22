@@ -1,7 +1,13 @@
 package entities;
 
+import java.sql.Date;
+
 public class Menu {
 private java.sql.Date start;
+private java.sql.Date end;
+public java.sql.Date getEnd() {
+	return end;
+}
 public java.sql.Date getStart() {
 	return start;
 }
@@ -140,5 +146,9 @@ public String getAdd3price() {
 }
 public void setAdd3price(String add3price) {
 	this.add3price = add3price;
+}
+public void setEnd(Date date) {
+	this.end = date;
+	
 }
 }

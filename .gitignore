@@ -8,3 +8,4 @@ LunchHour/.metadata/
 LunchHour/.project
 LunchHour/.classpath
 .DS_Store
+*.csv

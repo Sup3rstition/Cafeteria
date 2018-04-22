@@ -41,7 +41,7 @@
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Label fx:id="Createaccount" layoutX="251.0" layoutY="250.0" onMouseClicked="#opencreateaccount" text="Create Account">
+      <Label fx:id="Createaccount" layoutX="257.0" layoutY="250.0" onMouseClicked="#opencreateaccount" text="Create Account">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>

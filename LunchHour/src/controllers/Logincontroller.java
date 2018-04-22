@@ -1,7 +1,13 @@
 package controllers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,8 +16,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 import connection.Lunchhourdb;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +62,7 @@ public class Logincontroller implements Initializable{
     
     @FXML
     private Button exitBtn;
-    
+
     @FXML	//if the user wants a new account they will click on the create account label.
     void opencreateaccount(MouseEvent event) throws IOException {
         Parent CreateAccount = FXMLLoader.load(getClass().getClassLoader().getResource("application/CreateAccountPage.fxml"));

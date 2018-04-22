@@ -163,7 +163,7 @@ public void setMenudate(LocalDate dateofbirth) {
     this.menudate.set(dateofbirth);
 }
 
-public ObjectProperty<LocalDate> dateOfBirthProperty() {
+public ObjectProperty<LocalDate> getorderProperty() {
     return menudate;
 }
 public void setFullname(String string) {

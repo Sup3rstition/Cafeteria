@@ -1,6 +1,10 @@
 package controllers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,6 +17,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -20,12 +27,17 @@ import javax.swing.text.NumberFormatter;
 
 import connection.Lunchhourdb;
 import entities.Studentinfo;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,6 +45,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -41,10 +54,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -56,8 +75,6 @@ public class CheckHistoryController implements Initializable {
     @FXML
     private Button savebtn;
 
-    @FXML
-    private Button printbtn;
 
     @FXML
     private Button Backbtn;
@@ -73,23 +90,26 @@ public class CheckHistoryController implements Initializable {
 
     @FXML
     private TextField searchid;
+    @FXML
+    private Label actionStatus;
 
     @FXML
     private ComboBox<Studentinfo> Selectedstudent;
-    
+    private ArrayList<Studentinfo> stdlist = new ArrayList<Studentinfo>();
+
     @FXML
     void backtoorder(ActionEvent event) throws IOException {
     	list.clear();
      	((Node)(event.getSource())).getScene().getWindow().hide();
     }
-    ObservableList<Studentinfo> items;
     void setList(ObservableList<Studentinfo> item) {
-    	this.items = item;
     	Studentinfo all = new Studentinfo();
     	all.setFirstname("All");
     	all.setLastname("Students");
-    	items.add(0, all);
-    	Selectedstudent.setItems(items);
+    	all.setSection("all");
+  		stdlist.add(all);
+    	stdlist.addAll(item);
+    	Selectedstudent.setItems(FXCollections.observableArrayList(stdlist));
     	Selectedstudent.getSelectionModel().selectFirst();
     	Selectedstudent.setCellFactory(new Callback<ListView<Studentinfo>,ListCell<Studentinfo>>(){
     	 public ListCell<Studentinfo> call(ListView<Studentinfo> l) {
@@ -128,7 +148,7 @@ public class CheckHistoryController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		orderdate(StartingDate);
-		Selectedstudent.setItems(items);
+		Selectedstudent.setItems(FXCollections.observableList(stdlist));
 	        searchid.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
 		
 		order.setCellValueFactory(new PropertyValueFactory<>("menudate"));
@@ -168,18 +188,74 @@ public class CheckHistoryController implements Initializable {
 	    }
 	}
 	
-    @FXML
-    void print(ActionEvent event) {
-    	Alert a = new Alert(AlertType.INFORMATION);
-    	a.setContentText("Sent to printer");
-    	a.showAndWait();
-    }
-
+    private void saveFileRoutine(File file)
+			throws IOException{
+		// Creates a new file and writes the txtArea contents into it
+    	TextArea texts = new TextArea();
+  	  String Titles = "Order ID,Order Date,Name,Menu Item,Additionals,Extra Items,Total\n";
+  	  texts.appendText(Titles);
+  	  orderhistory.getItems().stream().forEach((o)
+                -> {
+              	  String text = orderIdcol.getCellData(o)+ "," +order.getCellData(o)+ "," +name.getCellData(o)+ "," +menuitem.getCellData(o)+ "," +add.getCellData(o).replaceAll(",", ". ")+ "," +extra.getCellData(o).replaceAll(",", ". ")+ "," +total.getCellData(o) + "\n";
+              	  texts.appendText(text);
+                });
+                ObservableList<CharSequence> paragraph = texts.getParagraphs();
+                Iterator<CharSequence>  iter = paragraph.iterator();
+                try
+                {
+                    BufferedWriter bf = new BufferedWriter(new FileWriter(file));
+                    while(iter.hasNext())
+                    {
+                        CharSequence seq = iter.next();
+                        bf.append(seq);
+                        bf.newLine();
+                    }
+                    bf.flush();
+                    bf.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+		file.createNewFile();
+	}
     @FXML
     void save(ActionEvent event) {
-    	Alert a = new Alert(AlertType.INFORMATION);
-    	a.setContentText("Saved under documents");
-    	a.showAndWait();
+    	FileChooser fileChooser = new FileChooser();
+    	fileChooser.setTitle("Save file");
+    	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Csv", "*.Csv"));
+    	fileChooser.setInitialFileName("Orders_" + LocalDate.now().toString() + ".Csv");
+    	File savedFile = fileChooser.showSaveDialog(((Node)(event.getSource())).getScene().getWindow());
+
+    	if (savedFile != null) {
+
+    	    try {
+    	        saveFileRoutine(savedFile);
+    	    }
+    	    catch(IOException e) {
+    		
+    	        e.printStackTrace();
+    	        Alert alert = new Alert(AlertType.ERROR);
+    	        alert.setTitle("Error");
+    	        alert.setHeaderText("Saving Error...");
+    	        alert.setContentText("An error has occured while trying to save file! Please try again!");
+
+    	        alert.showAndWait();
+    	        return;
+    	    }
+    	    Alert alert = new Alert(AlertType.INFORMATION);
+    	    alert.setTitle("File Saved");
+    	    alert.setHeaderText(null);
+    	    alert.setContentText("File saved: " + savedFile.toString());
+
+    	    alert.showAndWait();
+    	}
+    	else {
+    		 Alert alert = new Alert(AlertType.INFORMATION);
+     	    alert.setTitle("File Save canceled");
+     	    alert.setHeaderText(null);
+     	    alert.setContentText("Saving Cancelled");
+    	}
     }
 
     @FXML
@@ -741,7 +817,7 @@ public class CheckHistoryController implements Initializable {
 		incorrectlabel.setVisible(false);
 		String searchorderid = searchid.getText();
 		//if specific student is selected it will search by them first.
-		if(!Selectedstudent.getValue().getFirstname().equals("All") && !Selectedstudent.getValue().getLastname().equals("Students")) {
+		if(!Selectedstudent.getValue().getSection().equals("all")) {
 			searchbystudent(searchorderid);
 		}
 		//Search id Search
