@@ -1,5 +1,7 @@
 package controllers;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -46,6 +48,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -75,6 +78,8 @@ public class CheckHistoryController implements Initializable {
 
     @FXML
     private TextField searchid;
+    @FXML
+    private Label actionStatus;
 
     @FXML
     private ComboBox<Studentinfo> Selectedstudent;
@@ -173,16 +178,63 @@ public class CheckHistoryController implements Initializable {
 	
     @FXML
     void print(ActionEvent event) {
-    	Alert a = new Alert(AlertType.INFORMATION);
-    	a.setContentText("Sent to printer");
-    	a.showAndWait();
+    	System.out.printf("%-15s%15s%10s%-25s","\033[1mOrder Date\033[0m","Name", "" ,"Menu Item");
+    	System.out.println();
+    	System.out.printf("%-15s%15s%10s%-25s","__________","____", "" ,"_________");
+    	System.out.println();
+    	
+    	orderhistory.getItems().stream().forEach((o)
+                -> {
+                	System.out.format("%-15s%15s%10s%-25s", order.getCellData(o),name.getCellData(o), "" ,menuitem.getCellData(o));
+                	System.out.println();
+                });
     }
-
+    private void saveFileRoutine(File file)
+			throws IOException{
+		// Creates a new file and writes the txtArea contents into it
+		String txt = "Test";
+		file.createNewFile();
+		FileWriter writer = new FileWriter(file);
+		writer.write(txt);
+		writer.close();
+	}
     @FXML
     void save(ActionEvent event) {
-    	Alert a = new Alert(AlertType.INFORMATION);
-    	a.setContentText("Saved under documents");
-    	a.showAndWait();
+    	FileChooser fileChooser = new FileChooser();
+    	fileChooser.setTitle("Save file");
+    	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Txt", "*.txt"));
+    	fileChooser.setInitialFileName("Orders_" + LocalDate.now().toString() + ".txt");
+    	File savedFile = fileChooser.showSaveDialog(((Node)(event.getSource())).getScene().getWindow());
+
+    	if (savedFile != null) {
+
+    	    try {
+    	        saveFileRoutine(savedFile);
+    	    }
+    	    catch(IOException e) {
+    		
+    	        e.printStackTrace();
+    	        Alert alert = new Alert(AlertType.ERROR);
+    	        alert.setTitle("Error");
+    	        alert.setHeaderText("Saving Error...");
+    	        alert.setContentText("An error has occured while trying to save file! Please try again!");
+
+    	        alert.showAndWait();
+    	        return;
+    	    }
+    	    Alert alert = new Alert(AlertType.INFORMATION);
+    	    alert.setTitle("File Saved");
+    	    alert.setHeaderText(null);
+    	    alert.setContentText("File saved: " + savedFile.toString());
+
+    	    alert.showAndWait();
+    	}
+    	else {
+    		 Alert alert = new Alert(AlertType.INFORMATION);
+     	    alert.setTitle("File Save canceled");
+     	    alert.setHeaderText(null);
+     	    alert.setContentText("Saving Cancelled");
+    	}
     }
 
     @FXML

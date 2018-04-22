@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,11 +20,14 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -102,7 +106,8 @@ public class Menupagecontroller implements Initializable {
 	RadioButton selectedradio;
 	private ObservableList<Extras> extras  = FXCollections.observableArrayList();
 	NumberFormat formatter = new DecimalFormat("#0.00");
-	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	@FXML
     private Tooltip menu1des;
 	@FXML
@@ -236,7 +241,7 @@ public class Menupagecontroller implements Initializable {
 			menuitem = Menu3.getText();
 		}
     	
-    	Cart order = new Cart(Studentname.getText(), menuitem, menudaylabel.getText(), totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText(), studentid_);
+    	Cart order = new Cart(Studentname.getText(), menuitem, orderdate.getValue().format(dateformatter) , totaladd , totalextra(), Double.parseDouble(total_txt.getText()),menudate.getText(), studentid_);
     	TreeItem<Cart> order1 = new TreeItem<Cart>(order);
     	order.setMenuorderdate(java.sql.Date.valueOf(orderdate.getValue()));
     	
@@ -316,10 +321,11 @@ public class Menupagecontroller implements Initializable {
 		try {
 			BuildExtraTable();
 			//Menu building method
+			orderdate();
 			BuildMenu();
 			//Sets the price for the text box
+			setprops();
 			Totalchange();
-			orderdate();
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -332,17 +338,11 @@ public class Menupagecontroller implements Initializable {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
-	   		Error2.setTitle("Error");
-	   		Error2.setHeaderText("Connection Error!");
-	   		Error2.showAndWait();
 		}
 
 	}
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
 	}
 	private void orderdate() {
         final Callback<DatePicker, DateCell> dayCellFactory = 
@@ -357,19 +357,21 @@ public class Menupagecontroller implements Initializable {
                             LocalDateTime date1 = LocalDateTime.now();
                             LocalDateTime date2 = now.atStartOfDay().plusHours(7);
                             DayOfWeek day = DayOfWeek.from(item);
-                            if (item.isAfter(now.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))) || day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY
+                            if (item.isAfter(now.with(TemporalAdjusters.next(DayOfWeek.FRIDAY)).plusDays(7)) || day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY || item.isBefore(now)
+                            		|| (date1.isAfter(date2) && item.isBefore(now.plusDays(1)))
                                 ) {
                                     setDisable(true);
                                     setStyle("-fx-background-color: #ffc0cb;");
                             }
-                            if(date1.isAfter(date2) && item.isBefore(now.plusDays(1)) || item.isBefore(now)) {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #ffc0cb;");
-                            }
-                            if(now.getDayOfWeek() == DayOfWeek.FRIDAY && item.isAfter(now) && date1.isAfter(date2)) {
+                            if(now.getDayOfWeek() == DayOfWeek.FRIDAY && date1.isAfter(date2) && item.compareTo(now) == 0) {
                             	setDisable(true);
                                 setStyle("-fx-background-color: #ffc0cb;");
                             }
+                            if(now.getDayOfWeek() == DayOfWeek.FRIDAY && item.isAfter(now.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))) && date1.isBefore(date2)) {
+                            	setDisable(true);
+                                setStyle("-fx-background-color: #ffc0cb;");
+                            }
+
                     }
                 };
             }
@@ -378,7 +380,7 @@ public class Menupagecontroller implements Initializable {
 	 DayOfWeek day = DayOfWeek.from(now);
      LocalDateTime date1 = LocalDateTime.now();
      LocalDateTime date2 = now.atStartOfDay().plusHours(7);
-	 if(day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY ) {
+	 if(day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY || (day == DayOfWeek.FRIDAY  && date1.isAfter(date2) )) {
 		 orderdate.setValue(now.with(TemporalAdjusters.next(DayOfWeek.MONDAY)));
 	 }else if(date1.isAfter(date2)) {
 		 orderdate.setValue(now.plusDays(1));
@@ -388,136 +390,220 @@ public class Menupagecontroller implements Initializable {
 	 }
 	 orderdate.setDayCellFactory(dayCellFactory);
 	 menudaylabel.setText(orderdate.getValue().getDayOfWeek().toString());
+		orderdate.valueProperty().addListener((ov, oldValue, newValue) -> {
+			if(newValue.isAfter(menu.getEnd().toLocalDate())) {
+				try {
+					BuildNextMenu();
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(newValue.isBefore(menu.getStart().toLocalDate())) {
+				try {
+					BuildMenu();
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+        });
+	}
+	void setprops() {
+		IntegerSpinnerValueFactory add1fac = new IntegerSpinnerValueFactory(0, 99);
+		IntegerSpinnerValueFactory add2fac = new IntegerSpinnerValueFactory(0, 99);
+		IntegerSpinnerValueFactory add3fac = new IntegerSpinnerValueFactory(0, 99);
+		add1qty.setValueFactory(add1fac);
+		add2qty.setValueFactory(add2fac);
+		add3qty.setValueFactory(add3fac);
+		Menu1.setToggleGroup(group);
+		Menu2.setToggleGroup(group);
+		Menu3.setToggleGroup(group);
+		group.selectToggle(Menu1);;
+			group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+			    public void changed(ObservableValue<? extends Toggle> ov,
+			        Toggle old_toggle, Toggle new_toggle) {
+			    		selectedradio = (RadioButton)group.getSelectedToggle();
+			            		  Totalchange();
+			            	  }
+			              });
+			add1qty.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+				 Totalchange();
+		    });
+			add2qty.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+				 Totalchange();
+		    });
+			add3qty.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+				 Totalchange();
+		    });
+		    
 	}
 @FXML
 void changeday(ActionEvent event) {
 	menudaylabel.setText(orderdate.getValue().getDayOfWeek().toString());
 }
+void setmenus() {
+	if(!menu.getMenu1().equals("No Item")) {
+		Menu1.setDisable(false);
+		Menu1.setText(menu.getMenu1());
+		menu1price.setText(menu.getMenu1price());
+		menu1des.setText(menu.getMenu1des());
+	}else {
+		Menu1.setText("No Item");
+		menu1price.setText("0");
+		Menu1.setDisable(true);
+	}
+	
+	if(!menu.getMenu2().equals("No Item")) {
+		Menu2.setDisable(false);
+		Menu2.setText(menu.getMenu2());
+		menu2price.setText(menu.getMenu2price());
+		menu2des.setText(menu.getMenu2des());
+		}else {
+		Menu2.setText("No Item");
+		menu2price.setText("0");
+		Menu2.setDisable(true);
+	}
+	
+	if(!menu.getMenu3().equals("No Item")) {
+		Menu3.setDisable(false);
+		Menu3.setText(menu.getMenu3());
+		menu3price.setText(menu.getMenu3price());
+		menu3des.setText(menu.getMenu3des());
+		
+	}else {
+		Menu3.setText("No Item");
+		menu3price.setText("0");
+		Menu3.setDisable(true);
+	}
+	
+	if(!menu.getAdd1().equals("No Item")) {
+		add1qty.setDisable(false);
+		Add1.setDisable(false);
+		Add1.setText(menu.getAdd1());
+		add1price.setText(menu.getAdd1price());
+		add1des.setText(menu.getAdd1des());
+		
+		
+	}else {
+		Add1.setText("No Item");
+		add1price.setText("0");
+		add1qty.setDisable(true);
+		Add1.setDisable(true);
+	}
+	
+	if(!menu.getAdd2().equals("No Item")) {
+		Add2.setDisable(false);
+		add2qty.setDisable(false);
+		Add2.setText(menu.getAdd2());
+		add2price.setText(menu.getAdd2price());
+		add2des.setText(menu.getAdd2des());
+		
+	}else {
+		Add2.setText("No Item");
+		add2price.setText("0");
+		add2qty.setDisable(true);
+		Add2.setDisable(true);
+	}
+	
+	if(!menu.getAdd3().equals("No Item")) {
+		Add3.setDisable(false);
+		add3qty.setDisable(false);
+		Add3.setText(menu.getAdd3());
+		add3price.setText(menu.getAdd3price());
+		add3des.setText(menu.getAdd3des());
+	}else {
+		Add3.setText("No Item");
+		add3price.setText("0");
+		add3qty.setDisable(true);
+		Add3.setDisable(true);
+	}
+	
+	
+	menudate.setText(dateFormat.format(menu.getStart().getTime()));
+	Menu1.setSelected(true);
+	if(Menu1.getText().equals("No Item")) {
+		Menu1.setSelected(false);
+		Menu2.setSelected(true);
+	}if(Menu2.getText().equals("No Item") && Menu1.getText().equals("No Item")) {
+		Menu2.setSelected(false);
+		Menu3.setSelected(true);
+	}if(Menu3.getText().equals("No Item") && Menu2.getText().equals("No Item")) {
+		Menu3.setSelected(false);
+		Menu1.setSelected(true);
+	}
+}
 	//Menu building method
-	private void BuildMenu() throws SQLException, JsonParseException, JsonMappingException, IOException {
+	Menu menu;
+	private void BuildMenu() throws JsonParseException, JsonMappingException, IOException {
+		java.sql.Date first = java.sql.Date.valueOf(LocalDate.now().with(DayOfWeek.MONDAY));
+		 LocalDate now = LocalDate.now();
+		 DayOfWeek day = DayOfWeek.from(now);
+	     LocalDateTime date1 = LocalDateTime.now();
+	     LocalDateTime date2 = now.atStartOfDay().plusHours(7);
+		 if(day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY || (date1.isAfter(date2)&& day == DayOfWeek.FRIDAY) ) {
+			  first = java.sql.Date.valueOf(now.with(TemporalAdjusters.next(DayOfWeek.MONDAY)));
+		 }
 		try {
 			ObjectMapper mapper = new ObjectMapper(); 
-			Menu menu = mapper.readValue(new File("Menu.json"), Menu.class);
-			checkdate(menu);
-			if(!menu.getMenu1().equals("No Item")) {
-				Menu1.setText(menu.getMenu1());
-				menu1price.setText(menu.getMenu1price());
-				menu1des.setText(menu.getMenu1des());
-			}else {
-				Menu1.setText("No Item");
-				menu1price.setText("0");
-				Menu1.setDisable(true);
-				menu1des.setText("No Item");
-			}
-			
-			if(!menu.getMenu2().equals("No Item")) {
-				Menu2.setText(menu.getMenu2());
-				menu2price.setText(menu.getMenu2price());
-				menu2des.setText(menu.getMenu2des());
-			}else {
-				Menu2.setText("No Item");
-				menu2price.setText("0");
-				Menu2.setDisable(true);
-				menu3des.setText("No Item");
-			}
-			
-			if(!menu.getMenu3().equals("No Item")) {
-				Menu3.setText(menu.getMenu3());
-				menu3price.setText(menu.getMenu3price());
-				menu3des.setText(menu.getMenu3des());
-			}else {
-				Menu3.setText("No Item");
-				menu3price.setText("0");
-				Menu3.setDisable(true);
-				menu3des.setText("No Item");
-			}
-			
-			if(!menu.getAdd1().equals("No Item")) {
-				Add1.setText(menu.getAdd1());
-				add1price.setText(menu.getAdd1price());
-				add1des.setText(menu.getAdd1des());
-				
-			}else {
-				Add1.setText("No Item");
-				add1price.setText("0");
-				add1qty.setDisable(true);
-				add1des.setText("No Item");
-			}
-			
-			if(!menu.getAdd2().equals("No Item")) {
-				Add2.setText(menu.getAdd2());
-				add2price.setText(menu.getAdd2price());
-				add2des.setText(menu.getAdd2des());
-			}else {
-				Add2.setText("No Item");
-				add2price.setText("0");
-				add2qty.setDisable(true);
-				add3des.setText("No Item");
-			}
-			
-			if(!menu.getAdd3().equals("No Item")) {
-				Add3.setText(menu.getAdd3());
-				add3price.setText(menu.getAdd3price());
-				add3des.setText(menu.getAdd3des());
-			}else {
-				Add3.setText("No Item");
-				add3price.setText("0");
-				add3qty.setDisable(true);
-				add3des.setText("No Item");
-			}
-			
-			
-			menudate.setText(dateFormat.format(menu.getStart().getTime()));
-			
-			IntegerSpinnerValueFactory add1fac = new IntegerSpinnerValueFactory(0, 99);
-			IntegerSpinnerValueFactory add2fac = new IntegerSpinnerValueFactory(0, 99);
-			IntegerSpinnerValueFactory add3fac = new IntegerSpinnerValueFactory(0, 99);
-			add1qty.setValueFactory(add1fac);
-			add2qty.setValueFactory(add2fac);
-			add3qty.setValueFactory(add3fac);
-			Menu1.setToggleGroup(group);
-			Menu2.setToggleGroup(group);
-			Menu3.setToggleGroup(group);
-			group.selectToggle(Menu1);;
-				group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-				    public void changed(ObservableValue<? extends Toggle> ov,
-				        Toggle old_toggle, Toggle new_toggle) {
-				    		selectedradio = (RadioButton)group.getSelectedToggle();
-				            		  Totalchange();
-				            	  }
-				              });
-				add1qty.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
-					 Totalchange();
-			    });
-				add2qty.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
-					 Totalchange();
-			    });
-				add3qty.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
-					 Totalchange();
-			    });
-			    
+			menu = mapper.readValue(new File("Menu.json"), Menu.class);
+			checkdate(first);
+			setmenus();
 		}catch(FileNotFoundException f) {
-		makenewfile();
-		BuildMenu();
+		createMenuFile(first);
 		}
 	}
-	private void checkdate(Menu menu) throws JsonParseException, JsonMappingException, IOException {
-		String SQL = "SELECT menuid from Menu INNER JOIN Menutool ON Menu.menuid=Menutool.menuidtool ORDER By menuid DESC Limit 1;";
+	private void BuildNextMenu() throws JsonParseException, JsonMappingException, IOException {
+		java.sql.Date first = java.sql.Date.valueOf(LocalDate.now().plusDays(7).with(DayOfWeek.MONDAY));
+		try {
+			ObjectMapper mapper = new ObjectMapper(); 
+			menu = mapper.readValue(new File("Next_Menu.json"), Menu.class);
+			checkdate(first);
+			setmenus(); 
+		}catch(FileNotFoundException f) {
+		createMenuFile(first);
+		}
+	}
+	private void checkdate(java.sql.Date first) throws JsonParseException, JsonMappingException, IOException {
+		String SQL = "SELECT Menu_Start,Revision from Menu Where Menu_Start = ?;";
 		try {
 			conn = Lunchhourdb.get();
 			ps = conn.prepareStatement(SQL);
+			ps.setDate(1,first);
 			rs = ps.executeQuery();
 			if(rs.next()) {
-				if(menu.getMenuid() < rs.getInt("menuid")) {
-					makenewfile();
-					BuildMenu();
+			if(menu.getStart().compareTo(rs.getDate("Menu_Start")) < 0 || menu.getMenuid() < rs.getInt("Revision")) {
+				if(menu.getStart().compareTo(Date.valueOf(LocalDate.now().with(DayOfWeek.MONDAY))) > 0) {
+				createMenuFile(first); 
 				}
 			}
+				}
+			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
 	   		Error2.setTitle("Error");
 	   		Error2.setHeaderText("Connection Error!");
 	   		Error2.showAndWait();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		
@@ -654,15 +740,18 @@ void changeday(ActionEvent event) {
 		total_txt.setText(formatter.format(Total));
 	}
 
-void makenewfile() {
-	String SQL = "SELECT * from Menu INNER JOIN Menutool ON Menu.menuid=Menutool.menuidtool ORDER By menuid DESC Limit 1;";
+	void createMenuFile(java.sql.Date first) {
+
+	String SQL = "SELECT * from Menu INNER JOIN Menutool ON Menu.menuid=Menutool.menuidtool Where Menu_Start = ?";
 	try {
 		conn = Lunchhourdb.get();
 		ps = conn.prepareStatement(SQL);
+		System.out.println(first);
+		ps.setDate(1, first);
 		rs = ps.executeQuery();
 		if(rs.next()) {
-			Menu menu = new Menu();
-			menu.setMenuid(rs.getInt("menuid"));
+			menu = new Menu();
+			menu.setMenuid(rs.getInt("Revision"));
 			menu.setMenu1(rs.getString("Menu 1 item"));
 			menu.setMenu2(rs.getString("Menu 2 item"));
 			menu.setMenu3(rs.getString("Menu 3 item"));
@@ -670,6 +759,7 @@ void makenewfile() {
 			menu.setMenu2price(rs.getString("Menu 2 Price"));
 			menu.setMenu3price(rs.getString("Menu 3 Price"));
 			menu.setStart(rs.getDate("Menu_Start"));
+			menu.setEnd(rs.getDate("Menu_End"));
 			menu.setAdd1(rs.getString("Additional 1"));
 			menu.setAdd2(rs.getString("Additional 2"));
 			menu.setAdd3(rs.getString("Additional 3"));
@@ -682,10 +772,14 @@ void makenewfile() {
 			menu.setAdd1des(rs.getString("add1des"));
 			menu.setAdd2des(rs.getString("add2des"));
 			menu.setAdd3des(rs.getString("add3des"));
-
+			setmenus();
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(new File("Menu.json"), menu);
+				if(menu.getStart().compareTo(Date.valueOf(LocalDate.now().with(DayOfWeek.MONDAY))) > 0) {
+				mapper.writeValue(new File("Next_Menu.json"), menu);
+				}else {
+					mapper.writeValue(new File("Menu.json"), menu);
+				}
 			} catch (JsonGenerationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -697,12 +791,19 @@ void makenewfile() {
 				e.printStackTrace();
 			}
 		}
-		conn.close();
 	} catch (SQLException e) {
 		Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
    		Error2.setTitle("Error");
    		Error2.setHeaderText("Connection Error!");
    		Error2.showAndWait();
+	}finally {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
+
 }

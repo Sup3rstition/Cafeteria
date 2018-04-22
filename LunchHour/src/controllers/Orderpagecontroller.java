@@ -361,10 +361,6 @@ public class Orderpagecontroller implements Initializable {
 		}
 		 
 	}
-	@FXML
-	void nextweek(ActionEvent event) {
-		
-	}
 	public void setInfo() {
 		parentsname.setText(parent.getName());
 		  Calendar cal = Calendar.getInstance();
