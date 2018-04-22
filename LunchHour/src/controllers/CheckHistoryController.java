@@ -1,8 +1,10 @@
 package controllers;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -24,12 +27,17 @@ import javax.swing.text.NumberFormatter;
 
 import connection.Lunchhourdb;
 import entities.Studentinfo;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,6 +45,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -45,11 +54,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -61,8 +75,6 @@ public class CheckHistoryController implements Initializable {
     @FXML
     private Button savebtn;
 
-    @FXML
-    private Button printbtn;
 
     @FXML
     private Button Backbtn;
@@ -176,34 +188,43 @@ public class CheckHistoryController implements Initializable {
 	    }
 	}
 	
-    @FXML
-    void print(ActionEvent event) {
-    	System.out.printf("%-15s%15s%10s%-25s","\033[1mOrder Date\033[0m","Name", "" ,"Menu Item");
-    	System.out.println();
-    	System.out.printf("%-15s%15s%10s%-25s","__________","____", "" ,"_________");
-    	System.out.println();
-    	
-    	orderhistory.getItems().stream().forEach((o)
-                -> {
-                	System.out.format("%-15s%15s%10s%-25s", order.getCellData(o),name.getCellData(o), "" ,menuitem.getCellData(o));
-                	System.out.println();
-                });
-    }
     private void saveFileRoutine(File file)
 			throws IOException{
 		// Creates a new file and writes the txtArea contents into it
-		String txt = "Test";
+    	TextArea texts = new TextArea();
+  	  String Titles = "Order ID,Order Date,Name,Menu Item,Additionals,Extra Items,Total\n";
+  	  texts.appendText(Titles);
+  	  orderhistory.getItems().stream().forEach((o)
+                -> {
+              	  String text = orderIdcol.getCellData(o)+ "," +order.getCellData(o)+ "," +name.getCellData(o)+ "," +menuitem.getCellData(o)+ "," +add.getCellData(o).replaceAll(",", ". ")+ "," +extra.getCellData(o).replaceAll(",", ". ")+ "," +total.getCellData(o) + "\n";
+              	  texts.appendText(text);
+                });
+                ObservableList<CharSequence> paragraph = texts.getParagraphs();
+                Iterator<CharSequence>  iter = paragraph.iterator();
+                try
+                {
+                    BufferedWriter bf = new BufferedWriter(new FileWriter(file));
+                    while(iter.hasNext())
+                    {
+                        CharSequence seq = iter.next();
+                        bf.append(seq);
+                        bf.newLine();
+                    }
+                    bf.flush();
+                    bf.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
 		file.createNewFile();
-		FileWriter writer = new FileWriter(file);
-		writer.write(txt);
-		writer.close();
 	}
     @FXML
     void save(ActionEvent event) {
     	FileChooser fileChooser = new FileChooser();
     	fileChooser.setTitle("Save file");
-    	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Txt", "*.txt"));
-    	fileChooser.setInitialFileName("Orders_" + LocalDate.now().toString() + ".txt");
+    	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Csv", "*.Csv"));
+    	fileChooser.setInitialFileName("Orders_" + LocalDate.now().toString() + ".Csv");
     	File savedFile = fileChooser.showSaveDialog(((Node)(event.getSource())).getScene().getWindow());
 
     	if (savedFile != null) {

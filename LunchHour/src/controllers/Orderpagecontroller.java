@@ -12,6 +12,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+
+
 import connection.Lunchhourdb;
 import entities.Parentinfo;
 import entities.Studentinfo;
@@ -184,7 +186,6 @@ public class Orderpagecontroller implements Initializable {
 		        java.sql.Date startDate = new java.sql.Date(cal.getTime().getTime());
 		   		 String sql = "Insert into Cafeteria.Order (`Parent Id`, `Student ID`, `Menu Item`, Additional, Extra, Total, `Order Date`, Studentname, Order_Date) Values ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"; 
 				 ps = conn.prepareStatement(sql);
-				 
 				 for(int i=0; i < root.getChildren().size();i++) {
 				    	TreeItem<Cart> tableRow = root.getChildren().get(i);
 				    	ps.setInt(1, parent.getParentId());
@@ -485,6 +486,8 @@ public class Orderpagecontroller implements Initializable {
     public void setparent(Parentinfo parentinfo) {
     	this.parent = parentinfo;
     }
+   
+  
 }
 
 
