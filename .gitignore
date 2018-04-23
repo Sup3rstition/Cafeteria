@@ -9,3 +9,4 @@ LunchHour/.project
 LunchHour/.classpath
 .DS_Store
 *.csv
+LunchHourAdmin/target/
