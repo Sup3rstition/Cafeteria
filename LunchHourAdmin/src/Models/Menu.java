@@ -25,67 +25,21 @@ private String menu3des;
 private String add1des;
 private String add2des;
 private String add3des;
+private int id;
+public int getId() {
+	return id;
+}
+public void setId(int id) {
+	this.id = id;
+}
+public int getMenutoolid() {
+	return menutoolid;
+}
+public void setMenutoolid(int menutoolid) {
+	this.menutoolid = menutoolid;
+}
+private int menutoolid;
 
-public SimpleStringProperty getstart() {
-	return new SimpleStringProperty(start.toString());
-}
-public SimpleStringProperty getend() {
-	return new SimpleStringProperty(end.toString());
-}
-public SimpleStringProperty getmenu1() {
-	return new SimpleStringProperty(menu1);
-}
-public SimpleStringProperty getmenu2() {
-	return new SimpleStringProperty(menu2);
-}
-public SimpleStringProperty getmenu3() {
-	return new SimpleStringProperty(menu3);
-}
-public SimpleStringProperty getadd1() {
-	return new SimpleStringProperty(add1);
-}
-public SimpleStringProperty getadd2() {
-	return new SimpleStringProperty(add2);
-}
-public SimpleStringProperty getadd3() {
-	return new SimpleStringProperty(add3);
-}
-public SimpleStringProperty getadd1price() {
-	return new SimpleStringProperty(add1price);
-}
-public SimpleStringProperty getadd2price() {
-	return new SimpleStringProperty(add2price);
-}
-public SimpleStringProperty getadd3price() {
-	return new SimpleStringProperty(add3price);
-}
-public SimpleStringProperty getmenu1price() {
-	return new SimpleStringProperty(menu1price);
-}
-public SimpleStringProperty getmenu2price() {
-	return new SimpleStringProperty(menu2price);
-}
-public SimpleStringProperty getmenu3price() {
-	return new SimpleStringProperty(menu3price);
-}
-public SimpleStringProperty getmenu1des() {
-	return new SimpleStringProperty(menu1des);
-}
-public SimpleStringProperty getmenu2des() {
-	return new SimpleStringProperty(menu2des);
-}
-public SimpleStringProperty getmenu3des() {
-	return new SimpleStringProperty(menu3des);
-}
-public SimpleStringProperty getadd1des() {
-	return new SimpleStringProperty(add1des);
-}
-public SimpleStringProperty getadd2des() {
-	return new SimpleStringProperty(add2des);
-}
-public SimpleStringProperty getadd3des() {
-	return new SimpleStringProperty(add3des);
-}
 public java.sql.Date getEnd() {
 	return end;
 }

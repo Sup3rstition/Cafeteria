@@ -204,23 +204,31 @@ public class Editusercontroller implements Initializable {
     void back(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/Adminhomepage.fxml"));
-    	Parent Orderpage = loader.load();
+    	Parent page = loader.load();
     	Adminhomepagecontroller controller = loader.getController();
 		controller.setAdminuser(adminuser);
 		controller.start();
-        Scene Order = new Scene(Orderpage);
+        Scene Order = new Scene(page);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Order);
     }
 
     @FXML
     void del(ActionEvent event) {
-
+    	
     }
 
     @FXML
-    void edit(ActionEvent event) {
-    	
+    void edit(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/EditParent.fxml"));
+    	Parent page = loader.load();
+    	Adminhomepagecontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
+		controller.start();
+        Scene newscene = new Scene(page);
+        Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
+        window.setScene(newscene);
     }
     private int id;
     @FXML

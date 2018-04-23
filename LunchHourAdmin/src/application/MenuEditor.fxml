@@ -5,6 +5,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -37,32 +38,32 @@
             <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Menu Item 1:" GridPane.rowIndex="1">
+            <Label text="  Menu Item 1:" GridPane.rowIndex="1">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Menu Item 2:" GridPane.rowIndex="2">
+            <Label text="  Menu Item 2:" GridPane.rowIndex="2">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Menu Item 3:" GridPane.rowIndex="3">
+            <Label text="  Menu Item 3:" GridPane.rowIndex="3">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Additional Item 1:" GridPane.rowIndex="4">
+            <Label text="  Additional Item 1:" GridPane.rowIndex="4">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Additional Item 2:" GridPane.rowIndex="5">
+            <Label text="  Additional Item 2:" GridPane.rowIndex="5">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Additional Item 3:" GridPane.rowIndex="6">
+            <Label text="  Additional Item 3:" GridPane.rowIndex="6">
                <font>
                   <Font size="16.0" />
                </font>
@@ -71,31 +72,49 @@
                <font>
                   <Font size="16.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="menu1des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="menu2" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="menu2des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="menu3" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="menu3des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="add1" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="add1des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="add2" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="add2des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Label fx:id="add3" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>
+               <tooltip>
+                  <Tooltip fx:id="add3des" text="Empty Tooltip" />
+               </tooltip>
             </Label>
             <Button fx:id="menu1btn" mnemonicParsing="false" onAction="#editmenu1" text="Edit" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <Button fx:id="menu2btn" mnemonicParsing="false" onAction="#editmenu2" text="Edit" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
@@ -103,12 +122,12 @@
             <Button fx:id="add1btn" mnemonicParsing="false" onAction="#editadd1" text="Edit" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
             <Button fx:id="add2btn" mnemonicParsing="false" onAction="#editadd2" text="Edit" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
             <Button fx:id="add2btn" mnemonicParsing="false" onAction="#editadd3" text="Edit" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
-            <CheckBox fx:id="checkbox1" mnemonicParsing="false" onAction="#check1" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-            <CheckBox fx:id="checkbox2" mnemonicParsing="false" onAction="#check2" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-            <CheckBox fx:id="checkbox3" mnemonicParsing="false" onAction="#check3" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-            <CheckBox fx:id="checkbox4" mnemonicParsing="false" onAction="#check4" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-            <CheckBox fx:id="checkbox5" mnemonicParsing="false" onAction="#check5" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
-            <CheckBox fx:id="checkbox6" mnemonicParsing="false" onAction="#check6" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+            <CheckBox fx:id="checkbox1" mnemonicParsing="false" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <CheckBox fx:id="checkbox2" mnemonicParsing="false" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <CheckBox fx:id="checkbox3" mnemonicParsing="false" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <CheckBox fx:id="checkbox4" mnemonicParsing="false" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <CheckBox fx:id="checkbox5" mnemonicParsing="false" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <CheckBox fx:id="checkbox6" mnemonicParsing="false" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
             <Label text="Remove" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Label text="Price" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Label fx:id="m1price" text="Price" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
@@ -125,10 +144,10 @@
       <Button fx:id="backbtn" layoutX="23.0" layoutY="405.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Separator layoutX="12.0" layoutY="148.0" prefHeight="3.0" prefWidth="518.0" />
       <Button fx:id="editextrabtn" layoutX="339.0" layoutY="405.0" mnemonicParsing="false" onAction="#exitextra" text="Edit Extras" />
-      <GridPane layoutX="14.0" layoutY="58.0" prefHeight="90.0" prefWidth="287.0">
+      <GridPane layoutX="14.0" layoutY="58.0" prefHeight="90.0" prefWidth="337.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" prefWidth="172.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="0.0" prefWidth="165.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" prefWidth="108.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="0.0" prefWidth="229.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />

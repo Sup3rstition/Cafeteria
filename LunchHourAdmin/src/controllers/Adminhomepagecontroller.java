@@ -85,6 +85,7 @@ public class Adminhomepagecontroller implements Initializable{
     	Parent Menupage = loader.load();
     	Menucontroller control = loader.getController();
     	control.setAdminuser(adminuser);
+    	control.firststart();
         Scene Menu = new Scene(Menupage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Menu);
