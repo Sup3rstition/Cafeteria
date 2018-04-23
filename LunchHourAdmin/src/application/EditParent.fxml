@@ -72,17 +72,9 @@
             <Label text="First Name:" />
             <TextField fx:id="Lastnametxt" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Balance:" GridPane.rowIndex="2" />
-            <TextField promptText="Balance" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="balancetxt" promptText="Balance" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <TableView fx:id="studenttable" layoutX="14.0" layoutY="421.0" prefHeight="125.0" prefWidth="288.0">
-        <columns>
-          <TableColumn text="First Name" />
-            <TableColumn prefWidth="79.0" text="Last Name" />
-            <TableColumn prefWidth="61.0" text="Grade" />
-          <TableColumn prefWidth="66.0" text="Section" />
-        </columns>
-      </TableView>
       <Button fx:id="removebtn" layoutX="246.0" layoutY="551.0" mnemonicParsing="false" onAction="#removeselected" text="Remove" />
       <Button fx:id="addbtn" layoutX="195.0" layoutY="551.0" mnemonicParsing="false" onAction="#Addstudentable" text="Add" />
       <Separator layoutX="14.0" layoutY="410.0" prefWidth="200.0" />
@@ -132,5 +124,13 @@
       <Label fx:id="Userlength" layoutX="164.0" layoutY="80.0" text="Username isn't long enough" textFill="RED" visible="false" />
       <Label fx:id="emailvalid" layoutX="170.0" layoutY="125.0" text="Not a vaild email Address" textFill="RED" visible="false" />
       <Label fx:id="Uservalid" layoutX="177.0" layoutY="80.0" text="Not a valid Username" textFill="RED" visible="false" />
+      <TableView fx:id="studt" layoutX="14.0" layoutY="413.0" prefHeight="133.0" prefWidth="288.0">
+        <columns>
+          <TableColumn fx:id="firstc" prefWidth="75.0" text="First name" />
+          <TableColumn fx:id="lastc" prefWidth="88.0" text="Last Name" />
+            <TableColumn fx:id="secc" prefWidth="62.0" text="Seciton" />
+            <TableColumn fx:id="gradec" prefWidth="49.0" text="Grade" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

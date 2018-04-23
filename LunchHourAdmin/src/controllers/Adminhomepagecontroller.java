@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import Models.Account;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 public class Adminhomepagecontroller implements Initializable{
@@ -107,6 +109,7 @@ public class Adminhomepagecontroller implements Initializable{
     	loader.setLocation(getClass().getResource("/application/EditUserPage.fxml"));
     	Parent parentpage = loader.load();
     	Editusercontroller controller = loader.getController();
+    	controller.start();
 		controller.setAdminuser(adminuser);
         Scene Parent = new Scene(parentpage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();

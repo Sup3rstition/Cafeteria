@@ -8,12 +8,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import Models.Account;
+import Models.Account2;
 import Models.Parentinfo;
 import Models.Student;
 import connection.Lunchhourdb;
+import Models.Studentinfo;
 import helpers.BCrypt;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +35,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -41,6 +51,20 @@ public class Editaccountcontroller implements Initializable {
 			this.adminuser = user;
 			
 		}
+	    @FXML
+	    private TableView<Studentinfo> studenttable;
+
+	    @FXML
+	    private TableColumn<Studentinfo, String> firstc;
+
+	    @FXML
+	    private TableColumn<Studentinfo, String> lastc;
+
+	    @FXML
+	    private TableColumn<Studentinfo, String> secc;
+
+	    @FXML
+	    private TableColumn<Studentinfo, String> gradec;
     @FXML
     private TextField Username_txt;
 
@@ -59,22 +83,7 @@ public class Editaccountcontroller implements Initializable {
     @FXML
     private TextField Lastnametxt;
 
-    @FXML
-    private TableView<Student> studenttable;
-
-    @FXML
-    private TableColumn<Student, String> firstNamecol;
-
-    @FXML
-    private TableColumn<Student, String> lastnamecol;
-
-    @FXML
-    private TableColumn<Student, String> gradecol;
-
-    @FXML
-    private TableColumn<Student, String> sectioncol;
-
-    @FXML
+	@FXML
     private Button removebtn;
 
     @FXML
@@ -102,24 +111,30 @@ public class Editaccountcontroller implements Initializable {
          loader.load();
          Createstudentcontroller controller = loader.getController();
          Parent popup = loader.getRoot();
-         controller.setItems(studenttable.getItems());
+      //   controller.setItems(studenttable.getItems());
 
          // Display popup
          Stage stage = new Stage();
          stage.setScene(new Scene(popup));
          //This displays the stage and waits for the input
          stage.showAndWait();
-         studenttable.refresh();
+        // studenttable.refresh();
          
     }
 
     @FXML
     void backtologin(ActionEvent event) throws IOException {
-    	Parent Loginpage = FXMLLoader.load(getClass().getClassLoader().getResource("application/Login.fxml"));
-        Scene Login = new Scene(Loginpage);
-        Stage window = (Stage) backbtn.getScene().getWindow();
-        window.setScene(Login);
-        window.show();
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/EditUserPage.fxml"));
+    	Parent page = loader.load();
+    	Editusercontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
+		controller.setAdminList(items2);
+		controller.secondstart();
+        Scene newscene = new Scene(page);
+        Stage stage = new Stage();
+        stage.setScene(newscene);
+        stage.show();
 
 
     }
@@ -195,8 +210,8 @@ public class Editaccountcontroller implements Initializable {
 			             parentid = rs.getInt(1);
 			             sql = "Insert Into Cafeteria.Student(`First Name`, `Last Name`, Section, Grade, `Parent ID`) Values(?,?,?,?,?)";
 			             ps = conn.prepareStatement(sql);
-			             for(int i=0; i < studenttable.getItems().size();i++) {
-				             	Student tableRow = studenttable.getItems().get(i);
+			            /* for(int i=0; i < studenttable.getItems().size();i++) {
+				            	Student tableRow = studenttable.getItems().get(i);
 				             String name = tableRow.getFirstName();
 				             String lastname = tableRow.getLastName();
 				             String Grade = tableRow.getGrade();
@@ -206,8 +221,8 @@ public class Editaccountcontroller implements Initializable {
 				             ps.setString(3, Section );
 				             ps.setString(4, Grade );
 				             ps.setInt(5, parentid);
-				        	 ps.execute();
-				             }
+				       	 	ps.execute();
+				             }*/
 			             }
 			             
 			        	 conn.close();    					// Closes connection
@@ -268,38 +283,69 @@ public class Editaccountcontroller implements Initializable {
 
     @FXML
     void removeselected(ActionEvent event) {
-    	//Remove alert to make sure you want to remove the student
-    	
-    	Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + studenttable.getSelectionModel().getSelectedItem().getFirstName() +" "+studenttable.getSelectionModel().getSelectedItem().getLastName() +" from Student table?" , ButtonType.YES, ButtonType.CANCEL);
-   	 alert.showAndWait();
 
-   	 if (alert.getResult() == ButtonType.YES) {
-    	Student selectedItem = studenttable.getSelectionModel().getSelectedItem();
-        studenttable.getItems().remove(selectedItem);
-   	 }
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "Remove " + studenttable.getSelectionModel().getSelectedItem().getFirstname() +" "+studenttable.getSelectionModel().getSelectedItem().getLastname() +" from Student table?" , ButtonType.YES, ButtonType.CANCEL);
+      	 alert.showAndWait();
 
+      	 if (alert.getResult() == ButtonType.YES) {
+      		Studentinfo selectedItem = studenttable.getSelectionModel().getSelectedItem();
+           studenttable.getItems().remove(selectedItem);
+      	 }
     }
     @FXML
     private TextField balancetxt;
     void start() {
-    	String[] name = parent.getName().split(" ");
-    	Username_txt.setText(parent.getUsername());
-    	Emailaddress_txt.setText(parent.getEmail());
-    	Firstnametxt.setText(name[0]);
-    	Lastnametxt.setText(name[1]);
-    	balancetxt.setText(parent.getBalance().toString());
-    	
-    	
+    	Username_txt.setText(Selectedparent.getUsername());
+    	Emailaddress_txt.setText(Selectedparent.getEmail());
+    	Firstnametxt.setText(Selectedparent.getPfirst());
+    	Lastnametxt.setText(Selectedparent.getPlast());
+    	balancetxt.setText(String.valueOf(Selectedparent.getBalance()));
+    	searchkids();
     }
-    Parentinfo parent;
+    ObservableList<Models.Studentinfo> items = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		//this creates a reference to student to get the information from the other controller.
-		firstNamecol.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
-		lastnamecol.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
-		gradecol.setCellValueFactory(new PropertyValueFactory<Student, String>("Grade"));
-		sectioncol.setCellValueFactory(new PropertyValueFactory<Student, String>("Section"));
-		
-	    
+		firstc.setCellValueFactory(new PropertyValueFactory<Studentinfo, String>("firstName"));
+		lastc.setCellValueFactory(new PropertyValueFactory<Studentinfo, String>("lastName"));
+		gradec.setCellValueFactory(new PropertyValueFactory<Studentinfo, String>("Grade"));
+		secc.setCellValueFactory(new PropertyValueFactory<Studentinfo, String>("Section"));
 	}
+	ArrayList<Studentinfo> students = new ArrayList<Studentinfo>();
+	void searchkids(){
+	      String sql = "SELECT * from Cafeteria.Student Where `Parent ID` = ?;";
+	  	  try {
+	  		  conn = Lunchhourdb.get();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(Selectedparent.getParentId()));
+		  	  rs = ps.executeQuery();
+		  	  while(rs.next()) {
+		  		Studentinfo student = new Studentinfo();
+		  		  student.setParentID(rs.getInt("Parent ID"));
+		  		  student.setFirstname(rs.getString("First Name").toLowerCase());
+		  		  student.setLastname(rs.getString("Last Name").toLowerCase());
+		  		  student.setGrade(rs.getString("Grade").toLowerCase());
+		  		  student.setSection(rs.getString("Section").toLowerCase());
+		  		  list.add(student);
+		  		  studenttable.setItems(list);
+		  	  }} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	  	  }
+	  
+	}
+		private Account2 Selectedparent;
+	  public Account2 getSelectedparent() {
+			return Selectedparent;
+		}
+	  ObservableList<Studentinfo> list = FXCollections.observableArrayList();
+		public void setSelectedparent(Account2 selectedparent) {
+			Selectedparent = selectedparent;
+		}
+	private ObservableList<Account2>items2;
+			public void setAdminlist(ObservableList<Account2> items2) {
+				// TODO Auto-generated method stub
+				
+			}
 }
+	

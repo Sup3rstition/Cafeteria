@@ -34,7 +34,13 @@ public void setGrade(String grade) {
 }
 private String firstname;
 private String lastname;
+public int getParentID() {
+	return parentID;
+}
+public void setParentID(int parentID) {
+	this.parentID = parentID;
+}
 private String section;
 private String grade;
-
+private int parentID;
 }

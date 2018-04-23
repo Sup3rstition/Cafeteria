@@ -51,8 +51,12 @@ public class Createstudentcontroller implements Initializable{
     void addstudent(ActionEvent event) { 
     	// gets the values and text of the answers the user supplies and inputs them into the table on createAccount
     	if(Studentfirst_txt.getText() != null && Studentlast_txt.getText() != null && Grade.getValue() !=null && Section.getValue() != null ) {
-    	student.add(new Student(Studentfirst_txt.getText(),Studentlast_txt.getText(),Grade.getValue(),
-    			Section.getValue()));
+    	Student stud = new Student();
+    	stud.setFirstName(Studentfirst_txt.getText());
+    	stud.setLastName(Studentlast_txt.getText());
+    	stud.setGrade(Grade.getValue());
+		stud.setSection(Section.getValue());
+    		student.add(stud);
     	//Clears the values in the fields
     	Studentfirst_txt.clear();
     	Studentlast_txt.clear();
