@@ -35,13 +35,13 @@
       <Button fx:id="searchbtn" layoutX="606.0" layoutY="53.0" mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Search" />
       <TableView fx:id="orderhistory" layoutX="10.0" layoutY="105.0" prefHeight="312.0" prefWidth="924.0">
         <columns>
-            <TableColumn fx:id="idc" prefWidth="99.0" text="Order number" />
-            <TableColumn fx:id="orderc" text="Order Date" />
-            <TableColumn fx:id="dayc" prefWidth="68.0" text="Day" />
-          <TableColumn fx:id="namec" prefWidth="77.0" text="Student" />
-            <TableColumn fx:id="gradec" prefWidth="84.0" text="Grade" />
-            <TableColumn fx:id="sectionc" prefWidth="62.0" text="Section" />
-            <TableColumn fx:id="menuitemc" prefWidth="108.0" text="Menu Item" />
+            <TableColumn fx:id="idc" prefWidth="66.0" text="Order #" />
+            <TableColumn fx:id="orderc" prefWidth="88.0" text="Order Date" />
+            <TableColumn fx:id="dayc" prefWidth="98.0" text="Day" />
+          <TableColumn fx:id="namec" prefWidth="109.0" text="Student" />
+            <TableColumn fx:id="gradec" prefWidth="39.0" text="Grade" />
+            <TableColumn fx:id="sectionc" prefWidth="49.0" text="Section" />
+            <TableColumn fx:id="menuitemc" prefWidth="129.0" text="Menu Item" />
             <TableColumn fx:id="addc" prefWidth="130.0" text="Additional Item" />
             <TableColumn fx:id="extrac" prefWidth="142.0" text="Extra items" />
             <TableColumn fx:id="totalc" prefWidth="67.0" text="Total" />

@@ -164,11 +164,11 @@ public class Ordercontroller implements Initializable {
 			throws IOException{
 		// Creates a new file and writes the txtArea contents into it
     	TextArea texts = new TextArea();
-  	  String Titles = "Order ID,Order Date,Name,Menu Item,Additionals,Extra Items,Total\n";
+  	  String Titles = "Order Number,Order Date,Day,Student Name,Grade,Section,Menu Item,Additionals,Extra Items,Total\n";
   	  texts.appendText(Titles);
   	  orderhistory.getItems().stream().forEach((o)
                 -> {
-              	  String text = idc.getCellData(o)+ "," +orderc.getCellData(o)+ "," +namec.getCellData(o)+ "," +menuitemc.getCellData(o)+ "," +addc.getCellData(o).replaceAll(",", ". ")+ "," +extrac.getCellData(o).replaceAll(",", ". ")+ "," +totalc.getCellData(o) + "\n";
+              	  String text = idc.getCellData(o)+ "," +orderc.getCellData(o)+"," +dayc.getCellData(o)+ "," +namec.getCellData(o)+"," +gradec.getCellData(o)+ "," +sectionc.getCellData(o)+"," +menuitemc.getCellData(o)+ "," +addc.getCellData(o).replaceAll(",", ". ")+ "," +extrac.getCellData(o).replaceAll(",", ". ")+ "," +totalc.getCellData(o) + "\n";
               	  texts.appendText(text);
                 });
                 ObservableList<CharSequence> paragraph = texts.getParagraphs();
@@ -192,6 +192,8 @@ public class Ordercontroller implements Initializable {
 		file.createNewFile();
 	}
     void searchbydates() {
+    	incorrectdates.setVisible(false);
+    	items.clear();
 		if(starting.getValue() != null && ending.getValue() != null) {
 			if(!starting.getValue().isAfter(ending.getValue())){
     			try {    		
@@ -218,8 +220,22 @@ public class Ordercontroller implements Initializable {
     					history.setTotal(rs.getDouble("Total"));
     					history.setOrderDate((rs.getDate("Order_Date").toLocalDate()));
     					history.setOrderid(rs.getInt("ID"));
+    					history.setDay((rs.getDate("Order_Date").toLocalDate().getDayOfWeek().toString()));
+    					history.setStudentID(rs.getInt("Student ID"));
     	    			items.add(history);
     	    		}
+    	    		conn = Lunchhourdb.get();
+        			sql = "Select * from Cafeteria.Student Where ID = ?;";
+    	    		for(AdminOrders o : items) {
+        				ps = conn.prepareStatement(sql);
+        	    		ps.setInt(1,o.getStudentID());
+        	    		rs = ps.executeQuery();
+        	    		if(rs.next()) {
+        	    			o.setGrade(rs.getString("Grade"));
+        	    			o.setSection(rs.getString("Section"));
+        	    		}
+    	    		}
+    	    		conn.close();
     	    		orderhistory.setItems(items);
     			} catch (SQLException e) {
     				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
@@ -261,8 +277,22 @@ public class Ordercontroller implements Initializable {
 						history.setTotal(rs.getDouble("Total"));
 						history.setOrderDate((rs.getDate("Order_Date").toLocalDate()));
 						history.setOrderid(rs.getInt("ID"));
-		    			items.add(history);
-		    		}
+						history.setDay((rs.getDate("Order_Date").toLocalDate().getDayOfWeek().toString()));
+    					history.setStudentID(rs.getInt("Student ID"));
+    	    			items.add(history);
+    	    		}
+    	    		conn = Lunchhourdb.get();
+        			sql = "Select * from Cafeteria.Student Where ID = ?;";
+    	    		for(AdminOrders o : items) {
+        				ps = conn.prepareStatement(sql);
+        	    		ps.setInt(1,o.getStudentID());
+        	    		rs = ps.executeQuery();
+        	    		if(rs.next()) {
+        	    			o.setGrade(rs.getString("Grade"));
+        	    			o.setSection(rs.getString("Section"));
+        	    		}
+    	    		}
+    	    		conn.close();
 		    		orderhistory.setItems(items);
 				} catch (SQLException e) {
 					Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
@@ -272,19 +302,72 @@ public class Ordercontroller implements Initializable {
 				}
 	    	} 
 	}
+    void searchall(){
+    	incorrectdates.setVisible(false);
+    	items.clear();
+    			try {    		
+        			conn = Lunchhourdb.get();
+        			String sql = "Select * from Cafeteria.Order;";
+    				ps = conn.prepareStatement(sql);
+    	    		rs = ps.executeQuery();
+    	    		while(rs.next()) {
+    	    			AdminOrders history = new AdminOrders();
+    	    			history.setFullname(rs.getString("Studentname"));
+    					history.setMenu(rs.getString("Menu Item"));
+    					if(rs.getString("Additional") != null) {
+    						history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+    						}else {
+    							history.setAdd("0");
+    						}
+    						if(rs.getString("Extra") != null) {
+    						history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+    						}else {
+    							history.setExtra("0");
+    						}
+    					history.setTotal(rs.getDouble("Total"));
+    					history.setOrderDate((rs.getDate("Order_Date").toLocalDate()));
+    					history.setOrderid(rs.getInt("ID"));
+    					history.setDay((rs.getDate("Order_Date").toLocalDate().getDayOfWeek().toString()));
+    					history.setStudentID(rs.getInt("Student ID"));
+    	    			items.add(history);
+    	    		}
+    	    		conn = Lunchhourdb.get();
+        			sql = "Select * from Cafeteria.Student Where ID = ?;";
+    	    		for(AdminOrders o : items) {
+        				ps = conn.prepareStatement(sql);
+        	    		ps.setInt(1,o.getStudentID());
+        	    		rs = ps.executeQuery();
+        	    		if(rs.next()) {
+        	    			o.setGrade(rs.getString("Grade"));
+        	    			o.setSection(rs.getString("Section"));
+        	    		}
+    	    		}
+    	    		conn.close();
+    	    		orderhistory.setItems(items);
+    			} catch (SQLException e) {
+    				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+        	   		Error2.setTitle("Error");
+        	   		Error2.setHeaderText("Connection Error!");
+        	   		Error2.showAndWait();
+    			}
+    }
     @FXML
     void search(ActionEvent event) {
+    	if(starting!=null || ending !=null) {
     	searchbydates();
+    	}else {
+    		searchall();
+    	}
     }
     @FXML
     private Label incorrectdates;
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		orderc.setCellValueFactory(new PropertyValueFactory<>("menudate"));
+		orderc.setCellValueFactory(new PropertyValueFactory<>("OrderDate"));
 		orderc.setCellFactory(new Ordercontroller.ColumnFormatter<>(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 		idc.setCellValueFactory(new PropertyValueFactory<AdminOrders, Integer>("orderid"));
 		namec.setCellValueFactory(new PropertyValueFactory<AdminOrders, String>("fullname"));
-		menuitemc.setCellValueFactory(new PropertyValueFactory<AdminOrders, String>("menuitem"));
+		menuitemc.setCellValueFactory(new PropertyValueFactory<AdminOrders, String>("Menu"));
 		addc.setCellValueFactory(new PropertyValueFactory<AdminOrders, String>("add"));
 		extrac.setCellValueFactory(new PropertyValueFactory<AdminOrders, String>("extra"));
 		totalc.setCellValueFactory(new PropertyValueFactory<AdminOrders, Double>("total"));

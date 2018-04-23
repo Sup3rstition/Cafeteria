@@ -3,7 +3,7 @@ package Models;
 import java.time.LocalDate;
 
 public class AdminOrders {
-private int orderid;
+
 public int getOrderid() {
 	return orderid;
 }
@@ -70,11 +70,19 @@ public double getTotal() {
 public void setTotal(double total) {
 	this.total = total;
 }
+private int orderid;
 private LocalDate OrderDate;
 private String day;
 private String fname;
 private String lname;
 private String grade;
+private int StudentID;
+public int getStudentID() {
+	return StudentID;
+}
+public void setStudentID(int studentID) {
+	StudentID = studentID;
+}
 public String getFullname() {
 	return fullname;
 }

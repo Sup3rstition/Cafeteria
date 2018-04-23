@@ -167,7 +167,6 @@ void searchall() {
 	    	
            
        
-  //  }
     private String adminuser;
     public void setAdminuser(String user) {
 		this.adminuser = user;
