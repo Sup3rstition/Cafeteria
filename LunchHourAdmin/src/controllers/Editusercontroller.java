@@ -215,7 +215,32 @@ public class Editusercontroller implements Initializable {
 
     @FXML
     void del(ActionEvent event) {
-    	
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to Account "+ accounttable.getSelectionModel().getSelectedItem().getValue().getUsername().getValue() + "?" , ButtonType.YES, ButtonType.CANCEL);
+	   	 alert.showAndWait();
+
+	   	 if (alert.getResult() == ButtonType.YES) {
+	   	 
+   	int parentid = Integer.parseInt(accounttable.getSelectionModel().getSelectedItem().getValue().getParentId().get());
+   	
+   	 String sql = "DELETE FROM `Cafeteria`.`Parents` WHERE `Id`=?;";
+	    	try {
+	    		conn = Lunchhourdb.get();
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, parentid );
+		    	ps.execute();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	    	
+	    	root.getChildren().clear();
+	    	updateinfo();
+	    	Alert Done = new Alert(AlertType.INFORMATION);
+	   		Done.setTitle("Success!");
+	   		Done.setHeaderText("Selected Account Status: Deleted");
+	   		Done.setContentText("Account has been Deleted");
+
+	   		Done.showAndWait();
+	   	 }
     }
 
     @FXML
