@@ -148,6 +148,7 @@ public class CheckHistoryController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		orderdate(StartingDate);
+		orderdate(EndingDate);
 		Selectedstudent.setItems(FXCollections.observableList(stdlist));
 	        searchid.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
 		
@@ -379,7 +380,7 @@ public class CheckHistoryController implements Initializable {
 					ps = conn.prepareStatement(sql);
 					ps.setInt(1, parentid);
 		    		ps.setDate(2,Date.valueOf(StartingDate.getValue()));
-		    		ps.setDate(3, Date.valueOf(today.plusDays(7)));
+		    		ps.setDate(3, Date.valueOf(today.plusDays(6)));
 		    		rs = ps.executeQuery();
 		    		while(rs.next()) {
 		    			Cart history = new Cart();
