@@ -59,11 +59,6 @@ public class Deliverycontroller implements Initializable{
     @FXML
     private DatePicker endingdate;
 
-    @FXML
-    private Button savebtn;
-
-    @FXML
-    private Button printbtn;
 
     @FXML
     private Button Backbtn;
@@ -98,11 +93,7 @@ public class Deliverycontroller implements Initializable{
     @FXML
     private Label delivery;
 
-    @FXML
-    private ComboBox<String> filtercombo;
-
-    @FXML
-    private TextField filter;
+    
     private String adminuser;
     @FXML
     void backtoorder(ActionEvent event) throws IOException {
@@ -117,20 +108,6 @@ public class Deliverycontroller implements Initializable{
         window.setScene(Order);
     }
 
-    @FXML
-    void filtercom(ActionEvent event) {
-
-    }
-
-    @FXML
-    void print(ActionEvent event) {
-
-    }
-
-    @FXML
-    void save(ActionEvent event) {
-
-    }
 	List<Order> orderlist = new ArrayList<Order>();
 	private Connection conn = null;
 	private PreparedStatement ps = null;
@@ -186,7 +163,7 @@ public class Deliverycontroller implements Initializable{
 	    		}
 	    			orderlist.add(order);
 	    		}
-    			for (LocalDate date = startingdate.getValue(); date.isBefore(today.plusDays(7)); date = date.plusDays(1)) {
+    			for (LocalDate date = startingdate.getValue(); date.isBefore(today.plusDays(5)); date = date.plusDays(1)) {
     				System.out.println(0);
     				Orders dateorder = new Orders();
     				String sdate = date.toString();
