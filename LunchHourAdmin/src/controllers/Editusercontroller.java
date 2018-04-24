@@ -6,12 +6,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
-import Models.Account;
+import Models.Account2;
 import Models.Orders;
+import Models.Student;
+import Models.Studentinfo;
 import connection.Lunchhourdb;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,12 +35,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 
 public class Editusercontroller implements Initializable {
 	private Connection conn = null;
@@ -51,58 +69,31 @@ public class Editusercontroller implements Initializable {
     @FXML
     private TextField pfirst;
 
-    @FXML
-    private TextField plast;
-
-    @FXML
-    private TextField user;
 
     @FXML
     private TextField addfundstxt;
 
+    public void setAdminList( ObservableList<Account2> items) {
+    	this.items = items;
+    }
+    ObservableList<Account2> items = FXCollections.observableArrayList();
     @FXML
-    private TextField cfirst;
+    private TableView<Account2> accounts;
 
     @FXML
-    private Button search;
+    private TableColumn<Account2, String> userc;
 
     @FXML
-    private TextField clast;
+    private TableColumn<Account2,String> emailc;
 
     @FXML
-    private TextField email;
-    
-    
-    @FXML
-    private TreeTableView<Account> accounttable;
+    private TableColumn<Account2, String> firstc;
 
     @FXML
-    private TreeTableColumn<Account, String> usercol;
+    private TableColumn<Account2,String> lastc;
 
     @FXML
-    private TreeTableColumn<Account, String> emailcol;
-
-    @FXML
-    private TreeTableColumn<Account, String> pfirstcol;
-
-    @FXML
-    private TreeTableColumn<Account, String> plastcol;
-
-    @FXML
-    private TreeTableColumn<Account, String> balcol;
-
-    @FXML
-    private TreeTableColumn<Account, String> cfirstcol;
-
-    @FXML
-    private TreeTableColumn<Account, String> clastcol;
-
-    @FXML
-    private TreeTableColumn<Account, String> seccol;
-
-    @FXML
-    private TreeTableColumn<Account, String> gradecol;
-
+    private TableColumn<Account2,Double> balancec;
     @FXML
     void addacc(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
@@ -114,58 +105,45 @@ public class Editusercontroller implements Initializable {
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Order);
     }
-   void updateinfo (){
-	   String spfirst = pfirst.getText();
-    	   if(spfirst.equals("bryan") || spfirst.equals("Bryan")) {
-               
-               try {
-               	conn = Lunchhourdb.get();
-   				ps = conn.prepareStatement("SELECT * from Cafeteria.Parents WHERE Username = ?;");
-   				 ps.setString(1, "Cordes96");
-   		            rs = ps.executeQuery();
-   		            if(rs.next()) {
-   		        	Account Bryan = new Account();
-   		        	id = rs.getInt("Id");
-   		        	Bryan.setPfirst(rs.getString("First Name"));
-   		        	Bryan.setPlast(rs.getString("Last Name"));
-   		        	Bryan.setEmail(rs.getString("EmailAddress"));
-   		        	Bryan.setUsername(rs.getString("Username"));
-   		        	Bryan.setBalance(rs.getDouble("Balance"));
-   		        	TreeItem<Account> tBryan = new TreeItem<Account>(Bryan);
-   		      
-   		        	  String sql = "SELECT * from Cafeteria.Student WHERE `Parent ID` = ?;";
-   		        	  ps = conn.prepareStatement(sql);
-   		        	  ps.setInt(1, id);
-   		        	  rs = ps.executeQuery();
-   		        	  while(rs.next()) {
-   		        		  Account student = new Account();
-   		        		  student.setCfirst(rs.getString("First Name"));
-   		        		  student.setClast(rs.getString("Last Name"));
-   		        		  student.setGrade(rs.getString("Grade"));
-   		        		  student.setSection(rs.getString("Section"));
-   		        		  tBryan.getChildren().add(new TreeItem<Account>(student));
-   		        	  }
-   		        	  root.getChildren().add(tBryan);
-   		            }
-   		            
-   			} catch (SQLException e) {
-   				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
-    	   		Error2.setTitle("Error");
-    	   		Error2.setHeaderText("Connection Error!");
-    	   		Error2.showAndWait();
-   			}
-              
-           }
+    void secondstart() {
+    	accounts.setItems(items);
     }
+void searchall() {
+		items.clear();
+	   try {
+        	conn = Lunchhourdb.get();
+			ps = conn.prepareStatement("SELECT * from Cafeteria.Parents;");
+	            rs = ps.executeQuery();
+	            while(rs.next()) {
+	        	Account2 Account = new Account2();
+	        	Account.setParentId(String.valueOf(rs.getInt("Id")));
+	        	Account.setPfirst(rs.getString("First Name").toLowerCase());
+	        	Account.setPlast(rs.getString("Last Name").toLowerCase());
+	        	Account.setEmail(rs.getString("EmailAddress").toLowerCase());
+	        	Account.setUsername(rs.getString("Username").toLowerCase());
+	        	Account.setBalance(rs.getDouble("Balance"));
+	        	items.add(Account);
+	            }
+	            accounts.setItems(items);
+	            
+		} catch (SQLException e) {
+			Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
+	   		Error2.setTitle("Error");
+	   		Error2.setHeaderText("Connection Error!");
+	   		Error2.showAndWait();
+		}
+}
+	String pattern = "#0.##";
+	DecimalFormat decimalFormat = new DecimalFormat(pattern);
     @FXML
     void addfund(ActionEvent event) {
-    	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to add " + addfundstxt.getText() +" to "+ accounttable.getSelectionModel().getSelectedItem().getValue().getUsername().getValue() + "?" , ButtonType.YES, ButtonType.CANCEL);
-	   	 alert.showAndWait();
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to add " +  decimalFormat.format(addfundstxt.getText()) +" to "+ accounts.getSelectionModel().getSelectedItem().getUsername()+ "?" , ButtonType.YES, ButtonType.CANCEL);
+	  	 alert.showAndWait();
 
-	   	 if (alert.getResult() == ButtonType.YES) {
-	   	 
-    	double intbal = accounttable.getSelectionModel().getSelectedItem().getValue().getBalancet();
-    	double finbal = intbal + Double.parseDouble(addfundstxt.getText());
+	  	 if (alert.getResult() == ButtonType.YES) {
+
+    	double intbal = accounts.getSelectionModel().getSelectedItem().getBalance();
+    	double finbal = intbal + Double.parseDouble( decimalFormat.format(addfundstxt.getText()));
     	
     	 String sql = "Update Parents SET Balance = ? , `Last Balance Update` = ?   Where Id = ?;";
 	    	try {
@@ -173,7 +151,7 @@ public class Editusercontroller implements Initializable {
 				ps = conn.prepareStatement(sql);
 				ps.setDouble(1, finbal );
 		    	ps.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
-		    	ps.setInt(3, id);
+		    	ps.setInt(3, Integer.parseInt(accounts.getSelectionModel().getSelectedItem().getParentId()));
 		    	ps.execute();
 			} catch (SQLException e) {
 				Alert Error2= new Alert(AlertType.ERROR, "An error has occured while connecting with the database.\n Please check your internet connection and try again.");
@@ -182,8 +160,6 @@ public class Editusercontroller implements Initializable {
     	   		Error2.showAndWait();
 			}
 	    	
-	    	root.getChildren().clear();
-	    	updateinfo();
 	    	Alert Done = new Alert(AlertType.INFORMATION);
 	   		Done.setTitle("Success!");
 	   		Done.setHeaderText("Account Balance has been updated!");
@@ -191,10 +167,10 @@ public class Editusercontroller implements Initializable {
 
 	   		Done.showAndWait();
 	   	 }
+    }
 	    	
            
        
-    }
     private String adminuser;
     public void setAdminuser(String user) {
 		this.adminuser = user;
@@ -204,47 +180,134 @@ public class Editusercontroller implements Initializable {
     void back(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/Adminhomepage.fxml"));
-    	Parent Orderpage = loader.load();
+    	Parent page = loader.load();
     	Adminhomepagecontroller controller = loader.getController();
 		controller.setAdminuser(adminuser);
 		controller.start();
-        Scene Order = new Scene(Orderpage);
+        Scene Order = new Scene(page);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Order);
     }
 
     @FXML
     void del(ActionEvent event) {
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to Account "+ accounts.getSelectionModel().getSelectedItem().getUsername() + "?" , ButtonType.YES, ButtonType.CANCEL);
+	  	 alert.showAndWait();
 
+	 if (alert.getResult() == ButtonType.YES) {
+	   	 searchkids();
+   	int parentid = Integer.parseInt(accounts.getSelectionModel().getSelectedItem().getParentId());
+   	
+   	 String sql = "DELETE FROM `Cafeteria`.`Parents` WHERE `Id`=?;";
+	    	try {
+	    		conn = Lunchhourdb.get();
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, parentid );
+		    	ps.execute();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	    	
+	    	Alert Done = new Alert(AlertType.INFORMATION);
+	   		Done.setTitle("Success!");
+	   		Done.setHeaderText("Selected Account Status: Deleted");
+	   		Done.setContentText("Account has been Deleted");
+
+	   		Done.showAndWait();
+	   	 }
     }
-
     @FXML
-    void edit(ActionEvent event) {
-    	
+    void edit(ActionEvent event) throws IOException {
+    	if(accounts.getSelectionModel().getSelectedItem() != null) {
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(getClass().getResource("/application/EditParent.fxml"));
+    	Parent page = loader.load();
+    	Editaccountcontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
+		controller.setSelectedparent(accounts.getSelectionModel().getSelectedItem());
+		controller.setAdminlist(items);
+		controller.start();
+        Scene newscene = new Scene(page);
+        Stage stage = new Stage();
+        stage.setScene(newscene);
+        stage.show();
+    	}else {
+    		
+    	}
     }
-    private int id;
-    @FXML
-    void search(ActionEvent event) {
-    	updateinfo();
-           
-
+    ArrayList<Studentinfo> students = new ArrayList<>();
+    void searchkids(){
+	      String sql = "SELECT * from Cafeteria.Student Where `Parent ID` = ?;";
+	  	  try {
+	  		  conn = Lunchhourdb.get();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(accounts.getSelectionModel().getSelectedItem().getParentId()));
+		  	  rs = ps.executeQuery();
+		  	  while(rs.next()) {
+		  		Studentinfo student = new Studentinfo();
+		  		  student.setParentID(rs.getInt("Parent ID"));
+		  		  student.setFirstname(rs.getString("First Name").toLowerCase());
+		  		  student.setLastname(rs.getString("Last Name").toLowerCase());
+		  		  student.setGrade(rs.getString("Grade").toLowerCase());
+		  		  student.setSection(rs.getString("Section").toLowerCase());
+		  		  students.add(student);
+		  		  
+		  	  }} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	  	  }
+	  
+	}
+    void start(){
+    	searchall();
     }
-    TreeItem<Account> root = new TreeItem<>();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		accounttable.setRoot(root);
-		accounttable.setShowRoot(false);
-		usercol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getUsername());
-		emailcol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getEmail());
-		pfirstcol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getPfirst());
-		plastcol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getPlast());
-		balcol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getBalance());
-		cfirstcol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getCfirst());
-		clastcol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getClast());
-		seccol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getSection());
-		gradecol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Account, String> param) -> param.getValue().getValue().getGrade());
-		
-		
-	}
+		UnaryOperator<TextFormatter.Change> filter = new UnaryOperator<TextFormatter.Change>() {
 
+            @Override
+            public TextFormatter.Change apply(TextFormatter.Change t) {
+
+                if (t.isReplaced()) 
+                    if(t.getText().matches("[^0-9]"))
+                        t.setText(t.getControlText().substring(t.getRangeStart(), t.getRangeEnd()));
+                
+
+                if (t.isAdded()) {
+                    if (t.getControlText().contains(".")) {
+                        if (t.getText().matches("[^0-9]")) {
+                            t.setText("");
+                        }
+                    } else if (t.getText().matches("[^0-9.]")) {
+                        t.setText("");
+                    }
+                }
+
+                return t;
+            }
+        };
+        addfundstxt.setTextFormatter(new TextFormatter<>(filter));
+		firstc.setCellValueFactory(new PropertyValueFactory<Account2, String>("pfirst"));
+		lastc.setCellValueFactory(new PropertyValueFactory<Account2, String>("plast"));
+		emailc.setCellValueFactory(new PropertyValueFactory<Account2, String>("Email"));
+		userc.setCellValueFactory(new PropertyValueFactory<Account2, String>("Username"));
+		balancec.setCellValueFactory(new PropertyValueFactory<Account2, Double>("balance"));
+		
+		FilteredList<Account2> filteredList = new FilteredList<>(items, p -> true);
+		pfirst.setOnKeyReleased(e-> {
+		 pfirst.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(newValue.isEmpty()
+                 ? null
+                 : user -> user.getPfirst().contains(newValue.toLowerCase())
+                           || user.getUsername().contains(newValue.toLowerCase())
+                           || user.getPlast().contains(newValue.toLowerCase())
+                           || user.getParentId().contains(newValue.toLowerCase())
+                           || user.getEmail().contains(newValue.toLowerCase())
+                           || user.getEmail().contains(newValue.toLowerCase())
+				 ));
+		 				    
+		 SortedList<Account2> sortedData = new SortedList<>(filteredList);
+		 sortedData.comparatorProperty().bind(accounts.comparatorProperty());
+		 accounts.setItems(sortedData);
+		});
+	}
 }

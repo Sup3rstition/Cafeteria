@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import Models.Account;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 public class Adminhomepagecontroller implements Initializable{
@@ -73,6 +75,8 @@ public class Adminhomepagecontroller implements Initializable{
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/getFDR.fxml"));
     	Parent fdr = loader.load();
+    	FDRcontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
         Scene Fdr = new Scene(fdr);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Fdr);
@@ -85,6 +89,7 @@ public class Adminhomepagecontroller implements Initializable{
     	Parent Menupage = loader.load();
     	Menucontroller control = loader.getController();
     	control.setAdminuser(adminuser);
+    	control.firststart();
         Scene Menu = new Scene(Menupage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Menu);
@@ -95,6 +100,8 @@ public class Adminhomepagecontroller implements Initializable{
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/getOrder.fxml"));
     	Parent orderpage = loader.load();
+    	Ordercontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
         Scene order = new Scene(orderpage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(order);
@@ -106,6 +113,7 @@ public class Adminhomepagecontroller implements Initializable{
     	loader.setLocation(getClass().getResource("/application/EditUserPage.fxml"));
     	Parent parentpage = loader.load();
     	Editusercontroller controller = loader.getController();
+    	controller.start();
 		controller.setAdminuser(adminuser);
         Scene Parent = new Scene(parentpage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();

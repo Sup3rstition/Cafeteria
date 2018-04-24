@@ -84,10 +84,5 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Label fx:id="actionStatus" layoutX="181.0" layoutY="591.0" text="?" textFill="RED">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>

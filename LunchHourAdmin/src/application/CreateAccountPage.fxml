@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="610.0" prefWidth="329.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Createaccountcontroller">
+<AnchorPane prefHeight="610.0" prefWidth="219.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Createaccountcontroller">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Create An Account">
          <font>
@@ -22,7 +22,7 @@
          </font>
       </Label>
       <Separator layoutX="14.0" layoutY="39.0" prefWidth="200.0" />
-      <GridPane layoutX="39.0" layoutY="42.0" prefHeight="182.0" prefWidth="262.0">
+      <GridPane layoutX="39.0" layoutY="42.0" prefHeight="182.0" prefWidth="275.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -42,21 +42,27 @@
             <Label text="Username:" />
             <Label text="Password:" GridPane.rowIndex="2" />
             <Label text="Confirm Password:" GridPane.rowIndex="3" />
-            <TextField fx:id="Emailaddress_txt" promptText="Email Address" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="Emailaddress_txt" promptText="Email Address" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <tooltip>
+                  <Tooltip text="Symbols besides @ are not accept. No spaces." />
+               </tooltip></TextField>
             <PasswordField fx:id="Password_txt1" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <tooltip>
-                  <Tooltip text="Password Requires atleast 6 characters" />
+                  <Tooltip text="Password Requires atleast 8 characters" />
                </tooltip></PasswordField>
-            <PasswordField fx:id="Password_txt2" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <PasswordField fx:id="Password_txt2" prefWidth="160.0" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <tooltip>
+                  <Tooltip text="Password requires atleast 2 characters" />
+               </tooltip></PasswordField>
          </children>
       </GridPane>
       <Separator layoutX="14.0" layoutY="254.0" prefWidth="200.0" />
-      <Label layoutX="14.0" layoutY="230.0" text="Personal Information">
+      <Label layoutX="14.0" layoutY="230.0" text="Parents Information">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <GridPane layoutX="38.0" layoutY="265.0" prefHeight="90.0" prefWidth="262.0">
+      <GridPane layoutX="38.0" layoutY="265.0" prefHeight="90.0" prefWidth="275.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -72,12 +78,15 @@
             <TextField fx:id="Lastnametxt" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <TableView fx:id="studenttable" layoutX="14.0" layoutY="390.0" prefHeight="125.0" prefWidth="288.0">
+      <TableView fx:id="studenttable" layoutX="14.0" layoutY="390.0" prefHeight="125.0" prefWidth="302.0">
+      <placeholder>
+        <Label text="" />
+    </placeholder>
         <columns>
-          <TableColumn text="First Name" />
-            <TableColumn prefWidth="79.0" text="Last Name" />
-            <TableColumn prefWidth="61.0" text="Grade" />
-          <TableColumn prefWidth="66.0" text="Section" />
+          <TableColumn fx:id="firstNamecol" editable="false" text="First Name" />
+            <TableColumn fx:id="lastnamecol" editable="false" prefWidth="79.0" text="Last Name" />
+            <TableColumn fx:id="gradecol" editable="false" prefWidth="61.0" text="Grade" />
+          <TableColumn fx:id="sectioncol" editable="false" prefWidth="66.0" text="Section" />
         </columns>
       </TableView>
       <Button fx:id="removebtn" layoutX="246.0" layoutY="520.0" mnemonicParsing="false" onAction="#removeselected" text="Remove" />
@@ -88,9 +97,9 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="backbtn" layoutX="10.0" layoutY="572.0" mnemonicParsing="false" onAction="#backtologin" prefHeight="25.0" prefWidth="67.0" text="Back" />
-      <Button fx:id="createaccount" layoutX="214.0" layoutY="572.0" mnemonicParsing="false" onAction="#createanaccount" text="Create Account" />
-      <Separator layoutX="14.0" layoutY="558.0" prefHeight="3.0" prefWidth="288.0" />
+      <Button fx:id="backbtn" layoutX="10.0" layoutY="572.0" mnemonicParsing="false" onAction="#backtologin" prefHeight="25.0" prefWidth="67.0" text="Cancel" />
+      <Button fx:id="createaccount" layoutX="206.0" layoutY="572.0" mnemonicParsing="false" onAction="#createanaccount" text="Create Account" />
+      <Separator layoutX="14.0" layoutY="558.0" prefHeight="3.0" prefWidth="310.0" />
       <Label fx:id="Passwordlabel" layoutX="172.0" layoutY="222.0" text="Passwords don't match" textFill="RED" visible="false" />
       <Label fx:id="Usernamelabel" layoutX="176.0" layoutY="80.0" text="Username already exist" textFill="RED" visible="false" />
       <Label fx:id="Emaillabel" layoutX="162.0" layoutY="125.0" text="Email address already in use" textFill="RED" visible="false" />

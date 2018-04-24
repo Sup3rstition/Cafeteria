@@ -21,8 +21,8 @@ private static Connection createConnection() {
 	      try {
 	      Class.forName("com.mysql.jdbc.Driver");
 	      String dbName = "Cafeteria";
-	      String userName = "root";
-	      String password = "root";
+	      String userName = "LunchHourAdmin";
+	      String password = "FGCUADMIN123";
 	      String hostname = "lunchhourdb.codmmpb86f3e.us-east-1.rds.amazonaws.com";
 	      String port = "3306";
 	      String jdbcUrl = "jdbc:mysql://" + hostname + ":" +
