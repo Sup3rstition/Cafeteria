@@ -12,13 +12,13 @@
 
 <AnchorPane prefHeight="557.0" prefWidth="594.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FDRcontroller">
    <children>
-      <DatePicker layoutX="110.0" layoutY="53.0" prefHeight="25.0" prefWidth="162.0" />
+      <DatePicker fx:id="starting" editable="false" layoutX="110.0" layoutY="53.0" prefHeight="25.0" prefWidth="162.0" />
       <Label layoutX="12.0" layoutY="14.0" text="Get Food Delivery report">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="12.0" layoutY="55.0" text="Starting Date:">
+      <Label layoutX="12.0" layoutY="55.0" text="Menu Date:">
          <font>
             <Font size="14.0" />
          </font>
@@ -33,17 +33,16 @@
       <Button fx:id="savebtn" layoutX="470.0" layoutY="518.0" mnemonicParsing="false" onAction="#save" prefHeight="27.0" prefWidth="108.0" style="-fx-background-color: #AFC6AF;" text="Save to file" />
       <Button fx:id="Backbtn" layoutX="14.0" layoutY="519.0" mnemonicParsing="false" onAction="#backtoorder" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #AFC6AF;" text="Back" />
       <Button fx:id="searchbtn" layoutX="293.0" layoutY="53.0" mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #AFC6AF;" text="Search" />
-      <TextField layoutX="108.0" layoutY="89.0" prefHeight="27.0" prefWidth="108.0" promptText="Section" />
-      <TextField layoutX="233.0" layoutY="89.0" prefHeight="27.0" prefWidth="108.0" promptText="Grade" />
-      <TableView layoutX="12.0" layoutY="134.0" prefHeight="376.0" prefWidth="571.0">
+      <TextField fx:id="sectionfil" layoutX="108.0" layoutY="89.0" prefHeight="27.0" prefWidth="108.0" promptText="Section" />
+      <TextField fx:id="gradefil" layoutX="233.0" layoutY="89.0" prefHeight="27.0" prefWidth="108.0" promptText="Grade" />
+      <TableView fx:id="fdrtable" layoutX="12.0" layoutY="134.0" prefHeight="376.0" prefWidth="571.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="First Name" />
-          <TableColumn prefWidth="75.0" text="Last Name" />
-            <TableColumn prefWidth="75.0" text="Grade" />
-            <TableColumn prefWidth="75.0" text="Section" />
-            <TableColumn prefWidth="75.0" text="Menu Item" />
-            <TableColumn prefWidth="98.0" text="Additional item" />
-            <TableColumn prefWidth="85.0" text="Extra items" />
+          <TableColumn fx:id="namec" prefWidth="117.0" text="Name" />
+            <TableColumn fx:id="gradec" minWidth="0.0" prefWidth="46.0" text="Grade" />
+            <TableColumn fx:id="sectionc" prefWidth="50.0" text="Section" />
+            <TableColumn fx:id="menuc" prefWidth="111.0" text="Menu Item" />
+            <TableColumn fx:id="addc" prefWidth="139.0" text="Additional item" />
+            <TableColumn fx:id="extrac" prefWidth="107.0" text="Extra items" />
         </columns>
       </TableView>
    </children>

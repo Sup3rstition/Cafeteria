@@ -6,11 +6,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import Models.Account2;
 import Models.Orders;
@@ -131,15 +133,17 @@ void searchall() {
 	   		Error2.showAndWait();
 		}
 }
+	String pattern = "#0.##";
+	DecimalFormat decimalFormat = new DecimalFormat(pattern);
     @FXML
     void addfund(ActionEvent event) {
-    	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to add " + addfundstxt.getText() +" to "+ accounts.getSelectionModel().getSelectedItem().getUsername()+ "?" , ButtonType.YES, ButtonType.CANCEL);
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to add " +  decimalFormat.format(addfundstxt.getText()) +" to "+ accounts.getSelectionModel().getSelectedItem().getUsername()+ "?" , ButtonType.YES, ButtonType.CANCEL);
 	  	 alert.showAndWait();
 
 	  	 if (alert.getResult() == ButtonType.YES) {
-	   	 
+
     	double intbal = accounts.getSelectionModel().getSelectedItem().getBalance();
-    	double finbal = intbal + Double.parseDouble(addfundstxt.getText());
+    	double finbal = intbal + Double.parseDouble( decimalFormat.format(addfundstxt.getText()));
     	
     	 String sql = "Update Parents SET Balance = ? , `Last Balance Update` = ?   Where Id = ?;";
 	    	try {
@@ -259,7 +263,30 @@ void searchall() {
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		addfundstxt.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+		UnaryOperator<TextFormatter.Change> filter = new UnaryOperator<TextFormatter.Change>() {
+
+            @Override
+            public TextFormatter.Change apply(TextFormatter.Change t) {
+
+                if (t.isReplaced()) 
+                    if(t.getText().matches("[^0-9]"))
+                        t.setText(t.getControlText().substring(t.getRangeStart(), t.getRangeEnd()));
+                
+
+                if (t.isAdded()) {
+                    if (t.getControlText().contains(".")) {
+                        if (t.getText().matches("[^0-9]")) {
+                            t.setText("");
+                        }
+                    } else if (t.getText().matches("[^0-9.]")) {
+                        t.setText("");
+                    }
+                }
+
+                return t;
+            }
+        };
+        addfundstxt.setTextFormatter(new TextFormatter<>(filter));
 		firstc.setCellValueFactory(new PropertyValueFactory<Account2, String>("pfirst"));
 		lastc.setCellValueFactory(new PropertyValueFactory<Account2, String>("plast"));
 		emailc.setCellValueFactory(new PropertyValueFactory<Account2, String>("Email"));

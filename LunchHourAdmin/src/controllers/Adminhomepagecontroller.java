@@ -75,6 +75,8 @@ public class Adminhomepagecontroller implements Initializable{
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/getFDR.fxml"));
     	Parent fdr = loader.load();
+    	FDRcontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
         Scene Fdr = new Scene(fdr);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(Fdr);
@@ -98,6 +100,8 @@ public class Adminhomepagecontroller implements Initializable{
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("/application/getOrder.fxml"));
     	Parent orderpage = loader.load();
+    	Ordercontroller controller = loader.getController();
+		controller.setAdminuser(adminuser);
         Scene order = new Scene(orderpage);
         Stage window = (Stage)((Node) (event.getSource())).getScene().getWindow();
         window.setScene(order);

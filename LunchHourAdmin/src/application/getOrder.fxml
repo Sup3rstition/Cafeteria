@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="511.0" prefWidth="936.0" style="-fx-background-color: #DDECDD;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Ordercontroller">
    <children>
-      <DatePicker fx:id="starting" layoutX="110.0" layoutY="53.0" />
+      <DatePicker fx:id="starting" editable="false" layoutX="110.0" layoutY="53.0" />
       <Label layoutX="12.0" layoutY="14.0" text="Get Order report">
          <font>
             <Font name="System Bold" size="18.0" />
@@ -48,7 +48,7 @@
         </columns>
       </TableView>
       <TextField fx:id="filter" layoutX="773.0" layoutY="423.0" promptText="Filter" />
-      <DatePicker fx:id="ending" layoutX="389.0" layoutY="53.0" />
+      <DatePicker fx:id="ending" editable="false" layoutX="389.0" layoutY="53.0" />
       <Label layoutX="298.0" layoutY="56.0" text="Ending Date:">
          <font>
             <Font size="14.0" />

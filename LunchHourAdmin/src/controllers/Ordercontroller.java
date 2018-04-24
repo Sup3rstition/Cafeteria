@@ -262,22 +262,22 @@ public class Ordercontroller implements Initializable {
 		    		rs = ps.executeQuery();
 		    		while(rs.next()) {
 		    			AdminOrders history = new AdminOrders();
-		    			history.setFullname(rs.getString("Studentname"));
-						history.setMenu(rs.getString("Menu Item"));
+		    			history.setFullname(rs.getString("Studentname").toLowerCase());
+						history.setMenu(rs.getString("Menu Item").toLowerCase());
 						if(rs.getString("Additional") != null) {
-							history.setAdd(rs.getString("Additional").replaceAll("/", ","));
+							history.setAdd(rs.getString("Additional").replaceAll("/", ",").toLowerCase());
 							}else {
 								history.setAdd("0");
 							}
 							if(rs.getString("Extra") != null) {
-							history.setExtra(rs.getString("Extra").replaceAll("/", ","));
+							history.setExtra(rs.getString("Extra").replaceAll("/", ",").toLowerCase());
 							}else {
 								history.setExtra("0");
 							}
 						history.setTotal(rs.getDouble("Total"));
 						history.setOrderDate((rs.getDate("Order_Date").toLocalDate()));
 						history.setOrderid(rs.getInt("ID"));
-						history.setDay((rs.getDate("Order_Date").toLocalDate().getDayOfWeek().toString()));
+						history.setDay((rs.getDate("Order_Date").toLocalDate().getDayOfWeek().toString()).toLowerCase());
     					history.setStudentID(rs.getInt("Student ID"));
     	    			items.add(history);
     	    		}
@@ -288,8 +288,8 @@ public class Ordercontroller implements Initializable {
         	    		ps.setInt(1,o.getStudentID());
         	    		rs = ps.executeQuery();
         	    		if(rs.next()) {
-        	    			o.setGrade(rs.getString("Grade"));
-        	    			o.setSection(rs.getString("Section"));
+        	    			o.setGrade(rs.getString("Grade").toLowerCase());
+        	    			o.setSection(rs.getString("Section").toLowerCase()i );
         	    		}
     	    		}
     	    		conn.close();
