@@ -289,7 +289,7 @@ public class Ordercontroller implements Initializable {
         	    		rs = ps.executeQuery();
         	    		if(rs.next()) {
         	    			o.setGrade(rs.getString("Grade").toLowerCase());
-        	    			o.setSection(rs.getString("Section").toLowerCase()i );
+        	    			o.setSection(rs.getString("Section").toLowerCase() );
         	    		}
     	    		}
     	    		conn.close();
